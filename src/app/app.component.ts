@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { AngularFirestore }  from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'gtm-root',
@@ -7,4 +9,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'guytime';
+  items: Observable<any[]>;
+
+  constructor(fs: AngularFirestore) {
+    this.items = fs.collection('items').valueChanges();
+  }
 }

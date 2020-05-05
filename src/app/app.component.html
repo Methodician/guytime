@@ -340,6 +340,9 @@
 
   <!-- Resources -->
   <h2>Resources</h2>
+  <ul>
+    <li *ngFor="let item of items | async">{{item | json}}</li>
+  </ul>
   <p>Here are some links to help you get started:</p>
 
   <div class="card-container">
