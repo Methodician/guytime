@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "guy-time": {
+      "hosting": {
+        "guytime": [
+          "guy-time"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "guy-time"
+  }
+}

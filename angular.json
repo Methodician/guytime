@@ -121,8 +121,16 @@
               "devServerTarget": "guytime:serve:production"
             }
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {}
         }
       }
-    }},
-  "defaultProject": "guytime"
+    }
+  },
+  "defaultProject": "guytime",
+  "cli": {
+    "analytics": "7d3be354-da31-446f-90bb-d5f29ec02836"
+  }
 }
