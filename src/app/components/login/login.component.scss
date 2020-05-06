@@ -1,0 +1,15 @@
+section {
+  height: 100%;
+  display: grid;
+  justify-content: center;
+  grid-template-rows: 20% 30% 30% 10% 10%;
+
+  header {
+    border: 2px red solid;
+    width: 80%;
+  }
+
+  article {
+    border: 2px green solid;
+  }
+}
