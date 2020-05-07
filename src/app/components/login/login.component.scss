@@ -1,15 +1,23 @@
-section {
+main {
   height: 100%;
   display: grid;
   justify-content: center;
-  grid-template-rows: 20% 30% 30% 10% 10%;
+  grid-template-rows: 20% 75% 5%;
 
   header {
-    border: 2px red solid;
-    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
-  article {
-    border: 2px green solid;
+  mat-card {
+    max-width: 400px;
+    margin: 2em auto;
+    text-align: center;
+
+    mat-form-field {
+      display: block;
+    }
   }
 }
