@@ -14,6 +14,7 @@ export const environment = {
     appId: '1:57109098543:web:312ab5b3367b28081596da',
     measurementId: 'G-K2RSVL04LT',
   },
+  geocoding_api_key: 'AIzaSyBwb1h6Q74h3SDdI0XY1_9cPFAw7Sat31U',
 };
 
 /*

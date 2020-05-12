@@ -9,6 +9,10 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    .logo {
+      width: 64%;
+    }
   }
 
   mat-card {
