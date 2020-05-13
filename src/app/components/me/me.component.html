@@ -1,1 +1,18 @@
-<p>me works!</p>
+<main>
+  <header>YOUR OWN PROFILE IN EDIT MODE</header>
+  <section>
+    <p>
+      This would contain your own profile editable details, links to account
+      management, friends list, viewing all your open chat rooms, settings,
+      etc... and a link to view your profile in public mode (kind of like
+      LinkedIn) along with an X or other clear way to "go back" to the list
+      view...
+    </p>
+    <a [routerLink]="['/guys']">go back...</a>
+    <p>
+      You could also sign out from here with the icon in the upper right or
+      something like that...
+    </p>
+    <a (click)="logout()">sign out</a>
+  </section>
+</main>

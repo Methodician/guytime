@@ -17,4 +17,11 @@ export class AuthService {
     this.isLoggedIn = true;
     this.router.navigate(['/guys']);
   };
+
+  logout = () => {
+    this.userName = null;
+    this.password = null;
+    this.isLoggedIn = false;
+    this.router.navigate(['/login']);
+  };
 }

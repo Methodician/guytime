@@ -1,1 +1,18 @@
-<p>profile-detail works!</p>
+<main>
+  <header>ONE GUY'S PROFILE</header>
+  <section>
+    <p>
+      this would have all the profile stuff for the guy you clicked, a way to
+      start a chat with him if you are friended or a way to friend him if you
+      are not, etc... and an X or other clear way to go back to the list. Think
+      about those actions... Are those the main actions you'd like on this page?
+    </p>
+    <a [routerLink]="['/chat', 'sdfaf3234']">chat with this guy</a>
+    <p>
+      You could friend him if you weren't his friend, and there would be no chat
+      link. I guess maybe we could have an "unfriend" option here too? Or put
+      that in the friend list...
+    </p>
+    <a [routerLink]="['/guys']">go back...</a>
+  </section>
+</main>

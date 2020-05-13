@@ -24,9 +24,10 @@ import { NgGuideComponent } from './components/ng-guide/ng-guide.component';
 import { ProfileListComponent } from './components/profile-list/profile-list.component';
 import { ProfileDetailComponent } from './components/profile-detail/profile-detail.component';
 import { MeComponent } from './components/me/me.component';
+import { ChatComponent } from './components/chat/chat.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, NgGuideComponent, ProfileListComponent, ProfileDetailComponent, MeComponent],
+  declarations: [AppComponent, LoginComponent, NgGuideComponent, ProfileListComponent, ProfileDetailComponent, MeComponent, ChatComponent],
   imports: [
     BrowserModule,
     FormsModule,
