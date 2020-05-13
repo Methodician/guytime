@@ -21,9 +21,12 @@ import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './components/login/login.component';
 import { NgGuideComponent } from './components/ng-guide/ng-guide.component';
+import { ProfileListComponent } from './components/profile-list/profile-list.component';
+import { ProfileDetailComponent } from './components/profile-detail/profile-detail.component';
+import { MeComponent } from './components/me/me.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, NgGuideComponent],
+  declarations: [AppComponent, LoginComponent, NgGuideComponent, ProfileListComponent, ProfileDetailComponent, MeComponent],
   imports: [
     BrowserModule,
     FormsModule,
