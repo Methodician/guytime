@@ -7,11 +7,13 @@ import { ProfileListComponent } from './components/profile-list/profile-list.com
 import { AuthGuard } from './guards/auth.guard';
 import { MeComponent } from './components/me/me.component';
 import { ChatComponent } from './components/chat/chat.component';
+import { RegisterComponent } from './components/register/register.component';
 
 const routes: Routes = [
   // Should ultimately go to home (browse/filter profiles) which will redirect to login if you're not logged in
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
   { path: 'me', component: MeComponent, canActivate: [AuthGuard] },
   { path: 'guys', component: ProfileListComponent, canActivate: [AuthGuard] },
   {

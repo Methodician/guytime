@@ -1,0 +1,27 @@
+main {
+  height: 100%;
+  display: grid;
+  justify-content: center;
+  grid-template-rows: 20% 75% 5%;
+
+  header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .logo {
+      width: 64%;
+    }
+  }
+
+  mat-card {
+    max-width: 400px;
+    margin: 2em auto;
+    text-align: center;
+
+    mat-form-field {
+      display: block;
+    }
+  }
+}

@@ -10,15 +10,14 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  isLoginValid = true;
+  isLoggedIn = false;
   form: FormGroup;
 
-  constructor(
-    private fb: FormBuilder,
-    private authSvc: AuthService,
-    private route: ActivatedRoute,
-    private router: Router,
-  ) {}
+  constructor(private fb: FormBuilder, private authSvc: AuthService) {
+    this.authSvc.authInfo$.subscribe(
+      info => (this.isLoggedIn = info.isLoggedIn()),
+    );
+  }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -29,8 +28,8 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     const email = this.form.get('email').value;
-    const pw = this.form.get('password').value;
+    const password = this.form.get('password').value;
 
-    this.authSvc.login(email, pw);
+    this.authSvc.signIn(email, password);
   }
 }

@@ -25,9 +25,10 @@ import { ProfileListComponent } from './components/profile-list/profile-list.com
 import { ProfileDetailComponent } from './components/profile-detail/profile-detail.component';
 import { MeComponent } from './components/me/me.component';
 import { ChatComponent } from './components/chat/chat.component';
+import { RegisterComponent } from './components/register/register.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, NgGuideComponent, ProfileListComponent, ProfileDetailComponent, MeComponent, ChatComponent],
+  declarations: [AppComponent, LoginComponent, NgGuideComponent, ProfileListComponent, ProfileDetailComponent, MeComponent, ChatComponent, RegisterComponent],
   imports: [
     BrowserModule,
     FormsModule,
