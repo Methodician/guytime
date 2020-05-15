@@ -23,6 +23,7 @@ export class AuthService {
             user.email,
           ),
         );
+        this.router.navigate(['/me']);
       } else {
         this.authInfo$.next(this.NULL_USER);
       }
@@ -35,6 +36,7 @@ export class AuthService {
         email,
         password,
       );
+      this.router.navigate(['/me']);
       return credential;
     } catch (error) {
       alert(error);
@@ -48,7 +50,7 @@ export class AuthService {
         email,
         password,
       );
-      this.router.navigate(['/guys']);
+      this.router.navigate(['/me']);
       return credential;
     } catch (error) {
       alert(error);
