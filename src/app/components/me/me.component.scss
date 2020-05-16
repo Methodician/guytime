@@ -1,0 +1,22 @@
+main {
+  margin: 15px;
+
+  .summary {
+    max-width: 400px;
+
+    .message_icon {
+      position: absolute;
+      right: 40px;
+      align-self: center;
+    }
+    mat-card-content {
+      .center_content {
+        display: flex;
+        justify-content: center;
+      }
+      .interests_list {
+        margin-bottom: 15px;
+      }
+    }
+  }
+}

@@ -1,6 +1,51 @@
 <main>
-  <header>YOUR OWN PROFILE IN EDIT MODE</header>
-  <section>
+  <!-- <gtm-summary></gtm-summary> -->
+  <mat-card class="summary">
+    <mat-card-header>
+      <img
+        mat-card-avatar
+        class="avatar"
+        src="https://material.angular.io/assets/img/examples/shiba1.jpg"
+      />
+      <mat-card-title>Dave</mat-card-title>
+      <mat-card-subtitle><b>38</b> Single</mat-card-subtitle>
+      <mat-icon class="message_icon" matBadge="15">chat</mat-icon>
+    </mat-card-header>
+    <mat-card-content>
+      <span class="interests_title_wrapper">
+        <mat-card-title class="interests_title center_content"
+          >Interests</mat-card-title
+        >
+      </span>
+      <mat-chip-list
+        class="interests_list center_content"
+        aria-label="Selected Interests"
+      >
+        <mat-chip>indoors</mat-chip>
+        <mat-chip>outdoors</mat-chip>
+      </mat-chip-list>
+      <mat-card-title>About Me</mat-card-title>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+      tempor incididunt ut labore et dolore magna aliqua. Sollicitudin tempor id
+      eu nisl nunc mi ipsum faucibus. Sapien et ligula ullamcorper malesuada
+      proin. Habitant morbi tristique senectus et netus et malesuada. Tortor
+      consequat id porta nibh venenatis cras. Tempus iaculis urna id volutpat
+      lacus. Suspendisse ultrices gravida dictum fusce. Ipsum dolor sit amet
+      consectetur adipiscing elit. Lectus vestibulum mattis ullamcorper velit
+      sed ullamcorper. Mauris pharetra et ultrices neque ornare aenean euismod
+      elementum. Adipiscing commodo elit at imperdiet dui accumsan sit amet.
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button color="primary" [routerLink]="['/guys']">
+        Browse Guys
+      </button>
+      <button mat-button color="primary" [routerLink]="['/guys']">
+        Friends
+      </button>
+      <button mat-button color="warn" (click)="logout()">Sign Out</button>
+    </mat-card-actions>
+  </mat-card>
+  <!-- <section>
     <p>
       This would be the bottom of the "stack" (the home /landing page) and
       contain your own profile editable details, links to account management,
@@ -13,5 +58,5 @@
       something like that...
     </p>
     <a (click)="logout()">sign out</a>
-  </section>
+  </section> -->
 </main>

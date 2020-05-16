@@ -16,6 +16,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -28,11 +31,21 @@ import { ChatComponent } from './components/chat/chat.component';
 import { RegisterComponent } from './components/register/register.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, NgGuideComponent, ProfileListComponent, ProfileDetailComponent, MeComponent, ChatComponent, RegisterComponent],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    NgGuideComponent,
+    ProfileListComponent,
+    ProfileDetailComponent,
+    MeComponent,
+    ChatComponent,
+    RegisterComponent,
+  ],
   imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
@@ -40,7 +53,9 @@ import { RegisterComponent } from './components/register/register.component';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    BrowserAnimationsModule,
+    MatIconModule,
+    MatChipsModule,
+    MatBadgeModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
