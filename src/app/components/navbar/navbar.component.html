@@ -1,0 +1,16 @@
+<main *ngIf="isLoggedIn$ | async">
+  <mat-button-toggle-group
+    [value]="currentSelection"
+    (change)="onNavSelected($event)"
+  >
+    <mat-button-toggle value="guys" aria-label="Browse list of guys">
+      <mat-icon>view_list</mat-icon>
+    </mat-button-toggle>
+    <mat-button-toggle value="me" aria-label="Profile and account management">
+      <mat-icon>account_circle</mat-icon>
+    </mat-button-toggle>
+    <mat-button-toggle value="chat" aria-label="Open chats">
+      <mat-icon>chat</mat-icon>
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+</main>

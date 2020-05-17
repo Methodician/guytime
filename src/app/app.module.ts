@@ -16,6 +16,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatChipsModule } from '@angular/material/chips';
@@ -29,6 +30,8 @@ import { ProfileDetailComponent } from './components/profile-detail/profile-deta
 import { MeComponent } from './components/me/me.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { RegisterComponent } from './components/register/register.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { ChatListComponent } from './components/chat-list/chat-list.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +43,8 @@ import { RegisterComponent } from './components/register/register.component';
     MeComponent,
     ChatComponent,
     RegisterComponent,
+    NavbarComponent,
+    ChatListComponent,
   ],
   imports: [
     BrowserModule,
@@ -56,6 +61,7 @@ import { RegisterComponent } from './components/register/register.component';
     MatIconModule,
     MatChipsModule,
     MatBadgeModule,
+    MatButtonToggleModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

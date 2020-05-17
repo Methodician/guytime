@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AuthInfo } from '../models/auth-info';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,11 @@ export class AuthService {
 
   authInfo$ = new BehaviorSubject(this.NULL_USER);
 
+  isLoggedIn$: Observable<boolean>;
+
   constructor(private router: Router, private afAuth: AngularFireAuth) {
+    this.isLoggedIn$ = this.afAuth.user.pipe(map(user => user && !!user.uid));
+
     this.afAuth.user.subscribe(user => {
       if (user) {
         this.authInfo$.next(
@@ -23,7 +28,7 @@ export class AuthService {
             user.email,
           ),
         );
-        this.router.navigate(['/me']);
+        this.router.navigate(['/guys']);
       } else {
         this.authInfo$.next(this.NULL_USER);
       }

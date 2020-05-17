@@ -1,0 +1,12 @@
+main {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  mat-button-toggle-group {
+    display: flex;
+    justify-content: space-evenly;
+    mat-button-toggle {
+      width: 33.3333%;
+    }
+  }
+}

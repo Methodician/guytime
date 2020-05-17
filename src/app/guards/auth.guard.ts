@@ -7,6 +7,7 @@ import {
   Router,
 } from '@angular/router';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 
 @Injectable({
@@ -23,9 +24,10 @@ export class AuthGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    if (this.authSvc.authInfo$.value.isLoggedIn()) return true;
-
-    this.router.navigate(['/login']);
-    return false;
+    return this.authSvc.isLoggedIn$.pipe(
+      tap(isLoggedIn => {
+        if (!isLoggedIn) this.router.navigate(['/login']);
+      }),
+    );
   }
 }
