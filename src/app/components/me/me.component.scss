@@ -21,13 +21,12 @@ main {
     grid-area: body;
     margin: 10px;
     display: grid;
-    grid-template-rows: auto;
+    grid-template-rows: 95px auto;
     grid-template-columns: auto;
 
     .header {
       display: grid;
       grid-template-columns: 100px auto;
-      height: 95px;
 
       .avatar {
         width: 90px;

@@ -1,18 +1,86 @@
 <main>
-  <header>ONE GUY'S PROFILE</header>
-  <section>
-    <p>
-      this would have all the profile stuff for the guy you clicked, a way to
-      start a chat with him if you are friended or a way to friend him if you
-      are not, etc... and an X or other clear way to go back to the list. Think
-      about those actions... Are those the main actions you'd like on this page?
-    </p>
-    <a [routerLink]="['/chat', 'sdfaf3234']">chat with this guy</a>
-    <p>
-      You could friend him if you weren't his friend, and there would be no chat
-      link. I guess maybe we could have an "unfriend" option here too? Or put
-      that in the friend list...
-    </p>
-    <a [routerLink]="['/guys']">go back...</a>
+  <section class="top_bar">
+    <div class="menu">
+      <button
+        class="menu_button"
+        mat-icon-button
+        [matMenuTriggerFor]="menu"
+        aria-label="Filter Menu"
+      >
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item disabled>
+          <mat-icon>edit</mat-icon>
+          <span>Edit Details</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>account_box</mat-icon>
+          <span>Public View</span>
+        </button>
+        <button mat-menu-item disabled>
+          <mat-icon>people</mat-icon>
+          <span>Connections</span>
+        </button>
+        <mat-divider></mat-divider>
+      </mat-menu>
+    </div>
+    <b class="page_title">About Me</b>
   </section>
+  <mat-card class="body">
+    <article class="header">
+      <img
+        mat-card-avatar
+        src="https://material.angular.io/assets/img/examples/shiba1.jpg"
+        alt="Profile Image"
+        class="avatar"
+      />
+      <section class="summary">
+        <div class="stats">
+          <b class="name">Dave</b>
+          <p class="age_relationship">38 - Single</p>
+        </div>
+        <div class="interests">
+          <mat-icon>home_work</mat-icon>
+          <mat-icon>nature_people</mat-icon>
+        </div>
+      </section>
+    </article>
+    <mat-card class="bio">
+      <mat-card-title>Bio</mat-card-title>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Sollicitudin tempor
+        id eu nisl nunc mi ipsum faucibus. Sapien et ligula ullamcorper
+        malesuada proin. Habitant morbi tristique senectus et netus et
+        malesuada. Tortor consequat id porta nibh venenatis cras. Tempus iaculis
+        urna id volutpat lacus. Suspendisse ultrices gravida dictum fusce. Ipsum
+        dolor sit amet consectetur adipiscing elit. Lectus vestibulum mattis
+        ullamcorper velit sed ullamcorper. Mauris pharetra et ultrices neque
+        ornare aenean euismod elementum. Adipiscing commodo elit at imperdiet
+        dui accumsan sit amet.
+      </p>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Sollicitudin tempor
+        id eu nisl nunc mi ipsum faucibus. Sapien et ligula ullamcorper
+        malesuada proin. Habitant morbi tristique senectus et netus et
+        malesuada. Tortor consequat id porta nibh venenatis cras. Tempus iaculis
+        urna id volutpat lacus. Suspendisse ultrices gravida dictum fusce. Ipsum
+        dolor sit amet consectetur adipiscing elit. Lectus vestibulum mattis
+        ullamcorper velit sed ullamcorper. Mauris pharetra et ultrices neque
+        ornare aenean euismod elementum. Adipiscing commodo elit at imperdiet
+        dui accumsan sit amet.
+      </p>
+    </mat-card>
+    <mat-card-actions>
+      <button mat-button color="primary" [routerLink]="['/guys']">
+        See Connections
+      </button>
+      <button mat-button color="primary">
+        Connect
+      </button>
+      <button mat-button color="primary">Chat</button>
+    </mat-card-actions>
+  </mat-card>
 </main>

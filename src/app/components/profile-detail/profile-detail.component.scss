@@ -1,0 +1,71 @@
+main {
+  display: grid;
+  grid-template-rows: 45px calc(100vh - 95px) 50px;
+  grid-template-areas:
+    'menu'
+    'body'
+    'navspace';
+
+  .top_bar {
+    grid-area: menu;
+    display: grid;
+    grid-template-columns: 30px auto;
+    background-color: lightgray;
+    .page_title {
+      justify-self: center;
+      align-self: center;
+    }
+  }
+
+  .body {
+    grid-area: body;
+    margin: 10px;
+    display: grid;
+    grid-template-rows: 95px auto 50px;
+    grid-template-columns: auto;
+
+    .header {
+      display: grid;
+      grid-template-columns: 100px auto;
+
+      .avatar {
+        width: 90px;
+        height: 90px;
+      }
+
+      .summary {
+        .stats {
+          display: grid;
+          justify-content: center;
+        }
+
+        .name {
+          text-align: center;
+          font-size: 1.68em;
+        }
+
+        .age_relationship {
+          text-align: center;
+          font-size: 1.3em;
+          font-weight: 500;
+          color: rgb(65, 64, 64);
+        }
+
+        .interests {
+          display: flex;
+          justify-content: center;
+
+          mat-icon {
+            margin: 0 5px;
+          }
+        }
+      }
+    }
+
+    .bio {
+      overflow: scroll;
+
+      margin-bottom: 10px;
+    }
+  }
+}
