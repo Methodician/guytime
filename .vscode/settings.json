@@ -7,9 +7,10 @@
     "typescript.preferences.quoteStyle": "single",
     "prettier.trailingComma": "es5",
     "cSpell.words": [
-        "changefreq",
-        "guytime",
-        "slugify"
+      "changefreq",
+      "guytime",
+      "navspace",
+      "slugify"
     ],
     "html.format.wrapAttributes": "force-expand-multiline",
     "editor.defaultFormatter": "esbenp.prettier-vscode",
