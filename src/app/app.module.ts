@@ -20,7 +20,10 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatListModule } from '@angular/material/list';
 
+// LOCAL IMPORTS
 import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './components/login/login.component';
@@ -62,6 +65,8 @@ import { ChatListComponent } from './components/chat-list/chat-list.component';
     MatChipsModule,
     MatBadgeModule,
     MatButtonToggleModule,
+    MatMenuModule,
+    MatListModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

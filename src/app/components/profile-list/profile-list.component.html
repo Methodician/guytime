@@ -1,21 +1,45 @@
 <main>
-  <p>This would be the default landing area with a filterable list of guys</p>
-
-  <header>LIST OF GUYS</header>
-  <section>
-    <ul>
-      <li><a [routerLink]="['abses3342']">GUY 1</a></li>
-      <li><a [routerLink]="['ffsd3242']">guy 2</a></li>
-      <li><a [routerLink]="['ffsd3242']">person</a></li>
-      <li><a [routerLink]="['ffsd3242']">dude</a></li>
-      <li><a [routerLink]="['ffsd3242']">monkey</a></li>
-      <li><a [routerLink]="['ffsd3242']">rabbit</a></li>
-    </ul>
+  <section class="top_bar">
+    <div class="menu">
+      <button
+        class="menu_button"
+        mat-icon-button
+        [matMenuTriggerFor]="menu"
+        aria-label="Filter Menu"
+      >
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>
+          <mat-icon>place</mat-icon>
+          <span>Find by location</span>
+        </button>
+        <button mat-menu-item disabled>
+          <mat-icon>clear_all</mat-icon>
+          <span>Clear all filters</span>
+        </button>
+      </mat-menu>
+    </div>
+    <b class="page_title">Guys Out There</b>
   </section>
 
-  <p>
-    There would also be the profile icon in the corner leading where this link
-    goes:
-  </p>
-  <a [routerLink]="['/me']">my profile</a>
+  <mat-list>
+    <mat-list-item *ngFor="let guy of guys">
+      <mat-card [routerLink]="[guy.id]">
+        <img
+          mat-card-avatar
+          class="grid_cell_centered"
+          src="https://material.angular.io/assets/img/examples/shiba1.jpg"
+        />
+        <b class="name">{{ guy.name }}</b>
+        <b class="age grid_cell_centered">{{ guy.age }}</b>
+        <span class="interests_title">Interests:</span>
+        <section>
+          <mat-icon *ngFor="let interest of guy.interests">{{
+            interest
+          }}</mat-icon>
+        </section>
+      </mat-card>
+    </mat-list-item>
+  </mat-list>
 </main>
