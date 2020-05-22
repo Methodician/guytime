@@ -68,7 +68,10 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     MatButtonToggleModule,
     MatMenuModule,
     MatListModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      registrationStrategy: 'registerImmediately',
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent],

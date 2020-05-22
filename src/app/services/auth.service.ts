@@ -28,7 +28,6 @@ export class AuthService {
             user.email,
           ),
         );
-        this.router.navigate(['/guys']);
       } else {
         this.authInfo$.next(this.NULL_USER);
       }

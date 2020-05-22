@@ -27,6 +27,9 @@
           <mat-icon>exit_to_app</mat-icon>
           <span>Sign Out</span>
         </button>
+        <button *ngIf="promptEvent" mat-menu-item (click)="installPwa()">
+          Install PWA
+        </button>
       </mat-menu>
     </div>
     <b class="page_title">About Me</b>
