@@ -35,6 +35,7 @@ import { ChatComponent } from './components/chat/chat.component';
 import { RegisterComponent } from './components/register/register.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { ChatListComponent } from './components/chat-list/chat-list.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { ChatListComponent } from './components/chat-list/chat-list.component';
     MatButtonToggleModule,
     MatMenuModule,
     MatListModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [],
   bootstrap: [AppComponent],
