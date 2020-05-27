@@ -1,39 +1,5 @@
 <main>
-  <section class="top_bar">
-    <div class="menu">
-      <button
-        class="menu_button"
-        mat-icon-button
-        [matMenuTriggerFor]="menu"
-        aria-label="Filter Menu"
-      >
-        <mat-icon>more_vert</mat-icon>
-      </button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item disabled>
-          <mat-icon>edit</mat-icon>
-          <span>Edit Details</span>
-        </button>
-        <button mat-menu-item>
-          <mat-icon>account_box</mat-icon>
-          <span>Public View</span>
-        </button>
-        <button mat-menu-item disabled>
-          <mat-icon>people</mat-icon>
-          <span>Connections</span>
-        </button>
-        <mat-divider></mat-divider>
-        <button mat-menu-item (click)="logout()">
-          <mat-icon>exit_to_app</mat-icon>
-          <span>Sign Out</span>
-        </button>
-        <button *ngIf="promptEvent" mat-menu-item (click)="installPwa()">
-          Install PWA
-        </button>
-      </mat-menu>
-    </div>
-    <b class="page_title">About Me</b>
-  </section>
+  <gtm-header title="About Me" [options]="headerOptions"></gtm-header>
   <mat-card class="body">
     <article class="header">
       <img

@@ -1,27 +1,5 @@
 <main>
-  <section class="top_bar">
-    <div class="menu">
-      <button
-        class="menu_button"
-        mat-icon-button
-        [matMenuTriggerFor]="menu"
-        aria-label="Filter Menu"
-      >
-        <mat-icon>more_vert</mat-icon>
-      </button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item>
-          <mat-icon>place</mat-icon>
-          <span>Find by location</span>
-        </button>
-        <button mat-menu-item disabled>
-          <mat-icon>clear_all</mat-icon>
-          <span>Clear all filters</span>
-        </button>
-      </mat-menu>
-    </div>
-    <b class="page_title">Guys Out There</b>
-  </section>
+  <gtm-header title="Guys Out There" [options]="headerOptions"></gtm-header>
 
   <mat-list>
     <mat-list-item *ngFor="let guy of guys">

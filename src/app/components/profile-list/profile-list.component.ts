@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { IHeaderOption } from '../header/header.component';
 
 @Component({
   selector: 'gtm-profile-list',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./profile-list.component.scss'],
 })
 export class ProfileListComponent implements OnInit {
+  headerOptions: IHeaderOption[];
+
   guys = [
     {
       id: 'fa34f',
@@ -53,5 +56,22 @@ export class ProfileListComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.headerOptions = [
+      {
+        iconName: 'place',
+        optionText: 'Find by location',
+        isDisabled: false,
+        onClick: this.logClicked,
+      },
+      {
+        iconName: 'clear_all',
+        optionText: 'Clear all filters',
+        isDisabled: true,
+        onClick: this.logClicked,
+      },
+    ];
+  }
+
+  logClicked = () => console.log('clicked');
 }

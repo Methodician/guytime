@@ -36,6 +36,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { ChatListComponent } from './components/chat-list/chat-list.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     RegisterComponent,
     NavbarComponent,
     ChatListComponent,
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,

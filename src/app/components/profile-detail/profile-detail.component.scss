@@ -21,7 +21,7 @@ main {
     grid-area: body;
     margin: 10px;
     display: grid;
-    grid-template-rows: 95px auto 50px;
+    grid-template-rows: 95px auto;
     grid-template-columns: auto;
 
     .header {

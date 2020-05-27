@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/services/auth.service';
-import { PwaService } from 'src/app/services/pwa.service';
+import { IHeaderOption } from '../header/header.component';
 
 @Component({
   selector: 'gtm-me',
@@ -10,13 +9,26 @@ import { PwaService } from 'src/app/services/pwa.service';
 export class MeComponent implements OnInit {
   promptEvent;
 
-  constructor(private authSvc: AuthService, private pwaSvc: PwaService) {
-    this.pwaSvc.promptEvent.subscribe(e => (this.promptEvent = e));
+  headerOptions: IHeaderOption[];
+
+  constructor() {}
+
+  ngOnInit(): void {
+    this.headerOptions = [
+      {
+        iconName: 'edit',
+        optionText: 'Edit Details',
+        isDisabled: false,
+        onClick: this.logClicked,
+      },
+      {
+        iconName: 'people',
+        optionText: 'Connections',
+        isDisabled: true,
+        onClick: this.logClicked,
+      },
+    ];
   }
 
-  ngOnInit(): void {}
-
-  logout = () => this.authSvc.logout();
-
-  installPwa = () => this.promptEvent.prompt();
+  logClicked = () => console.log('clicked');
 }

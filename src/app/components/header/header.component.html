@@ -1,0 +1,32 @@
+<main>
+  <div class="menu">
+    <button
+      class="menu_button"
+      mat-icon-button
+      [matMenuTriggerFor]="menu"
+      aria-label="Filter Menu"
+    >
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button
+        *ngFor="let option of options"
+        mat-menu-item
+        [disabled]="option.isDisabled"
+        (click)="option.onClick()"
+      >
+        <mat-icon>{{ option.iconName }}</mat-icon>
+        <span>{{ option.optionText }}</span>
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>exit_to_app</mat-icon>
+        <span>Sign Out</span>
+      </button>
+      <button *ngIf="promptEvent" mat-menu-item (click)="installPwa()">
+        Install PWA
+      </button>
+    </mat-menu>
+  </div>
+  <b class="page_title">{{ title }}</b>
+</main>
