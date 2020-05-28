@@ -9,7 +9,7 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class HeaderComponent implements OnInit {
   @Input() title: string;
-  @Input() options: IHeaderOption;
+  @Input() options: IHeaderOption[];
 
   promptEvent;
 

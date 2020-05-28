@@ -1,0 +1,32 @@
+main {
+  overflow: auto;
+  mat-list {
+    margin-top: 40px;
+    height: calc(100vh - 100px);
+    overflow: scroll;
+    mat-list-item {
+      margin-bottom: 6px;
+      height: 60px;
+      mat-card {
+        display: grid;
+        grid-template-rows: 25px 20px;
+        padding: 5px 8px;
+        height: 45px;
+        width: fill;
+        b {
+          font-size: 1em;
+        }
+        p {
+          font-size: 0.75em;
+          margin: 0;
+        }
+        b,
+        p {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+}

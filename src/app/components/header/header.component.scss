@@ -3,6 +3,9 @@ main {
   display: grid;
   grid-template-columns: 30px auto;
   background-color: lightgray;
+  position: fixed;
+  width: 100vw;
+  z-index: 10000;
   .page_title {
     justify-self: center;
     align-self: center;
