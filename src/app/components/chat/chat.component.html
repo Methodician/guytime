@@ -1,15 +1,35 @@
 <main>
-  <header>CHAT ROOM COMPONENT THING</header>
-  <section>
-    <p>
-      This would be a chat with one or more guys. There would be a way to add
-      more guys to the chat room. I'm thinking that adding a guy would prompt
-      you to name the chat room, and create a new "named" chat with the three
-      guys. Adding more guys to the "named" chat would allow them to see the
-      full history of that chat room. New chat rooms would always be created by
-      starting with two guys then adding a third. What do you think of that user
-      flow concept?
-    </p>
-    <a [routerLink]="['/guys']">go back...</a>
+  <gtm-header
+    title="John, Andrew, Nathan"
+    [options]="headerOptions"
+  ></gtm-header>
+  <section class="chat_list">
+    <article
+      class="chat_box"
+      [ngClass]="{ owned_chat: chat.sender === 'Jim' }"
+      *ngFor="let chat of chats"
+    >
+      <img
+        *ngIf="chat.sender !== 'Jim'"
+        class="avatar"
+        mat-card-avatar
+        [src]="chat.avatar"
+        alt=""
+      />
+      <mat-card>
+        <mat-card-content>{{ chat.text }}</mat-card-content>
+        <mat-card-footer>
+          <p class="date">{{ chat.timestamp | date: 'short' }}</p>
+          <p class="sender">{{ chat.sender }}</p>
+        </mat-card-footer>
+      </mat-card>
+      <img
+        *ngIf="chat.sender === 'Jim'"
+        class="avatar"
+        mat-card-avatar
+        [src]="chat.avatar"
+        alt=""
+      />
+    </article>
   </section>
 </main>

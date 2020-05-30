@@ -1,0 +1,35 @@
+main {
+  overflow: auto;
+  .chat_list {
+    display: flex;
+    flex-direction: column-reverse;
+    overflow: scroll;
+    margin-top: 40px;
+    height: calc(100vh - 100px);
+    .chat_box {
+      display: grid;
+      grid-template-columns: 60px auto;
+      margin: 8px;
+    }
+    .owned_chat {
+      grid-template-columns: auto 60px;
+      mat-card {
+        background-color: rgb(214, 244, 253);
+      }
+    }
+    .avatar {
+      justify-self: center;
+      align-self: top;
+    }
+    mat-card-content {
+      margin-bottom: 0.7em;
+    }
+    mat-card-footer {
+      font-size: 0.75em;
+      display: flex;
+      justify-content: space-between;
+      height: 2em;
+      padding: 4px;
+    }
+  }
+}

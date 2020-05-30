@@ -8,11 +8,11 @@ main {
       margin-bottom: 6px;
       height: 60px;
       mat-card {
+        width: stretch;
         display: grid;
         grid-template-rows: 25px 20px;
         padding: 5px 8px;
         height: 45px;
-        width: stretch;
         b {
           font-size: 1em;
         }
