@@ -29,4 +29,12 @@
     </mat-menu>
   </div>
   <b class="page_title">{{ title }}</b>
+  <button
+    (click)="onBackClicked()"
+    class="back_button"
+    mat-icon-button
+    aria-label="Back Button"
+  >
+    <mat-icon *ngIf="backLocation">close</mat-icon>
+  </button>
 </main>

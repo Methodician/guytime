@@ -1,7 +1,7 @@
 main {
   grid-area: menu;
   display: grid;
-  grid-template-columns: 30px auto;
+  grid-template-columns: 30px auto 30px;
   background-color: lightgray;
   position: fixed;
   width: 100vw;
@@ -9,5 +9,8 @@ main {
   .page_title {
     justify-self: center;
     align-self: center;
+  }
+  .back_button {
+    padding-right: 10px;
   }
 }
