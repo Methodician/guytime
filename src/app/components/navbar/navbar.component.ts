@@ -29,7 +29,6 @@ export class NavbarComponent implements OnInit {
   }
 
   onNavSelected = $e => {
-    console.log($e.value);
     this.router.navigate([`/${$e.value}`]);
   };
 }

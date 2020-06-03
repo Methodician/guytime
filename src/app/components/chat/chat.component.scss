@@ -48,5 +48,10 @@ main {
     .chat_input_has_text {
       height: 100px;
     }
+
+    .send_button {
+      position: absolute;
+      right: 5px;
+    }
   }
 }

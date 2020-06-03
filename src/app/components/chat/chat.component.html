@@ -35,12 +35,22 @@
   <section class="chat_input_wrapper">
     <form action="submit">
       <textarea
+        placeholder="Say something..."
         class="chat_input"
         name="msgInput"
         [(ngModel)]="msgInput"
-        (keydown.enter)="sendMessage($event)"
+        (keydown.enter)="onPressEnter($event)"
         [ngClass]="{ chat_input_has_text: msgInput.length > 0 }"
       ></textarea>
     </form>
+    <button
+      *ngIf="msgInput.length > 0"
+      aria-label="Send Message"
+      mat-icon-button
+      class="send_button"
+      (click)="sendMessage()"
+    >
+      <mat-icon>send</mat-icon>
+    </button>
   </section>
 </main>
