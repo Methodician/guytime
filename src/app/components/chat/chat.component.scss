@@ -1,11 +1,9 @@
 main {
-  overflow: auto;
   .chat_list {
-    display: flex;
-    flex-direction: column-reverse;
-    overflow: scroll;
-    margin-top: 40px;
-    height: calc(100vh - 100px);
+    position: absolute;
+    top: 40px;
+    overflow-y: scroll;
+    height: calc(100vh - 140px);
     .chat_box {
       display: grid;
       grid-template-columns: 60px auto;
@@ -22,14 +20,33 @@ main {
       align-self: top;
     }
     mat-card-content {
-      margin-bottom: 0.7em;
+      margin-bottom: 0.7rem;
     }
     mat-card-footer {
-      font-size: 0.75em;
+      font-size: 0.75rem;
       display: flex;
       justify-content: space-between;
-      height: 2em;
+      height: 2rem;
       padding: 4px;
+    }
+  }
+  .chat_input_wrapper {
+    width: 100%;
+    position: fixed;
+    bottom: 50px;
+    background-color: lightblue;
+    height: 50px;
+    z-index: 1000;
+    .chat_input {
+      position: absolute;
+      bottom: 10px;
+      border-radius: 10px;
+      border: none;
+      margin: 0 5px;
+      width: stretch;
+    }
+    .chat_input_has_text {
+      height: 100px;
     }
   }
 }

@@ -3,7 +3,7 @@
     title="John, Andrew, Nathan"
     [options]="headerOptions"
   ></gtm-header>
-  <section class="chat_list">
+  <section class="chat_list" #chatList>
     <article
       class="chat_box"
       [ngClass]="{ owned_chat: chat.sender === 'Jim' }"
@@ -31,5 +31,16 @@
         alt=""
       />
     </article>
+  </section>
+  <section class="chat_input_wrapper">
+    <form action="submit">
+      <textarea
+        class="chat_input"
+        name="msgInput"
+        [(ngModel)]="msgInput"
+        (keydown.enter)="sendMessage($event)"
+        [ngClass]="{ chat_input_has_text: msgInput.length > 0 }"
+      ></textarea>
+    </form>
   </section>
 </main>
