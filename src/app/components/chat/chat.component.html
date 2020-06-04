@@ -7,11 +7,11 @@
   <section class="chat_list" #chatList>
     <article
       class="chat_box"
-      [ngClass]="{ owned_chat: chat.sender === 'Jim' }"
+      [ngClass]="{ owned_chat: chat.sender === 'Andy' }"
       *ngFor="let chat of chats"
     >
       <img
-        *ngIf="chat.sender !== 'Jim'"
+        *ngIf="chat.sender !== 'Andy'"
         class="avatar"
         mat-card-avatar
         [src]="chat.avatar"
@@ -25,7 +25,7 @@
         </mat-card-footer>
       </mat-card>
       <img
-        *ngIf="chat.sender === 'Jim'"
+        *ngIf="chat.sender === 'Andy'"
         class="avatar"
         mat-card-avatar
         [src]="chat.avatar"
