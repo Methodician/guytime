@@ -134,11 +134,6 @@ export class ChatComponent implements OnInit {
 
   logClicked = () => console.log('clicked');
 
-  onPressEnter = ($e: KeyboardEvent) => {
-    $e.preventDefault();
-    this.sendMessage();
-  };
-
   sendMessage = () => {
     const message = {
       sender: 'Andy',

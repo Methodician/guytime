@@ -40,7 +40,6 @@
         class="chat_input"
         name="msgInput"
         [(ngModel)]="msgInput"
-        (keydown.enter)="onPressEnter($event)"
         [ngClass]="{ chat_input_has_text: msgInput.length > 0 }"
       ></textarea>
     </form>
