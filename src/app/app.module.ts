@@ -37,6 +37,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { ChatListComponent } from './components/chat-list/chat-list.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { HeaderComponent } from './components/header/header.component';
+import { ProfileEditComponent } from './components/profile-edit/profile-edit.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { HeaderComponent } from './components/header/header.component';
     NavbarComponent,
     ChatListComponent,
     HeaderComponent,
+    ProfileEditComponent,
   ],
   imports: [
     BrowserModule,

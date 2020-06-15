@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IHeaderOption } from '../header/header.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'gtm-me',
@@ -11,7 +12,7 @@ export class MeComponent implements OnInit {
 
   headerOptions: IHeaderOption[];
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.headerOptions = [
@@ -19,7 +20,7 @@ export class MeComponent implements OnInit {
         iconName: 'edit',
         optionText: 'Edit Details',
         isDisabled: false,
-        onClick: this.logClicked,
+        onClick: this.onEditClicked,
       },
       {
         iconName: 'people',
@@ -31,4 +32,6 @@ export class MeComponent implements OnInit {
   }
 
   logClicked = () => console.log('clicked');
+
+  onEditClicked = () => this.router.navigate(['/me/edit']);
 }

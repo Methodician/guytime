@@ -1,28 +1,11 @@
+@import 'src/app/styles/vars.scss';
+
 main {
-  display: grid;
-  grid-template-rows: 45px calc(100vh - 95px) 50px;
-  grid-template-areas:
-    'menu'
-    'body'
-    'navspace';
-
-  .top_bar {
-    grid-area: menu;
-    display: grid;
-    grid-template-columns: 30px auto;
-    background-color: lightgray;
-    .page_title {
-      justify-self: center;
-      align-self: center;
-    }
-  }
-
   .body {
-    grid-area: body;
-    margin: 10px;
+    position: absolute;
+    top: $header_height;
+    height: calc(100vh - #{$body_buffer_height});
     display: grid;
-    grid-template-rows: 95px auto;
-    grid-template-columns: auto;
 
     .header {
       display: grid;
@@ -65,7 +48,7 @@ main {
     .bio {
       overflow: scroll;
 
-      margin-bottom: 10px;
+      margin-top: 10px;
     }
   }
 }

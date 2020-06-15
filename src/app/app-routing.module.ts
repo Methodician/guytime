@@ -9,6 +9,7 @@ import { MeComponent } from './components/me/me.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { RegisterComponent } from './components/register/register.component';
 import { ChatListComponent } from './components/chat-list/chat-list.component';
+import { ProfileEditComponent } from './components/profile-edit/profile-edit.component';
 
 const routes: Routes = [
   // Should ultimately go to home (browse/filter profiles) which will redirect to login if you're not logged in
@@ -16,6 +17,11 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'me', component: MeComponent, canActivate: [AuthGuard] },
+  {
+    path: 'me/edit',
+    component: ProfileEditComponent,
+    canActivate: [AuthGuard],
+  },
   { path: 'guys', component: ProfileListComponent, canActivate: [AuthGuard] },
   {
     path: 'guys/:id',

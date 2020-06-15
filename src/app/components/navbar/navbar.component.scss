@@ -1,8 +1,10 @@
+@import 'src/app/styles/vars.scss';
 main {
   position: fixed;
   bottom: 0;
   width: 100%;
   mat-button-toggle-group {
+    height: $navbar_height;
     display: flex;
     justify-content: space-evenly;
     mat-button-toggle {

@@ -1,3 +1,5 @@
+@import 'src/app/styles/vars.scss';
+
 main {
   grid-area: menu;
   display: grid;
@@ -6,6 +8,7 @@ main {
   position: fixed;
   width: 100vw;
   z-index: 10000;
+  height: $header-height;
   .page_title {
     justify-self: center;
     align-self: center;
