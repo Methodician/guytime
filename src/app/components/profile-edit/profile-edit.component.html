@@ -58,8 +58,14 @@
           </div>
         </div>
         <div class="interests">
-          <mat-icon>home_work</mat-icon>
-          <mat-icon>nature_people</mat-icon>
+          <mat-icon
+            [ngClass]="{ deselected_interest: !isInterestSelected('indoors') }"
+            >home_work</mat-icon
+          >
+          <mat-icon
+            [ngClass]="{ deselected_interest: !isInterestSelected('outdoors') }"
+            >nature_people</mat-icon
+          >
         </div>
       </section>
     </article>

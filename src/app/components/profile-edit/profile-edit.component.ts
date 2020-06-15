@@ -42,6 +42,8 @@ export class ProfileEditComponent implements OnInit {
     this.avatarFile = file;
   };
 
+  isInterestSelected = (interest: string) => interest === 'indoors';
+
   logClicked = () => console.log('clicked');
 }
 

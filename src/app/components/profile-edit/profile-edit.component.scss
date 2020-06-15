@@ -43,6 +43,11 @@ main {
             }
           }
         }
+        .interests {
+          .deselected_interest {
+            color: lightgray;
+          }
+        }
       }
     }
   }
