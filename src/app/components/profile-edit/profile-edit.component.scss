@@ -6,22 +6,42 @@ main {
     top: $header_height;
     height: calc(100vh - #{$body_buffer_height});
     display: grid;
-    padding: 10px;
+    padding: 15px;
 
     .basics {
       display: grid;
       grid-template-columns: 100px auto;
+      height: 200px;
 
       .avatar_input_group {
         .avatar {
           width: 90px;
           height: 90px;
         }
-        input {
-          background-color: rgb(196, 206, 209);
-          padding: 3px;
-          border-radius: 5px;
-          width: 200px;
+        .avatar_button {
+          width: 90px;
+          padding: 0;
+          text-align: center;
+        }
+      }
+
+      .summary {
+        .stats {
+          display: flex;
+          flex-direction: column;
+
+          .name {
+            font-weight: bold;
+          }
+          .age_relationship {
+            display: inline;
+            .age {
+              width: 30px;
+            }
+            .relationship {
+              width: 100px;
+            }
+          }
         }
       }
     }

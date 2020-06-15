@@ -22,6 +22,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatListModule } from '@angular/material/list';
+import { MatSelectModule } from '@angular/material/select';
 
 // LOCAL IMPORTS
 import { environment } from '../environments/environment';
@@ -72,6 +73,7 @@ import { ProfileEditComponent } from './components/profile-edit/profile-edit.com
     MatButtonToggleModule,
     MatMenuModule,
     MatListModule,
+    MatSelectModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       registrationStrategy: 'registerImmediately',

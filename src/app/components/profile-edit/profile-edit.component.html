@@ -13,12 +13,49 @@
           alt="Profile Image"
           class="avatar"
         />
-        <input type="file" accept="image/*" (change)="onSelectAvatar($event)" />
+        <input
+          #avatarInput
+          hidden="true"
+          type="file"
+          accept="image/*"
+          (change)="onSelectAvatar($event)"
+        />
+        <button
+          (click)="avatarInput.click()"
+          class="avatar_button"
+          mat-raised-button
+          color="primary"
+        >
+          Pick Image
+        </button>
       </section>
       <section class="summary">
         <div class="stats">
-          <b class="name">Dave</b>
-          <p class="age_relationship">38 - Single</p>
+          <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input
+              matInput
+              placeholder="name"
+              class="name"
+              type="text"
+              value="Dave"
+            />
+          </mat-form-field>
+          <div class="age_relationship">
+            <mat-form-field class="age">
+              <mat-label>Age</mat-label>
+              <input matInput placeholder="age" type="number" value="38" />
+            </mat-form-field>
+            -
+            <mat-form-field class="relationship">
+              <mat-label>Relationship Status</mat-label>
+              <mat-select matNativeControl>
+                <mat-option value="Single">Single</mat-option>
+                <mat-option value="Married">Married</mat-option>
+                <mat-option value="Dating">Dating</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
         </div>
         <div class="interests">
           <mat-icon>home_work</mat-icon>
