@@ -7,12 +7,12 @@
   <form class="body">
     <article class="basics">
       <section class="avatar_input_group">
-        <img
+        <div
           mat-card-avatar
-          [src]="avatarUrl"
+          [style.background-image]="'url(' + avatarUrl + ')'"
           alt="Profile Image"
           class="avatar"
-        />
+        ></div>
         <input
           #avatarInput
           hidden="true"

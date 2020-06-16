@@ -2,12 +2,15 @@
   <gtm-header title="About Me" [options]="headerOptions"></gtm-header>
   <section class="body">
     <article class="header">
-      <img
+      <div
         mat-card-avatar
-        src="https://material.angular.io/assets/img/examples/shiba1.jpg"
+        [style.background-image]="
+          'url(https://material.angular.io/assets/img/examples/shiba1.jpg)'
+        "
         alt="Profile Image"
         class="avatar"
-      />
+      ></div>
+
       <section class="summary">
         <div class="stats">
           <b class="name">Dave</b>
