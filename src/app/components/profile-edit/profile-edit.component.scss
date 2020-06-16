@@ -45,6 +45,13 @@ main {
           }
         }
         .interests {
+          display: flex;
+          justify-content: center;
+
+          mat-icon {
+            margin: 0 5px;
+          }
+
           .deselected_interest {
             color: lightgray;
           }
