@@ -17,6 +17,8 @@ export class ProfileEditComponent implements OnInit {
 
   headerOptions: IHeaderOption[];
 
+  selectedInterests = ['outdoors'];
+
   constructor() {}
 
   ngOnInit(): void {
@@ -33,7 +35,6 @@ export class ProfileEditComponent implements OnInit {
   onSelectAvatar = ($e: IHtmlInputEvent) => {
     const reader = new FileReader();
     reader.onload = () => {
-      // this.form.markAsDirty();
       this.avatarUrl = reader.result;
     };
 
@@ -42,7 +43,17 @@ export class ProfileEditComponent implements OnInit {
     this.avatarFile = file;
   };
 
-  isInterestSelected = (interest: string) => interest === 'indoors';
+  isInterestSelected = (interest: string) =>
+    this.selectedInterests.includes(interest);
+
+  onInterestClicked = (interest: string) => {
+    const interestIndex = this.selectedInterests.indexOf(interest);
+    if (interestIndex === -1) {
+      this.selectedInterests.push(interest);
+    } else {
+      this.selectedInterests.splice(interestIndex, 1);
+    }
+  };
 
   logClicked = () => console.log('clicked');
 }

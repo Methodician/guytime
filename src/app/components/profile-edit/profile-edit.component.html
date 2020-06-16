@@ -59,10 +59,12 @@
         </div>
         <div class="interests">
           <mat-icon
+            (click)="onInterestClicked('indoors')"
             [ngClass]="{ deselected_interest: !isInterestSelected('indoors') }"
             >home_work</mat-icon
           >
           <mat-icon
+            (click)="onInterestClicked('outdoors')"
             [ngClass]="{ deselected_interest: !isInterestSelected('outdoors') }"
             >nature_people</mat-icon
           >
