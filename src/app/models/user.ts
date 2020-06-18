@@ -1,7 +1,7 @@
 // import { Timestamp } from '@google-cloud/firestore';
 import { DisplayNameI } from './shared';
 
-// export interface IUser {
+// export interface UserI {
 //   uid?: string;
 //   formattedAddress: string;
 //   geopoint: GeoPoint;
@@ -19,23 +19,22 @@ import { DisplayNameI } from './shared';
 //   createdAt: Timestamp;
 // }
 
-export interface IUser {
+export interface UserI {
   uid?: string;
-  fName: string;
+  fName?: string;
   lName?: string;
+  age?: number;
+  relationshipStatus?: RelationshipStatusT;
   activityTypes: ActivityTypeT[];
-  drinkingHabit: TDrinkingHabit;
-  personalityType: TPersonalityType;
-  imageUrl?: string;
   bio?: string;
-  email: string;
+  email?: string;
   phoneNumber?: string;
   connectionIds: string[];
-  createdAt: any;
+  createdAt?: any;
 }
 
-export type RelationshipStatus = 'SINGLE' | 'MARRIED' | 'DATING' | 'OTHER';
-export const RelationshipStatusM = new Map<RelationshipStatus, DisplayNameI>([
+export type RelationshipStatusT = 'SINGLE' | 'MARRIED' | 'DATING' | 'OTHER';
+export const RelationshipStatusM = new Map<RelationshipStatusT, DisplayNameI>([
   ['SINGLE', { displayName: 'Single' }],
   ['MARRIED', { displayName: 'Married' }],
   ['DATING', { displayName: 'Dating' }],

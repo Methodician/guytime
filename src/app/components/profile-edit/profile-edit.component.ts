@@ -2,8 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { IHeaderOption } from '../header/header.component';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AngularFireUploadTask } from '@angular/fire/storage';
-import { RelationshipStatusM, ActivityTypeM } from 'src/app/models/user';
+import { RelationshipStatusM, ActivityTypeM, UserI } from 'src/app/models/user';
 import { HtmlInputEventI } from 'src/app/models/shared';
+import { UserService } from 'src/app/services/user.service';
+import { BehaviorSubject } from 'rxjs';
+import { StorageService } from 'src/app/services/storage.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'gtm-profile-edit',
@@ -17,22 +21,35 @@ export class ProfileEditComponent implements OnInit {
   form: FormGroup;
   avatarFile: File;
   imageUploadTask: AngularFireUploadTask;
-  avatarUrl: string | ArrayBuffer =
-    'https://material.angular.io/assets/img/examples/shiba1.jpg';
+  avatarUrl: string | ArrayBuffer = '';
 
   headerOptions: IHeaderOption[];
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private userSvc: UserService,
+    authSvc: AuthService,
+    storageSvc: StorageService,
+  ) {
+    authSvc.authInfo$.subscribe(info => {
+      if (info.uid) {
+        storageSvc
+          .getDownloadUrl(`profileImages/${info.uid}`)
+          .then(url => (this.avatarUrl = url));
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      fName: ['Dave', Validators.required],
-      lName: ['Asprey', Validators.required],
-      age: [42, Validators.required],
-      relationshipStatus: ['SINGLE'],
-      activityTypes: [['INDOOR']],
+      fName: ['', Validators.required],
+      lName: ['', Validators.required],
+      age: [0, Validators.required],
+      relationshipStatus: [null],
+      activityTypes: [[]],
       bio: ['', Validators.required],
     });
+    this.watchLoggedInUser();
     this.headerOptions = [
       {
         iconName: 'account_circle',
@@ -42,6 +59,12 @@ export class ProfileEditComponent implements OnInit {
       },
     ];
   }
+
+  watchLoggedInUser = () => {
+    this.userSvc.loggedInUser$.subscribe(user => {
+      this.form.patchValue(user);
+    });
+  };
 
   onSelectAvatar = ($e: HtmlInputEventI) => {
     const reader = new FileReader();
@@ -75,8 +98,39 @@ export class ProfileEditComponent implements OnInit {
   };
 
   onSaveClicked = () => {
-    console.log(this.form.value);
-    console.log(this.form.valid);
+    if (!this.form.valid) {
+      alert('Please make sure all required fields are filled before saving');
+      return;
+    }
+    const profileImageSub = this.saveProfileImage().subscribe(
+      async isComplete => {
+        if (!isComplete) return;
+
+        try {
+          const formVal: UserI = this.form.value;
+          await this.userSvc.updateUser(formVal);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          if (profileImageSub) profileImageSub.unsubscribe();
+          return;
+        }
+      },
+    );
+  };
+
+  saveProfileImage = () => {
+    const isComplete$ = new BehaviorSubject(false);
+    if (!this.avatarFile) {
+      isComplete$.next(true);
+    } else {
+      const { task } = this.userSvc.uploadProfileImage(this.avatarFile);
+      // ToDo: add progress dialog
+      task.then(() => {
+        isComplete$.next(true);
+      });
+    }
+    return isComplete$;
   };
 
   logClicked = () => console.log('clicked');
