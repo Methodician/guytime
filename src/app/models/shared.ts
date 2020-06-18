@@ -1,9 +1,13 @@
-import { Timestamp, FieldValue } from '@google-cloud/firestore';
+// import { FieldValue, Timestamp } from '@google-cloud/firestore';
 
-export interface IDisplayName {
+export interface DisplayNameI {
   displayName: string;
 }
 
-export type TSettableTimestamp = Timestamp | FieldValue | Date | undefined;
+export interface HtmlInputEventI extends Event {
+  target: HTMLInputElement & EventTarget;
+}
 
-export type TNonEmptyArray<T> = [T, ...T[]];
+// export type SettableTimestampT = Timestamp | FieldValue | Date | undefined;
+
+export type NonEmptyArrayT<T> = [T, ...T[]];
