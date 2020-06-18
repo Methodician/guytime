@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { IHeaderOption } from '../header/header.component';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AngularFireUploadTask } from '@angular/fire/storage';
+import { RelationshipStatusM, ActivityTypeM } from 'src/app/models/user';
+import { HtmlInputEventI } from 'src/app/models/shared';
 
 @Component({
   selector: 'gtm-profile-edit',
@@ -9,23 +11,28 @@ import { AngularFireUploadTask } from '@angular/fire/storage';
   styleUrls: ['./profile-edit.component.scss'],
 })
 export class ProfileEditComponent implements OnInit {
+  relationshipStatusMap = RelationshipStatusM;
+  activityTypeMap = ActivityTypeM;
+
   form: FormGroup;
   avatarFile: File;
   imageUploadTask: AngularFireUploadTask;
   avatarUrl: string | ArrayBuffer =
     'https://material.angular.io/assets/img/examples/shiba1.jpg';
 
-  bio = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sollicitudin tempor id eu nisl nunc mi ipsum faucibus. Sapien et ligula ullamcorper malesuada proin. Habitant morbi tristique senectus et netus et malesuada. Tortor consequat id porta nibh venenatis cras. Tempus iaculis urna id volutpat lacus. Suspendisse ultrices gravida dictum fusce. Ipsum dolor sit amet consectetur adipiscing elit. Lectus vestibulum mattis ullamcorper velit sed ullamcorper. Mauris pharetra et ultrices neque ornare aenean euismod elementum. Adipiscing commodo elit at imperdiet dui accumsan sit amet.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sollicitudin tempor id eu nisl nunc mi ipsum faucibus. Sapien et ligula ullamcorper malesuada proin. Habitant morbi tristique senectus et netus et malesuada. Tortor consequat id porta nibh venenatis cras. Tempus iaculis urna id volutpat lacus. Suspendisse ultrices gravida dictum fusce. Ipsum dolor sit amet consectetur adipiscing elit. Lectus vestibulum mattis ullamcorper velit sed ullamcorper. Mauris pharetra et ultrices neque ornare aenean euismod elementum. Adipiscing commodo elit at imperdiet dui accumsan sit amet.`;
-
   headerOptions: IHeaderOption[];
 
-  selectedInterests = ['outdoors'];
-
-  constructor() {}
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
+    this.form = this.fb.group({
+      fName: ['Dave', Validators.required],
+      lName: ['Asprey', Validators.required],
+      age: [42, Validators.required],
+      relationshipStatus: ['SINGLE'],
+      activityTypes: [['INDOOR']],
+      bio: ['', Validators.required],
+    });
     this.headerOptions = [
       {
         iconName: 'account_circle',
@@ -36,7 +43,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
     ];
   }
 
-  onSelectAvatar = ($e: IHtmlInputEvent) => {
+  onSelectAvatar = ($e: HtmlInputEventI) => {
     const reader = new FileReader();
     reader.onload = () => {
       this.avatarUrl = reader.result;
@@ -47,21 +54,30 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
     this.avatarFile = file;
   };
 
-  isInterestSelected = (interest: string) =>
-    this.selectedInterests.includes(interest);
+  isActivityTypeSelected = (activityType: string) =>
+    this.form.value.activityTypes.includes(activityType);
 
-  onInterestClicked = (interest: string) => {
-    const interestIndex = this.selectedInterests.indexOf(interest);
-    if (interestIndex === -1) {
-      this.selectedInterests.push(interest);
+  onActivityTypeClicked = (activityType: string) => {
+    const activityTypes = [...(this.form.value.activityTypes as Array<string>)];
+    const activityTypeIndex = activityTypes.indexOf(activityType);
+    if (activityTypeIndex === -1) {
+      activityTypes.push(activityType);
     } else {
-      this.selectedInterests.splice(interestIndex, 1);
+      activityTypes.splice(activityTypeIndex, 1);
     }
+    this.form.patchValue({ activityTypes: activityTypes });
+  };
+
+  trimInput = formControlName => {
+    this.form.patchValue({
+      [formControlName]: this.form.value[formControlName].trim(),
+    });
+  };
+
+  onSaveClicked = () => {
+    console.log(this.form.value);
+    console.log(this.form.valid);
   };
 
   logClicked = () => console.log('clicked');
-}
-
-export interface IHtmlInputEvent extends Event {
-  target: HTMLInputElement & EventTarget;
 }

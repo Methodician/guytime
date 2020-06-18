@@ -12,7 +12,7 @@ main {
 
     .basics {
       display: grid;
-      grid-template-columns: 100px auto;
+      grid-template-columns: 100px calc(100vw - 140px);
 
       .avatar_input_group {
         .avatar {
@@ -32,8 +32,15 @@ main {
           display: flex;
           flex-direction: column;
 
-          .name {
-            font-weight: bold;
+          .names {
+            display: grid;
+            grid-template-columns: 50% 50%;
+            grid-gap: 10px;
+
+            .first_name,
+            .last_name {
+              font-weight: bold;
+            }
           }
           .age_relationship {
             display: inline;
@@ -67,5 +74,11 @@ main {
         }
       }
     }
+  }
+  .save_button_wrapper {
+    width: 100vw;
+    position: absolute;
+    bottom: calc(#{$navbar_height} + 10px);
+    text-align: center;
   }
 }
