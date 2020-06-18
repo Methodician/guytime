@@ -27,7 +27,6 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {}
 
   onBackClicked = () => {
-    console.log(this.backLocation);
     this.router.navigateByUrl(this.backLocation);
   };
 

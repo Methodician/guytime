@@ -8,6 +8,7 @@ import { UserService } from 'src/app/services/user.service';
 import { BehaviorSubject } from 'rxjs';
 import { StorageService } from 'src/app/services/storage.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'gtm-profile-edit',
@@ -28,6 +29,7 @@ export class ProfileEditComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private userSvc: UserService,
+    private router: Router,
     authSvc: AuthService,
     storageSvc: StorageService,
   ) {
@@ -109,6 +111,7 @@ export class ProfileEditComponent implements OnInit {
         try {
           const formVal: UserI = this.form.value;
           await this.userSvc.updateUser(formVal);
+          this.router.navigate(['/me']);
         } catch (error) {
           console.error(error);
         } finally {

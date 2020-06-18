@@ -79,14 +79,16 @@
           </div>
         </div>
         <div class="interests">
-          <mat-icon
+          <div
+            class="interest_icon_wrapper"
             *ngFor="let entry of activityTypeMap | keyvalue"
             (click)="onActivityTypeClicked(entry.key)"
-            [ngClass]="{
-              deselected_interest: !isActivityTypeSelected(entry.key)
-            }"
-            >{{ entry.value.iconName }}</mat-icon
           >
+            <gtm-toggle-icon
+              [deselected]="!isActivityTypeSelected(entry.key)"
+              [iconName]="entry.value.iconName"
+            ></gtm-toggle-icon>
+          </div>
         </div>
       </section>
     </article>

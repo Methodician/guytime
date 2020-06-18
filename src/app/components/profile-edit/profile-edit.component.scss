@@ -56,12 +56,8 @@ main {
           display: flex;
           justify-content: center;
 
-          mat-icon {
+          .interest_icon_wrapper {
             margin: 0 5px;
-          }
-
-          .deselected_interest {
-            color: lightgray;
           }
         }
       }
