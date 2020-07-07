@@ -6,8 +6,6 @@ import { RelationshipStatusM, ActivityTypeM, UserI } from 'src/app/models/user';
 import { HtmlInputEventI } from 'src/app/models/shared';
 import { UserService } from 'src/app/services/user.service';
 import { BehaviorSubject } from 'rxjs';
-import { StorageService } from 'src/app/services/storage.service';
-import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -22,7 +20,9 @@ export class ProfileEditComponent implements OnInit {
   form: FormGroup;
   avatarFile: File;
   imageUploadTask: AngularFireUploadTask;
-  avatarUrl: string | ArrayBuffer = '';
+  avatarUrl$: BehaviorSubject<string | ArrayBuffer> = new BehaviorSubject(
+    'assets/icons/square_icon.svg',
+  );
 
   headerOptions: IHeaderOption[];
 
@@ -30,28 +30,19 @@ export class ProfileEditComponent implements OnInit {
     private fb: FormBuilder,
     private userSvc: UserService,
     private router: Router,
-    authSvc: AuthService,
-    storageSvc: StorageService,
-  ) {
-    authSvc.authInfo$.subscribe(info => {
-      if (info.uid) {
-        storageSvc
-          .getDownloadUrl(`profileImages/${info.uid}`)
-          .then(url => (this.avatarUrl = url));
-      }
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
     this.form = this.fb.group({
       fName: ['', Validators.required],
       lName: ['', Validators.required],
       age: [0, Validators.required],
-      relationshipStatus: [null],
+      relationshipStatus: [null, Validators.required],
       activityTypes: [[]],
       bio: ['', Validators.required],
     });
     this.watchLoggedInUser();
+    this.avatarUrl$ = this.userSvc.getLoggedInAvatarUrl();
     this.headerOptions = [
       {
         iconName: 'account_circle',
@@ -71,7 +62,7 @@ export class ProfileEditComponent implements OnInit {
   onSelectAvatar = ($e: HtmlInputEventI) => {
     const reader = new FileReader();
     reader.onload = () => {
-      this.avatarUrl = reader.result;
+      this.avatarUrl$.next(reader.result);
     };
 
     const file = $e.target.files[0];

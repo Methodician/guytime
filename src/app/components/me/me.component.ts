@@ -8,8 +8,7 @@ import {
   ActivityTypeM,
   ActivityTypeT,
 } from 'src/app/models/user';
-import { StorageService } from 'src/app/services/storage.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
   selector: 'gtm-me',
@@ -25,24 +24,14 @@ export class MeComponent implements OnInit {
   headerOptions: IHeaderOption[];
 
   userInfo$: BehaviorSubject<UserI>;
-  avatarUrl: string = '';
+  avatarUrl$: Observable<string>;
 
-  constructor(
-    private router: Router,
-    userSvc: UserService,
-    storageSvc: StorageService,
-  ) {
-    this.userInfo$ = userSvc.loggedInUser$;
-    this.userInfo$.subscribe(info => {
-      if (info.uid) {
-        storageSvc
-          .getDownloadUrl(`profileImages/${info.uid}`)
-          .then(url => (this.avatarUrl = url));
-      }
-    });
-  }
+  constructor(private router: Router, private userSvc: UserService) {}
 
   ngOnInit(): void {
+    this.userInfo$ = this.userSvc.loggedInUser$;
+    this.avatarUrl$ = this.userSvc.getLoggedInAvatarUrl();
+
     this.headerOptions = [
       {
         iconName: 'edit',

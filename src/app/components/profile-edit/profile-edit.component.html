@@ -9,7 +9,7 @@
       <section class="avatar_input_group">
         <div
           mat-card-avatar
-          [style.background-image]="'url(' + avatarUrl + ')'"
+          [style.background-image]="'url(' + (avatarUrl$ | async) + ')'"
           alt="Profile Image"
           class="avatar"
         ></div>

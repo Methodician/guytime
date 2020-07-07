@@ -62,6 +62,31 @@ export class UserService {
     return;
   };
 
+  getLoggedInAvatarUrl = () => {
+    const url$ = new BehaviorSubject<string>('assets/icons/square_icon.svg');
+    this.authSvc.authInfo$.subscribe(info => {
+      this.getAvatarUrl(info.uid).subscribe(url => url$.next(url));
+    });
+    return url$;
+  };
+
+  getAvatarUrl = (uid: string) => {
+    const url$ = new BehaviorSubject<string>('assets/icons/square_icon.svg');
+    if (uid) {
+      this.afStorage
+        .ref(`profileImages/${uid}`)
+        .getDownloadURL()
+        .subscribe(
+          url => url$.next(url),
+          _ => {
+            url$.next('assets/icons/square_icon.svg');
+          },
+        );
+    }
+    return url$;
+  };
+
   // REFS
-  userRef = uid => this.afs.collection<UserI>('users').doc<UserI>(uid);
+  userRef = (uid: string) =>
+    this.afs.collection<UserI>('users').doc<UserI>(uid);
 }
