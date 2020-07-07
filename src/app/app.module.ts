@@ -39,6 +39,7 @@ import { ChatListComponent } from './components/chat-list/chat-list.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { HeaderComponent } from './components/header/header.component';
 import { ProfileEditComponent } from './components/profile-edit/profile-edit.component';
+import { ToggleIconComponent } from './components/ui/toggle-icon/toggle-icon.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { ProfileEditComponent } from './components/profile-edit/profile-edit.com
     ChatListComponent,
     HeaderComponent,
     ProfileEditComponent,
+    ToggleIconComponent,
   ],
   imports: [
     BrowserModule,

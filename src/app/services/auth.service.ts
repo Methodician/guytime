@@ -40,8 +40,8 @@ export class AuthService {
         email,
         password,
       );
-      this.router.navigate(['/me']);
-      return credential;
+
+      return { credential };
     } catch (error) {
       alert(error);
       return null;

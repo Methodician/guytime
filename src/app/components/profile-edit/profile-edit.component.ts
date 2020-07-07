@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { IHeaderOption } from '../header/header.component';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AngularFireUploadTask } from '@angular/fire/storage';
+import { RelationshipStatusM, ActivityTypeM, UserI } from 'src/app/models/user';
+import { HtmlInputEventI } from 'src/app/models/shared';
+import { UserService } from 'src/app/services/user.service';
+import { BehaviorSubject } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'gtm-profile-edit',
@@ -9,23 +14,35 @@ import { AngularFireUploadTask } from '@angular/fire/storage';
   styleUrls: ['./profile-edit.component.scss'],
 })
 export class ProfileEditComponent implements OnInit {
+  relationshipStatusMap = RelationshipStatusM;
+  activityTypeMap = ActivityTypeM;
+
   form: FormGroup;
   avatarFile: File;
   imageUploadTask: AngularFireUploadTask;
-  avatarUrl: string | ArrayBuffer =
-    'https://material.angular.io/assets/img/examples/shiba1.jpg';
-
-  bio = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sollicitudin tempor id eu nisl nunc mi ipsum faucibus. Sapien et ligula ullamcorper malesuada proin. Habitant morbi tristique senectus et netus et malesuada. Tortor consequat id porta nibh venenatis cras. Tempus iaculis urna id volutpat lacus. Suspendisse ultrices gravida dictum fusce. Ipsum dolor sit amet consectetur adipiscing elit. Lectus vestibulum mattis ullamcorper velit sed ullamcorper. Mauris pharetra et ultrices neque ornare aenean euismod elementum. Adipiscing commodo elit at imperdiet dui accumsan sit amet.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sollicitudin tempor id eu nisl nunc mi ipsum faucibus. Sapien et ligula ullamcorper malesuada proin. Habitant morbi tristique senectus et netus et malesuada. Tortor consequat id porta nibh venenatis cras. Tempus iaculis urna id volutpat lacus. Suspendisse ultrices gravida dictum fusce. Ipsum dolor sit amet consectetur adipiscing elit. Lectus vestibulum mattis ullamcorper velit sed ullamcorper. Mauris pharetra et ultrices neque ornare aenean euismod elementum. Adipiscing commodo elit at imperdiet dui accumsan sit amet.`;
+  avatarUrl$: BehaviorSubject<string | ArrayBuffer> = new BehaviorSubject(
+    'assets/icons/square_icon.svg',
+  );
 
   headerOptions: IHeaderOption[];
 
-  selectedInterests = ['outdoors'];
-
-  constructor() {}
+  constructor(
+    private fb: FormBuilder,
+    private userSvc: UserService,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
+    this.form = this.fb.group({
+      fName: ['', Validators.required],
+      lName: ['', Validators.required],
+      age: [0, Validators.required],
+      relationshipStatus: [null, Validators.required],
+      activityTypes: [[]],
+      bio: ['', Validators.required],
+    });
+    this.watchLoggedInUser();
+    this.avatarUrl$ = this.userSvc.getLoggedInAvatarUrl();
     this.headerOptions = [
       {
         iconName: 'account_circle',
@@ -36,10 +53,16 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
     ];
   }
 
-  onSelectAvatar = ($e: IHtmlInputEvent) => {
+  watchLoggedInUser = () => {
+    this.userSvc.loggedInUser$.subscribe(user => {
+      this.form.patchValue(user);
+    });
+  };
+
+  onSelectAvatar = ($e: HtmlInputEventI) => {
     const reader = new FileReader();
     reader.onload = () => {
-      this.avatarUrl = reader.result;
+      this.avatarUrl$.next(reader.result);
     };
 
     const file = $e.target.files[0];
@@ -47,21 +70,62 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
     this.avatarFile = file;
   };
 
-  isInterestSelected = (interest: string) =>
-    this.selectedInterests.includes(interest);
+  isActivityTypeSelected = (activityType: string) =>
+    this.form.value.activityTypes.includes(activityType);
 
-  onInterestClicked = (interest: string) => {
-    const interestIndex = this.selectedInterests.indexOf(interest);
-    if (interestIndex === -1) {
-      this.selectedInterests.push(interest);
+  onActivityTypeClicked = (activityType: string) => {
+    const activityTypes = [...(this.form.value.activityTypes as Array<string>)];
+    const activityTypeIndex = activityTypes.indexOf(activityType);
+    if (activityTypeIndex === -1) {
+      activityTypes.push(activityType);
     } else {
-      this.selectedInterests.splice(interestIndex, 1);
+      activityTypes.splice(activityTypeIndex, 1);
     }
+    this.form.patchValue({ activityTypes: activityTypes });
+  };
+
+  trimInput = formControlName => {
+    this.form.patchValue({
+      [formControlName]: this.form.value[formControlName].trim(),
+    });
+  };
+
+  onSaveClicked = () => {
+    if (!this.form.valid) {
+      alert('Please make sure all required fields are filled before saving');
+      return;
+    }
+    const profileImageSub = this.saveProfileImage().subscribe(
+      async isComplete => {
+        if (!isComplete) return;
+
+        try {
+          const formVal: UserI = this.form.value;
+          await this.userSvc.updateUser(formVal);
+          this.router.navigate(['/me']);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          if (profileImageSub) profileImageSub.unsubscribe();
+          return;
+        }
+      },
+    );
+  };
+
+  saveProfileImage = () => {
+    const isComplete$ = new BehaviorSubject(false);
+    if (!this.avatarFile) {
+      isComplete$.next(true);
+    } else {
+      const { task } = this.userSvc.uploadProfileImage(this.avatarFile);
+      // ToDo: add progress dialog
+      task.then(() => {
+        isComplete$.next(true);
+      });
+    }
+    return isComplete$;
   };
 
   logClicked = () => console.log('clicked');
-}
-
-export interface IHtmlInputEvent extends Event {
-  target: HTMLInputElement & EventTarget;
 }

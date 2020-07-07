@@ -4,12 +4,12 @@
     [options]="headerOptions"
     backLocation="/me"
   ></gtm-header>
-  <form class="body">
+  <form *ngIf="form" [formGroup]="form" class="body">
     <article class="basics">
       <section class="avatar_input_group">
         <div
           mat-card-avatar
-          [style.background-image]="'url(' + avatarUrl + ')'"
+          [style.background-image]="'url(' + (avatarUrl$ | async) + ')'"
           alt="Profile Image"
           class="avatar"
         ></div>
@@ -31,43 +31,64 @@
       </section>
       <section class="summary">
         <div class="stats">
-          <mat-form-field>
-            <mat-label>Name</mat-label>
-            <input
-              matInput
-              placeholder="name"
-              class="name"
-              type="text"
-              value="Dave"
-            />
-          </mat-form-field>
+          <div class="names">
+            <mat-form-field>
+              <mat-label>first Name</mat-label>
+              <input
+                matInput
+                placeholder="first name"
+                class="first_name"
+                type="text"
+                formControlName="fName"
+                (blur)="trimInput('fName')"
+              />
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>last Name</mat-label>
+              <input
+                matInput
+                placeholder="last name"
+                class="last_name"
+                type="text"
+                formControlName="lName"
+                (blur)="trimInput('lName')"
+              />
+            </mat-form-field>
+          </div>
           <div class="age_relationship">
             <mat-form-field class="age">
               <mat-label>Age</mat-label>
-              <input matInput placeholder="age" type="number" value="38" />
+              <input
+                matInput
+                placeholder="age"
+                type="number"
+                formControlName="age"
+              />
             </mat-form-field>
             -
             <mat-form-field class="relationship">
               <mat-label>Relationship Status</mat-label>
-              <mat-select matNativeControl>
-                <mat-option value="Single">Single</mat-option>
-                <mat-option value="Married">Married</mat-option>
-                <mat-option value="Dating">Dating</mat-option>
+              <mat-select formControlName="relationshipStatus">
+                <mat-option
+                  *ngFor="let relEntry of relationshipStatusMap | keyvalue"
+                  [value]="relEntry.key"
+                  >{{ relEntry.value.displayName }}</mat-option
+                >
               </mat-select>
             </mat-form-field>
           </div>
         </div>
         <div class="interests">
-          <mat-icon
-            (click)="onInterestClicked('indoors')"
-            [ngClass]="{ deselected_interest: !isInterestSelected('indoors') }"
-            >home_work</mat-icon
+          <div
+            class="interest_icon_wrapper"
+            *ngFor="let entry of activityTypeMap | keyvalue"
+            (click)="onActivityTypeClicked(entry.key)"
           >
-          <mat-icon
-            (click)="onInterestClicked('outdoors')"
-            [ngClass]="{ deselected_interest: !isInterestSelected('outdoors') }"
-            >nature_people</mat-icon
-          >
+            <gtm-toggle-icon
+              [deselected]="!isActivityTypeSelected(entry.key)"
+              [iconName]="entry.value.iconName"
+            ></gtm-toggle-icon>
+          </div>
         </div>
       </section>
     </article>
@@ -76,7 +97,7 @@
         <mat-label>Bio</mat-label>
         <textarea
           cdkTextareaAutosize
-          [(ngModel)]="bio"
+          formControlName="bio"
           name="bioInput"
           matInput
           placeholder="Ex. I enjoy my rock climbing hobby, fishing, and video games. I've been wanting to start a garden."
@@ -84,4 +105,14 @@
       </mat-form-field>
     </mat-card>
   </form>
+  <div class="save_button_wrapper">
+    <button
+      (click)="onSaveClicked()"
+      class="save_button"
+      mat-button
+      color="primary"
+    >
+      Save
+    </button>
+  </div>
 </main>
