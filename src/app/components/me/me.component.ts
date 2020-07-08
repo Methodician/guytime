@@ -2,12 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IHeaderOption } from '../header/header.component';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
-import {
-  UserI,
-  RelationshipStatusM,
-  ActivityTypeM,
-  ActivityTypeT,
-} from 'src/app/models/user';
+import { UserI, RelationshipStatusM } from 'src/app/models/user';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
@@ -17,7 +12,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class MeComponent implements OnInit {
   relationshipStatusMap = RelationshipStatusM;
-  activityTypeMap = ActivityTypeM;
 
   promptEvent;
 
@@ -47,9 +41,6 @@ export class MeComponent implements OnInit {
       },
     ];
   }
-
-  isActivityTypeSelected = (activityType: ActivityTypeT) =>
-    this.userInfo$.value.activityTypes.includes(activityType);
 
   onEditClicked = () => this.router.navigate(['/me/edit']);
 

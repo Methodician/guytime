@@ -1,0 +1,11 @@
+<main>
+  <div
+    *ngFor="let entry of activityTypeMap | keyvalue"
+    class="interest_icon_wrapper"
+  >
+    <gtm-toggle-icon
+      [deselected]="!isActivityTypeSelected(entry.key)"
+      [iconName]="entry.value.iconName"
+    ></gtm-toggle-icon>
+  </div>
+</main>
