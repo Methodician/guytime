@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { IHeaderOption } from '../header/header.component';
 import { UserI } from 'src/app/models/user';
+import { UserService } from 'src/app/services/user.service';
+import { map } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'gtm-profile-list',
@@ -9,20 +12,25 @@ import { UserI } from 'src/app/models/user';
 })
 export class ProfileListComponent implements OnInit {
   headerOptions: IHeaderOption[];
-  profiles: UserI[] = [
-    {
-      uid: 'slakfsdf',
-      fName: 'Dave',
-      age: 38,
-      activityTypes: ['INDOOR'],
-      relationshipStatus: 'SINGLE',
-      connectionIds: [],
-    },
-  ];
+  users$: BehaviorSubject<UserI[]> = new BehaviorSubject([]);
 
-  constructor() {}
+  constructor(private userSvc: UserService) {}
 
   ngOnInit(): void {
+    this.userSvc
+      .namedUsersRef()
+      .snapshotChanges()
+      .pipe(
+        map(snapList =>
+          snapList.map(userSnap => {
+            const data = userSnap.payload.doc.data();
+            const uid = userSnap.payload.doc.id;
+            return { uid, ...data };
+          }),
+        ),
+      )
+      .subscribe(users => this.users$.next(users));
+
     this.headerOptions = [
       {
         iconName: 'place',

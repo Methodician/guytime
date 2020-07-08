@@ -2,9 +2,9 @@
   <gtm-header title="Guys Out There" [options]="headerOptions"></gtm-header>
 
   <mat-list>
-    <mat-list-item *ngFor="let guy of profiles">
+    <mat-list-item *ngFor="let user of users$ | async">
       <gtm-profile-preview-card
-        [user]="guy"
+        [user]="user"
         style="width: 100%;"
       ></gtm-profile-preview-card>
     </mat-list-item>
