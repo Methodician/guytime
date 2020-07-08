@@ -1,0 +1,39 @@
+main {
+  width: 100%;
+
+  mat-card {
+    display: grid;
+    grid-template-columns: 15% 30% 55%;
+    grid-template-rows: 40% 60%;
+    grid-template-areas:
+      'avatar name relationship_status'
+      'avatar age interests_icons';
+    width: 100%;
+    height: 3.8rem;
+    padding: 6px;
+    .grid_cell_centered {
+      justify-self: center;
+      align-self: center;
+    }
+    img {
+      grid-area: avatar;
+    }
+    .name {
+      grid-area: name;
+      margin: 0;
+      justify-self: center;
+      align-self: flex-end;
+    }
+    .age {
+      grid-area: age;
+    }
+    .relationship_status {
+      grid-area: relationship_status;
+      align-self: flex-end;
+    }
+    section {
+      grid-area: interests_icons;
+      align-self: center;
+    }
+  }
+}

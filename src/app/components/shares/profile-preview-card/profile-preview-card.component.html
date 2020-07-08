@@ -1,0 +1,17 @@
+<main>
+  <mat-card [routerLink]="[user.uid]">
+    <img
+      mat-card-avatar
+      class="grid_cell_centered"
+      src="https://material.angular.io/assets/img/examples/shiba1.jpg"
+    />
+    <b class="name">{{ user.fName }}</b>
+    <b class="age grid_cell_centered">{{ user.age }}</b>
+    <b class="relationship_status">{{
+      relationshipStatusMap.get(user.relationshipStatus).displayName
+    }}</b>
+    <gtm-activities-span
+      [selectedActivities]="user.activityTypes"
+    ></gtm-activities-span>
+  </mat-card>
+</main>

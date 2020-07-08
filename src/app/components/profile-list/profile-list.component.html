@@ -2,22 +2,11 @@
   <gtm-header title="Guys Out There" [options]="headerOptions"></gtm-header>
 
   <mat-list>
-    <mat-list-item *ngFor="let guy of guys">
-      <mat-card [routerLink]="[guy.id]">
-        <img
-          mat-card-avatar
-          class="grid_cell_centered"
-          src="https://material.angular.io/assets/img/examples/shiba1.jpg"
-        />
-        <b class="name">{{ guy.name }}</b>
-        <b class="age grid_cell_centered">{{ guy.age }}</b>
-        <span class="interests_title">Interests:</span>
-        <section>
-          <mat-icon *ngFor="let interest of guy.interests">{{
-            interest
-          }}</mat-icon>
-        </section>
-      </mat-card>
+    <mat-list-item *ngFor="let guy of profiles">
+      <gtm-profile-preview-card
+        [user]="guy"
+        style="width: 100%;"
+      ></gtm-profile-preview-card>
     </mat-list-item>
   </mat-list>
 </main>

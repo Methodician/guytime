@@ -74,7 +74,7 @@ main {
   .save_button_wrapper {
     width: 100vw;
     position: absolute;
-    bottom: calc(#{$navbar_height} + 10px);
+    bottom: calc(#{$footer_height} + 10px);
     text-align: center;
   }
 }

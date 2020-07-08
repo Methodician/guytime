@@ -41,6 +41,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { ProfileEditComponent } from './components/profile-edit/profile-edit.component';
 import { ToggleIconComponent } from './components/ui/toggle-icon/toggle-icon.component';
 import { ActivitiesSpanComponent } from './components/shared/activities-span/activities-span.component';
+import { ProfilePreviewCardComponent } from './components/shares/profile-preview-card/profile-preview-card.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { ActivitiesSpanComponent } from './components/shared/activities-span/act
     ProfileEditComponent,
     ToggleIconComponent,
     ActivitiesSpanComponent,
+    ProfilePreviewCardComponent,
   ],
   imports: [
     BrowserModule,
