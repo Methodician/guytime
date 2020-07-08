@@ -15,7 +15,10 @@ main {
       justify-self: center;
       align-self: center;
     }
-    img {
+    .avatar {
+      width: 45px;
+      height: 45px;
+      background-size: cover;
       grid-area: avatar;
     }
     .name {
