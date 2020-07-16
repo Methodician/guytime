@@ -19,26 +19,45 @@ import { DisplayNameI } from './shared';
 //   createdAt: Timestamp;
 // }
 
+// export interface UserI {
+//   uid?: string;
+//   fName?: string;
+//   lName?: string;
+//   age?: number;
+//   relationshipStatus?: RelationshipStatusT;
+//   activityTypes: ActivityTypeT[];
+//   bio?: string;
+//   email?: string;
+//   phoneNumber?: string;
+//   connectionIds: string[];
+//   createdAt?: any;
+// }
+
+// Can put private info in another place later, and going to default to containing all properties for FB querying
 export interface UserI {
   uid?: string;
-  fName?: string;
-  lName?: string;
-  age?: number;
-  relationshipStatus?: RelationshipStatusT;
+  fName: string;
+  lName: string;
+  age: number;
+  relationshipStatus: RelationshipStatusT;
+  bio: string;
   activityTypes: ActivityTypeT[];
-  bio?: string;
-  email?: string;
-  phoneNumber?: string;
   connectionIds: string[];
   createdAt?: any;
 }
 
-export type RelationshipStatusT = 'SINGLE' | 'MARRIED' | 'DATING' | 'OTHER';
+export type RelationshipStatusT =
+  | 'SINGLE'
+  | 'MARRIED'
+  | 'DATING'
+  | 'OTHER'
+  | 'UNSPECIFIED';
 export const RelationshipStatusM = new Map<RelationshipStatusT, DisplayNameI>([
   ['SINGLE', { displayName: 'Single' }],
   ['MARRIED', { displayName: 'Married' }],
   ['DATING', { displayName: 'Dating' }],
   ['OTHER', { displayName: 'Other' }],
+  ['UNSPECIFIED', { displayName: 'Unspecified' }],
 ]);
 
 export type ActivityTypeT = 'INDOOR' | 'OUTDOOR';

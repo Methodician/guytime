@@ -40,6 +40,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { HeaderComponent } from './components/header/header.component';
 import { ProfileEditComponent } from './components/profile-edit/profile-edit.component';
 import { ToggleIconComponent } from './components/ui/toggle-icon/toggle-icon.component';
+import { ActivitiesSpanComponent } from './components/shared/activities-span/activities-span.component';
+import { ProfilePreviewCardComponent } from './components/shares/profile-preview-card/profile-preview-card.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +58,8 @@ import { ToggleIconComponent } from './components/ui/toggle-icon/toggle-icon.com
     HeaderComponent,
     ProfileEditComponent,
     ToggleIconComponent,
+    ActivitiesSpanComponent,
+    ProfilePreviewCardComponent,
   ],
   imports: [
     BrowserModule,

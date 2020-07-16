@@ -4,13 +4,20 @@ import { BehaviorSubject } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
-import { switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private NULL_USER: UserI = { activityTypes: [], connectionIds: [] };
+  private NULL_USER: UserI = {
+    fName: null,
+    lName: null,
+    age: null,
+    relationshipStatus: 'UNSPECIFIED',
+    bio: null,
+    activityTypes: [],
+    connectionIds: [],
+  };
   loggedInUser$: BehaviorSubject<UserI> = new BehaviorSubject(this.NULL_USER);
 
   constructor(
@@ -87,6 +94,25 @@ export class UserService {
   };
 
   // REFS
-  userRef = (uid: string) =>
-    this.afs.collection<UserI>('users').doc<UserI>(uid);
+  namedUsersRef = () =>
+    this.afs.collection<UserI>('users', ref => ref.where('fName', '>', ''));
+  allUsersRef = () => this.afs.collection<UserI>('users');
+  userRef = (uid: string) => this.allUsersRef().doc<UserI>(uid);
+
+  // HELPERS
+  testUserValidity = (user: UserI) => {
+    const isValid =
+      !!user.fName &&
+      user.fName !== '' &&
+      !!user.lName &&
+      user.lName !== '' &&
+      !!user.age &&
+      !!user.relationshipStatus &&
+      !!user.activityTypes &&
+      !!user.bio &&
+      user.bio !== '' &&
+      !!user.connectionIds;
+
+    return isValid;
+  };
 }

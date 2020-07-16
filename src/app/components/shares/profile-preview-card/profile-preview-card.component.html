@@ -1,0 +1,18 @@
+<main>
+  <mat-card [routerLink]="[user.uid]">
+    <div
+      mat-card-avatar
+      [style.background-image]="'url(' + (avatarUrl$ | async) + ')'"
+      alt="Profile Image"
+      class="avatar grid_cell_centered"
+    ></div>
+    <b class="name">{{ user.fName }}</b>
+    <b class="age grid_cell_centered">{{ user.age }}</b>
+    <b class="relationship_status">{{
+      relationshipStatusMap.get(user.relationshipStatus).displayName
+    }}</b>
+    <gtm-activities-span
+      [selectedActivities]="user.activityTypes"
+    ></gtm-activities-span>
+  </mat-card>
+</main>

@@ -33,7 +33,15 @@ export class RegisterComponent implements OnInit {
 
     try {
       await this.authSvc.register(email, password);
-      const user: UserI = { email, activityTypes: [], connectionIds: [] };
+      const user: UserI = {
+        fName: '',
+        lName: '',
+        age: 0,
+        relationshipStatus: 'UNSPECIFIED',
+        bio: '',
+        activityTypes: [],
+        connectionIds: [],
+      };
       const authSub = this.authSvc.authInfo$.subscribe(async authInfo => {
         if (authInfo.uid) {
           await this.userSvc.createUser(user);

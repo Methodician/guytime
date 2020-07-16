@@ -20,17 +20,9 @@
             }}
           </p>
         </div>
-        <div class="interests">
-          <div
-            *ngFor="let entry of activityTypeMap | keyvalue"
-            class="interest_icon_wrapper"
-          >
-            <gtm-toggle-icon
-              [deselected]="!isActivityTypeSelected(entry.key)"
-              [iconName]="entry.value.iconName"
-            ></gtm-toggle-icon>
-          </div>
-        </div>
+        <gtm-activities-span
+          [selectedActivities]="(userInfo$ | async).activityTypes"
+        ></gtm-activities-span>
       </section>
     </article>
     <mat-card class="bio">
