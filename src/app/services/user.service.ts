@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UserI } from 'src/app/models/user';
+import { UserI } from '@models/user';
 import { BehaviorSubject } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { AngularFirestore } from '@angular/fire/firestore';

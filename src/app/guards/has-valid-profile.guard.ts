@@ -7,10 +7,10 @@ import {
   Router,
 } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AuthService } from '../services/auth.service';
-import { UserService } from '../services/user.service';
+import { AuthService } from '@services/auth.service';
+import { UserService } from '@services/user.service';
 import { switchMap } from 'rxjs/operators';
-import { UserI } from '../models/user';
+import { UserI } from '@models/user';
 
 @Injectable({
   providedIn: 'root',

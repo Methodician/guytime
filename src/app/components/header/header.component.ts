@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PwaService } from 'src/app/services/pwa.service';
-import { AuthService } from 'src/app/services/auth.service';
+import { PwaService } from '@services/pwa.service';
+import { AuthService } from '@services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({

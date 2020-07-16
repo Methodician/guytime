@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { IHeaderOption } from '../header/header.component';
 import { Router } from '@angular/router';
-import { UserService } from 'src/app/services/user.service';
-import { UserI, RelationshipStatusM } from 'src/app/models/user';
+import { UserService } from '@services/user.service';
+import { UserI, RelationshipStatusM } from '@models/user';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({

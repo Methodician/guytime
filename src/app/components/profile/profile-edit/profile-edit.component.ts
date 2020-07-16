@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { IHeaderOption } from 'src/app/components/header/header.component';
+import { IHeaderOption } from '@components/header/header.component';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AngularFireUploadTask } from '@angular/fire/storage';
-import { RelationshipStatusM, ActivityTypeM, UserI } from 'src/app/models/user';
-import { HtmlInputEventI } from 'src/app/models/shared';
-import { UserService } from 'src/app/services/user.service';
+import { RelationshipStatusM, ActivityTypeM, UserI } from '@models/user';
+import { HtmlInputEventI } from '@models/shared';
+import { UserService } from '@services/user.service';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 

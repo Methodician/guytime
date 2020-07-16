@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { IHeaderOption } from 'src/app/components/header/header.component';
-import { UserI } from 'src/app/models/user';
-import { UserService } from 'src/app/services/user.service';
+import { IHeaderOption } from '@components/header/header.component';
+import { UserI } from '@models/user';
+import { UserService } from '@services/user.service';
 import { map } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 

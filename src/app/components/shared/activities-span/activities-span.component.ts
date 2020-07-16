@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ActivityTypeM, ActivityTypeT } from 'src/app/models/user';
+import { ActivityTypeM, ActivityTypeT } from '@models/user';
 
 @Component({
   selector: 'gtm-activities-span',
