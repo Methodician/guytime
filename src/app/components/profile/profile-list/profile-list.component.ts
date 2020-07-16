@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IHeaderOption } from '../header/header.component';
+import { IHeaderOption } from 'src/app/components/header/header.component';
 import { UserI } from 'src/app/models/user';
 import { UserService } from 'src/app/services/user.service';
 import { map } from 'rxjs/operators';

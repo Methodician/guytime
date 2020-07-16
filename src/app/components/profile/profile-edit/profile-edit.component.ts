@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IHeaderOption } from '../header/header.component';
+import { IHeaderOption } from 'src/app/components/header/header.component';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AngularFireUploadTask } from '@angular/fire/storage';
 import { RelationshipStatusM, ActivityTypeM, UserI } from 'src/app/models/user';

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IHeaderOption } from '../header/header.component';
+import { IHeaderOption } from 'src/app/components/header/header.component';
 
 @Component({
   selector: 'gtm-profile-detail',
