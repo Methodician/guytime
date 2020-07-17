@@ -4,10 +4,8 @@
     [options]="headerOptions"
     backLocation="/guys"
   ></gtm-header>
-  <div class="detail-wrapper">
-    <gtm-profile-detail
-      [userInfo]="user$ | async"
-      [avatarUrl]="avatarUrl$ | async"
-    ></gtm-profile-detail>
-  </div>
+  <gtm-profile-detail
+    [userInfo]="user$ | async"
+    [avatarUrl]="avatarUrl$ | async"
+  ></gtm-profile-detail>
 </main>
