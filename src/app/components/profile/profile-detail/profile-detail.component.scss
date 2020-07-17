@@ -6,17 +6,6 @@ main {
     'body'
     'navspace';
 
-  .top_bar {
-    grid-area: menu;
-    display: grid;
-    grid-template-columns: 30px auto;
-    background-color: lightgray;
-    .page_title {
-      justify-self: center;
-      align-self: center;
-    }
-  }
-
   .body {
     grid-area: body;
     margin: 10px;

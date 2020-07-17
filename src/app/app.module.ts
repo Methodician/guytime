@@ -42,8 +42,8 @@ import { ProfileEditComponent } from '@components/profile/profile-edit/profile-e
 import { ToggleIconComponent } from '@components/ui/toggle-icon/toggle-icon.component';
 import { ActivitiesSpanComponent } from '@components/shared/activities-span/activities-span.component';
 import { ProfilePreviewCardComponent } from '@components/shares/profile-preview-card/profile-preview-card.component';
-import { OtherDetailComponent } from '@components/other-detail/other-detail.component';
-import { MeDetailComponent } from '@components/me-detail/me-detail.component';
+import { OtherDetailComponent } from '@components/profile/other-detail/other-detail.component';
+import { MeDetailComponent } from '@components/profile/me-detail/me-detail.component';
 
 @NgModule({
   declarations: [
