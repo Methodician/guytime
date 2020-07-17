@@ -10,7 +10,7 @@
 
       <section class="summary">
         <div class="stats">
-          <b class="name">{{ userInfo.fName }}</b>
+          <b class="name">{{ userInfo.fName }} {{ userInfo.lName }}</b>
           <p class="age_relationship">
             {{ userInfo.age }} -
             {{
@@ -18,92 +18,15 @@
             }}
           </p>
         </div>
+
         <gtm-activities-span
           [selectedActivities]="userInfo.activityTypes"
         ></gtm-activities-span>
       </section>
     </article>
+
     <mat-card class="bio">
-      <mat-card-title class="bio_title">Bio</mat-card-title>
       {{ userInfo.bio }}
     </mat-card>
   </section>
-  <!-- <section *ngIf="userInfo$.value.uid" class="body">
-    <article class="header">
-      <div
-        mat-card-avatar
-        [style.background-image]="'url(' + (avatarUrl$ | async) + ')'"
-        alt="Profile Image"
-        class="avatar"
-      ></div>
-
-      <section class="summary">
-        <div class="stats">
-          <b class="name">{{ (userInfo$ | async).fName }}</b>
-          <p class="age_relationship">
-            {{ (userInfo$ | async).age }} -
-            {{
-              relationshipStatusMap.get((userInfo$ | async).relationshipStatus)
-                .displayName
-            }}
-          </p>
-        </div>
-        <gtm-activities-span
-          [selectedActivities]="(userInfo$ | async).activityTypes"
-        ></gtm-activities-span>
-      </section>
-    </article>
-    <mat-card class="bio">
-      <mat-card-title class="bio_title">Bio</mat-card-title>
-      {{ (userInfo$ | async).bio }}
-    </mat-card>
-  </section> -->
 </main>
-
-<!-- <mat-card class="body">
-  <article class="header">
-    <img
-      mat-card-avatar
-      src="https://material.angular.io/assets/img/examples/shiba1.jpg"
-      alt="Profile Image"
-      class="avatar"
-    />
-    <section class="summary">
-      <div class="stats">
-        <b class="name">Dave</b>
-        <p class="age_relationship">38 - Single</p>
-      </div>
-      <div class="interests">
-        <mat-icon>home_work</mat-icon>
-        <mat-icon>nature_people</mat-icon>
-      </div>
-    </section>
-  </article>
-  <mat-card class="bio">
-    <mat-card-title>Bio</mat-card-title>
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua. Sollicitudin tempor
-      id eu nisl nunc mi ipsum faucibus. Sapien et ligula ullamcorper
-      malesuada proin. Habitant morbi tristique senectus et netus et
-      malesuada. Tortor consequat id porta nibh venenatis cras. Tempus iaculis
-      urna id volutpat lacus. Suspendisse ultrices gravida dictum fusce. Ipsum
-      dolor sit amet consectetur adipiscing elit. Lectus vestibulum mattis
-      ullamcorper velit sed ullamcorper. Mauris pharetra et ultrices neque
-      ornare aenean euismod elementum. Adipiscing commodo elit at imperdiet
-      dui accumsan sit amet.
-    </p>
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua. Sollicitudin tempor
-      id eu nisl nunc mi ipsum faucibus. Sapien et ligula ullamcorper
-      malesuada proin. Habitant morbi tristique senectus et netus et
-      malesuada. Tortor consequat id porta nibh venenatis cras. Tempus iaculis
-      urna id volutpat lacus. Suspendisse ultrices gravida dictum fusce. Ipsum
-      dolor sit amet consectetur adipiscing elit. Lectus vestibulum mattis
-      ullamcorper velit sed ullamcorper. Mauris pharetra et ultrices neque
-      ornare aenean euismod elementum. Adipiscing commodo elit at imperdiet
-      dui accumsan sit amet.
-    </p>
-  </mat-card>
-</mat-card> -->
