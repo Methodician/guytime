@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { IHeaderOption } from '@app/components/header/header.component';
+import { IHeaderOption } from '@components/header/header.component';
 import { BehaviorSubject } from 'rxjs';
-import { UserI } from '@app/models/user';
+import { UserI } from '@models/user';
+import { UserService } from '@services/user.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'gtm-other-detail',
@@ -10,23 +12,26 @@ import { UserI } from '@app/models/user';
 })
 export class OtherDetailComponent implements OnInit {
   headerOptions: IHeaderOption[];
-  user$ = new BehaviorSubject<UserI>({
-    uid: 'DevfsZ8x1hYxNKS418vdXLrZqbv2',
-    fName: 'Jimmy',
-    lName: 'Martin',
-    age: 23,
-    relationshipStatus: 'MARRIED',
-    bio: 'This is about me',
-    activityTypes: [],
-    connectionIds: [],
-    createdAt: new Date(),
-  });
+  user$ = new BehaviorSubject<UserI>(null);
 
   avatarUrl$ = new BehaviorSubject<string>('assets/icons/square_icon.svg');
 
-  constructor() {}
+  constructor(private userSvc: UserService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.route.params.subscribe(params => {
+      if (params['id']) {
+        const uid = params['id'];
+        this.userSvc
+          .userRef(uid)
+          .valueChanges()
+          .subscribe(user => this.user$.next(user));
+        this.userSvc
+          .getAvatarUrl(uid)
+          .subscribe(url => this.avatarUrl$.next(url));
+      }
+    });
+
     this.headerOptions = [
       {
         iconName: 'people',

@@ -6,12 +6,10 @@ import { UserI, RelationshipStatusM } from '@app/models/user';
   templateUrl: './profile-detail.component.html',
   styleUrls: ['./profile-detail.component.scss'],
 })
-export class ProfileDetailComponent implements OnInit {
+export class ProfileDetailComponent {
   @Input() avatarUrl = 'assets/icons/square_icon.svg';
   @Input() userInfo: UserI;
 
   relationshipStatusMap = RelationshipStatusM;
   constructor() {}
-
-  ngOnInit(): void {}
 }
