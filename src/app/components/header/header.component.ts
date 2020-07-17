@@ -21,7 +21,7 @@ export class HeaderComponent implements OnInit {
     private authSvc: AuthService,
     private pwaSvc: PwaService,
   ) {
-    this.pwaSvc.promptEvent.subscribe(e => (this.promptEvent = e));
+    this.pwaSvc.promptEvent$.subscribe(e => (this.promptEvent = e));
   }
 
   ngOnInit(): void {}
