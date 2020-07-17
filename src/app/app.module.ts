@@ -31,7 +31,6 @@ import { LoginComponent } from '@components/login/login.component';
 import { NgGuideComponent } from '@components/ng-guide/ng-guide.component';
 import { ProfileListComponent } from '@components/profile/profile-list/profile-list.component';
 import { ProfileDetailComponent } from '@components/profile/profile-detail/profile-detail.component';
-import { MeComponent } from '@components/me/me.component';
 import { ChatComponent } from '@components/chat/chat.component';
 import { RegisterComponent } from '@components/register/register.component';
 import { NavbarComponent } from '@components/navbar/navbar.component';
@@ -42,8 +41,8 @@ import { ProfileEditComponent } from '@components/profile/profile-edit/profile-e
 import { ToggleIconComponent } from '@components/ui/toggle-icon/toggle-icon.component';
 import { ActivitiesSpanComponent } from '@components/shared/activities-span/activities-span.component';
 import { ProfilePreviewCardComponent } from '@components/shares/profile-preview-card/profile-preview-card.component';
-import { OtherDetailComponent } from '@components/other-detail/other-detail.component';
-import { MeDetailComponent } from '@components/me-detail/me-detail.component';
+import { OtherDetailComponent } from '@components/profile/other-detail/other-detail.component';
+import { MeDetailComponent } from '@components/profile/me-detail/me-detail.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +51,6 @@ import { MeDetailComponent } from '@components/me-detail/me-detail.component';
     NgGuideComponent,
     ProfileListComponent,
     ProfileDetailComponent,
-    MeComponent,
     ChatComponent,
     RegisterComponent,
     NavbarComponent,

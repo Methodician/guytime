@@ -1,0 +1,11 @@
+<main>
+  <gtm-header
+    [title]="'About ' + (user$ | async)?.fName"
+    [options]="headerOptions"
+    backLocation="/guys"
+  ></gtm-header>
+  <gtm-profile-detail
+    [userInfo]="user$ | async"
+    [avatarUrl]="avatarUrl$ | async"
+  ></gtm-profile-detail>
+</main>

@@ -1,31 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-import { IHeaderOption } from '../header/header.component';
+import { IHeaderOption } from '@app/components/header/header.component';
+import { BehaviorSubject } from 'rxjs';
+import { UserI } from '@app/models/user';
+import { UserService } from '@app/services/user.service';
 import { Router } from '@angular/router';
-import { UserService } from '@services/user.service';
-import { UserI, RelationshipStatusM } from '@models/user';
-import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
-  selector: 'gtm-me',
-  templateUrl: './me.component.html',
-  styleUrls: ['./me.component.scss'],
+  selector: 'gtm-me-detail',
+  templateUrl: './me-detail.component.html',
+  styleUrls: ['./me-detail.component.scss'],
 })
-export class MeComponent implements OnInit {
-  relationshipStatusMap = RelationshipStatusM;
+export class MeDetailComponent implements OnInit {
+  headerOptions: IHeaderOption[];
+  user$ = new BehaviorSubject<UserI>(null);
+  avatarUrl$ = new BehaviorSubject<string>('assets/icons/square_icon.svg');
 
   promptEvent;
 
-  headerOptions: IHeaderOption[];
-
-  userInfo$: BehaviorSubject<UserI>;
-  avatarUrl$: Observable<string>;
-
-  constructor(private router: Router, private userSvc: UserService) {}
+  constructor(private userSvc: UserService, private router: Router) {}
 
   ngOnInit(): void {
-    this.userInfo$ = this.userSvc.loggedInUser$;
+    this.user$ = this.userSvc.loggedInUser$;
     this.avatarUrl$ = this.userSvc.getLoggedInAvatarUrl();
-
     this.headerOptions = [
       {
         iconName: 'edit',
@@ -43,6 +39,5 @@ export class MeComponent implements OnInit {
   }
 
   onEditClicked = () => this.router.navigate(['/me/edit']);
-
   logClicked = () => console.log('clicked');
 }
