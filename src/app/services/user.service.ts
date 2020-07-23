@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
+import { FirebaseService } from './firebase.service';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +25,7 @@ export class UserService {
     private afStorage: AngularFireStorage,
     private afs: AngularFirestore,
     private authSvc: AuthService,
+    private fbSvc: FirebaseService,
   ) {
     this.authSvc.authInfo$.subscribe(authInfo => {
       if (!authInfo.isLoggedIn()) {
@@ -39,9 +41,26 @@ export class UserService {
     });
   }
 
+  // vvv TEMP DEV CODE
+  seedTimestamps = () => {
+    const timestamp = this.fbSvc.fsTimestamp();
+    this.allUsersRef()
+      .get()
+      .subscribe(usersSnap => {
+        const userSnaps = usersSnap.docs;
+        for (let userSnap of userSnaps) {
+          const uid = userSnap.id;
+          console.log('adding timestamp for', uid);
+          userSnap.ref.update({ createdAt: timestamp });
+        }
+      });
+  };
+  // ^^^ end temp dev code
+
   createUser = (user: UserI) => {
     const uid = this.authSvc.authInfo$.value.uid;
     if (uid) {
+      user.createdAt = this.fbSvc.fsTimestamp();
       return this.userRef(uid).set(user);
     }
     return;
