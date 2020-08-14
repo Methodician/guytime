@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IHeaderOption } from '@app/components/header/header.component';
+import { HeaderOptionMapT } from '@app/components/header/header.component';
 import { BehaviorSubject } from 'rxjs';
 import { UserI } from '@app/models/user';
 import { UserService } from '@app/services/user.service';
@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./me-detail.component.scss'],
 })
 export class MeDetailComponent implements OnInit {
-  headerOptions: IHeaderOption[];
+  headerOptions: HeaderOptionMapT;
   user$ = new BehaviorSubject<UserI>(null);
   avatarUrl$ = new BehaviorSubject<string>('assets/icons/square_icon.svg');
 
@@ -22,20 +22,26 @@ export class MeDetailComponent implements OnInit {
   ngOnInit(): void {
     this.user$ = this.userSvc.loggedInUser$;
     this.avatarUrl$ = this.userSvc.getLoggedInAvatarUrl();
-    this.headerOptions = [
-      {
-        iconName: 'edit',
-        optionText: 'Edit Details',
-        isDisabled: false,
-        onClick: this.onEditClicked,
-      },
-      {
-        iconName: 'people',
-        optionText: 'Connections',
-        isDisabled: true,
-        onClick: this.logClicked,
-      },
-    ];
+    this.headerOptions = new Map([
+      [
+        'editDetails',
+        {
+          iconName: 'edit',
+          optionText: 'Edit Details',
+          isDisabled: false,
+          onClick: this.onEditClicked,
+        },
+      ],
+      [
+        'connections',
+        {
+          iconName: 'people',
+          optionText: 'Connections',
+          isDisabled: true,
+          onClick: this.logClicked,
+        },
+      ],
+    ]);
   }
 
   onEditClicked = () => this.router.navigate(['/me/edit']);

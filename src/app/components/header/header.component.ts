@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
   @Input() title: string;
-  @Input() options: IHeaderOption[];
+  @Input() options: HeaderOptionMapT;
   // Icon will not display without a backLocation
   @Input() backLocation: string;
 
@@ -35,7 +35,9 @@ export class HeaderComponent implements OnInit {
   logout = () => this.authSvc.logout();
 }
 
-export interface IHeaderOption {
+export type HeaderOptionMapT = Map<string, HeaderOptionI>;
+
+export interface HeaderOptionI {
   iconName: string;
   optionText: string;
   isDisabled: boolean;

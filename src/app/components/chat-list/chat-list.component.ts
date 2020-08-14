@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { IHeaderOption } from '../header/header.component';
 
 @Component({
   selector: 'gtm-chat-list',

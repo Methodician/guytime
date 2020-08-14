@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { IHeaderOption } from '../header/header.component';
+import { HeaderOptionMapT } from '../header/header.component';
 
 @Component({
   selector: 'gtm-chat',
@@ -8,21 +8,24 @@ import { IHeaderOption } from '../header/header.component';
 })
 export class ChatComponent implements OnInit {
   @ViewChild('chatList') private chatListEl: ElementRef;
-  headerOptions: IHeaderOption[];
+  headerOptions: HeaderOptionMapT;
   msgInput = '';
   chats = [];
 
   constructor() {}
 
   ngOnInit(): void {
-    this.headerOptions = [
-      {
-        iconName: 'people',
-        optionText: 'People',
-        isDisabled: false,
-        onClick: this.logClicked,
-      },
-    ];
+    this.headerOptions = new Map([
+      [
+        'people',
+        {
+          iconName: 'people',
+          optionText: 'People',
+          isDisabled: false,
+          onClick: this.logClicked,
+        },
+      ],
+    ]);
 
     this.chats = [
       {

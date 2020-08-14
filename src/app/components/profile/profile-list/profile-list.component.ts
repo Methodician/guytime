@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IHeaderOption } from '@components/header/header.component';
+import { HeaderOptionMapT } from '@components/header/header.component';
 import { UserI } from '@models/user';
 import { UserService } from '@services/user.service';
 import { map } from 'rxjs/operators';
@@ -11,7 +11,7 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./profile-list.component.scss'],
 })
 export class ProfileListComponent implements OnInit {
-  headerOptions: IHeaderOption[];
+  headerOptions: HeaderOptionMapT;
   users$: BehaviorSubject<UserI[]> = new BehaviorSubject([]);
 
   constructor(private userSvc: UserService) {}
@@ -31,20 +31,26 @@ export class ProfileListComponent implements OnInit {
       )
       .subscribe(users => this.users$.next(users));
 
-    this.headerOptions = [
-      {
-        iconName: 'place',
-        optionText: 'Find by location',
-        isDisabled: false,
-        onClick: this.logClicked,
-      },
-      {
-        iconName: 'clear_all',
-        optionText: 'Clear all filters',
-        isDisabled: true,
-        onClick: this.logClicked,
-      },
-    ];
+    this.headerOptions = new Map([
+      [
+        'findByLocation',
+        {
+          iconName: 'place',
+          optionText: 'Find by location',
+          isDisabled: false,
+          onClick: this.logClicked,
+        },
+      ],
+      [
+        'clearAllFilters',
+        {
+          iconName: 'clear_all',
+          optionText: 'Clear all filters',
+          isDisabled: true,
+          onClick: this.logClicked,
+        },
+      ],
+    ]);
   }
 
   logClicked = () => console.log('clicked');

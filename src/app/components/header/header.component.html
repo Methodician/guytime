@@ -10,13 +10,13 @@
     </button>
     <mat-menu #menu="matMenu">
       <button
-        *ngFor="let option of options"
+        *ngFor="let option of options | keyvalue"
         mat-menu-item
-        [disabled]="option.isDisabled"
-        (click)="option.onClick()"
+        [disabled]="option.value.isDisabled"
+        (click)="option.value.onClick()"
       >
-        <mat-icon>{{ option.iconName }}</mat-icon>
-        <span>{{ option.optionText }}</span>
+        <mat-icon>{{ option.value.iconName }}</mat-icon>
+        <span>{{ option.value.optionText }}</span>
       </button>
       <mat-divider></mat-divider>
       <button mat-menu-item (click)="logout()">

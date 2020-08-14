@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IHeaderOption } from '@components/header/header.component';
+import { HeaderOptionMapT } from '@components/header/header.component';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AngularFireUploadTask } from '@angular/fire/storage';
 import { RelationshipStatusM, ActivityTypeM, UserI } from '@models/user';
@@ -24,7 +24,7 @@ export class ProfileEditComponent implements OnInit {
     'assets/icons/square_icon.svg',
   );
 
-  headerOptions: IHeaderOption[];
+  headerOptions: HeaderOptionMapT;
 
   constructor(
     private fb: FormBuilder,
@@ -43,14 +43,17 @@ export class ProfileEditComponent implements OnInit {
     });
     this.watchLoggedInUser();
     this.avatarUrl$ = this.userSvc.getLoggedInAvatarUrl();
-    this.headerOptions = [
-      {
-        iconName: 'account_circle',
-        optionText: 'Back to Me',
-        isDisabled: true,
-        onClick: this.logClicked,
-      },
-    ];
+    this.headerOptions = new Map([
+      [
+        'backToMe',
+        {
+          iconName: 'account_circle',
+          optionText: 'Back to Me',
+          isDisabled: true,
+          onClick: this.logClicked,
+        },
+      ],
+    ]);
   }
 
   watchLoggedInUser = () => {

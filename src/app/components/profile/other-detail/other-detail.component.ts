@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IHeaderOption } from '@components/header/header.component';
+import { HeaderOptionMapT } from '@components/header/header.component';
 import { BehaviorSubject } from 'rxjs';
 import { UserI } from '@models/user';
 import { UserService } from '@services/user.service';
@@ -11,7 +11,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./other-detail.component.scss'],
 })
 export class OtherDetailComponent implements OnInit {
-  headerOptions: IHeaderOption[];
+  headerOptions: HeaderOptionMapT;
   user$ = new BehaviorSubject<UserI>(null);
 
   avatarUrl$ = new BehaviorSubject<string>('assets/icons/square_icon.svg');
@@ -32,27 +32,42 @@ export class OtherDetailComponent implements OnInit {
       }
     });
 
-    this.headerOptions = [
-      {
-        iconName: 'people',
-        optionText: 'See their connections',
-        isDisabled: false,
-        onClick: this.logClicked,
-      },
-      {
-        iconName: 'person_add',
-        optionText: 'Connect with them',
-        isDisabled: true,
-        onClick: this.logClicked,
-      },
-      {
-        iconName: 'message',
-        optionText: 'Chat with them',
-        isDisabled: true,
-        onClick: this.logClicked,
-      },
-    ];
+    this.headerOptions = new Map([
+      [
+        'seeConnections',
+        {
+          iconName: 'people',
+          optionText: 'See their contacts',
+          isDisabled: true,
+          onClick: this.logClicked,
+        },
+      ],
+      [
+        'addConnection',
+        {
+          iconName: 'person_add',
+          optionText: 'Add them to contacts',
+          isDisabled: false,
+          onClick: this.onConnectClicked,
+        },
+      ],
+      [
+        'sendMessage',
+        {
+          iconName: 'message',
+          optionText: 'Chat with them',
+          isDisabled: true,
+          onClick: this.logClicked,
+        },
+      ],
+    ]);
   }
+
+  onConnectClicked = () => {
+    const existingOption = this.headerOptions.get('addConnection');
+    const newOption = { ...existingOption, isDisabled: true };
+    this.headerOptions.set('addConnection', newOption);
+  };
 
   logClicked = () => console.log('clicked');
 }
