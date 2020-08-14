@@ -37,13 +37,13 @@ export class MeDetailComponent implements OnInit {
         {
           iconName: 'people',
           optionText: 'Connections',
-          isDisabled: true,
-          onClick: this.logClicked,
+          isDisabled: false,
+          onClick: this.onConnectionsClicked,
         },
       ],
     ]);
   }
 
   onEditClicked = () => this.router.navigate(['/me/edit']);
-  logClicked = () => console.log('clicked');
+  onConnectionsClicked = () => this.router.navigate(['/me/connections']);
 }

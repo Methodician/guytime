@@ -1,15 +1,8 @@
 @import 'app/styles/vars.scss';
 
 main {
-  display: grid;
-  grid-template-rows: $header_height calc(100vh - #{$body_buffer_height}) $footer_height;
-  grid-template-areas:
-    'menu'
-    'list'
-    'navspace';
-
   mat-list {
-    grid-area: list;
+    height: $body_height;
     overflow: scroll;
     mat-list-item {
       height: 5.2rem;
