@@ -2,3 +2,4 @@
 $header_height: 40px;
 $footer_height: 50px;
 $body_buffer_height: $footer_height + $header_height;
+$body_height: calc(100vh - #{$body_buffer_height});
