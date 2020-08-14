@@ -88,6 +88,11 @@ export class UserService {
     return;
   };
 
+  addUserContact = (userId: string, contactId: string) =>
+    this.userRef(userId).update({
+      [`contacts.${contactId}`]: true,
+    });
+
   getLoggedInAvatarUrl = () => {
     const url$ = new BehaviorSubject<string>('assets/icons/square_icon.svg');
     this.authSvc.authInfo$.subscribe(info => {

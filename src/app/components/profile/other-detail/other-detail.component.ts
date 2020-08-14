@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HeaderOptionMapT } from '@components/header/header.component';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, combineLatest } from 'rxjs';
 import { UserI } from '@models/user';
 import { UserService } from '@services/user.service';
 import { ActivatedRoute } from '@angular/router';
@@ -25,7 +25,7 @@ export class OtherDetailComponent implements OnInit {
         this.userSvc
           .userRef(uid)
           .valueChanges()
-          .subscribe(user => this.user$.next(user));
+          .subscribe(user => this.user$.next({ ...user, uid }));
         this.userSvc
           .getAvatarUrl(uid)
           .subscribe(url => this.avatarUrl$.next(url));
@@ -61,13 +61,26 @@ export class OtherDetailComponent implements OnInit {
         },
       ],
     ]);
+
+    const bothUsers$ = combineLatest(
+      this.user$,
+      this.userSvc.loggedInUser$,
+      (user, loggedInUser) => ({ user, loggedInUser }),
+    );
+    bothUsers$.subscribe(({ user, loggedInUser }) => {
+      if (user && loggedInUser.contacts[user.uid]) {
+        const existingOption = this.headerOptions.get('addConnection');
+        const newOption = { ...existingOption, isDisabled: true };
+        this.headerOptions.set('addConnection', newOption);
+      }
+    });
   }
 
-  onConnectClicked = () => {
-    const existingOption = this.headerOptions.get('addConnection');
-    const newOption = { ...existingOption, isDisabled: true };
-    this.headerOptions.set('addConnection', newOption);
-  };
+  onConnectClicked = () =>
+    this.userSvc.addUserContact(
+      this.userSvc.loggedInUser$.value.uid,
+      this.user$.value.uid,
+    );
 
   logClicked = () => console.log('clicked');
 }
