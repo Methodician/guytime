@@ -35,24 +35,13 @@ export class OtherDetailComponent implements OnInit {
       }
     });
 
-    const bothUsers$ = combineLatest(
-      this.user$,
-      this.userSvc.loggedInUser$,
-      (user, loggedInUser) => ({ user, loggedInUser }),
-    );
-    // bothUsers$.subscribe(({ user, loggedInUser }) => {
-    //   if (user && loggedInUser.contacts[user.uid]) {
-    //     const existingOption = this.headerOptions.get('addConnection');
-    //     const newOption = { ...existingOption, isDisabled: true };
-    //     this.headerOptions.set('addConnection', newOption);
-    //   }
-    // });
+    this.watchForConnection();
     this.updateHeader();
   }
 
   updateHeader = () => {
     this.headerSvc.clearHeaderOptions();
-    
+
     this.headerSvc.setHeaderOption('seeConnections', {
       iconName: 'people',
       optionText: 'See their contacts',
@@ -73,12 +62,37 @@ export class OtherDetailComponent implements OnInit {
       isDisabled: true,
       onClick: this.logClicked,
     });
+
+    this.headerSvc.setHeaderOption('removeConnection', {
+      iconName: 'person_minus',
+      optionText: 'Remove contact',
+      isDisabled: false,
+      onClick: this.onDisconnectClicked,
+    });
+  };
+
+  watchForConnection = () => {
+    const bothUsers$ = combineLatest(
+      this.user$,
+      this.userSvc.loggedInUser$,
+      (user, loggedInUser) => ({ user, loggedInUser }),
+    );
+    bothUsers$.subscribe(({ user, loggedInUser }) => {
+      if (user && loggedInUser.contacts[user.uid]) {
+        this.headerSvc.disableHeaderOption('addConnection');
+      }
+    });
   };
 
   onConnectClicked = () =>
     this.userSvc.addUserContact(
       this.userSvc.loggedInUser$.value.uid,
       this.user$.value.uid,
+    );
+
+  onDisconnectClicked = () =>
+    alert(
+      'Please remind us to implement the disconnect feature if this is important',
     );
 
   logClicked = () => console.log('clicked');
