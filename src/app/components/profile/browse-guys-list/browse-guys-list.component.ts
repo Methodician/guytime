@@ -3,7 +3,7 @@ import { UserService } from '@app/services/user.service';
 import { map } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import { UserI } from '@app/models/user';
-import { HeaderOptionMapT } from '@app/components/header/header.component';
+import { HeaderService } from '@app/services/header.service';
 
 @Component({
   selector: 'gtm-browse-guys-list',
@@ -11,10 +11,9 @@ import { HeaderOptionMapT } from '@app/components/header/header.component';
   styleUrls: ['./browse-guys-list.component.scss'],
 })
 export class BrowseGuysListComponent implements OnInit {
-  headerOptions: HeaderOptionMapT;
   users$: BehaviorSubject<UserI[]> = new BehaviorSubject([]);
 
-  constructor(private userSvc: UserService) {}
+  constructor(private userSvc: UserService, private headerSvc: HeaderService) {}
 
   ngOnInit(): void {
     this.userSvc
@@ -31,27 +30,26 @@ export class BrowseGuysListComponent implements OnInit {
       )
       .subscribe(users => this.users$.next(users));
 
-    this.headerOptions = new Map([
-      [
-        'findByLocation',
-        {
-          iconName: 'place',
-          optionText: 'Find by location',
-          isDisabled: false,
-          onClick: this.logClicked,
-        },
-      ],
-      [
-        'clearAllFilters',
-        {
-          iconName: 'clear_all',
-          optionText: 'Clear all filters',
-          isDisabled: true,
-          onClick: this.logClicked,
-        },
-      ],
-    ]);
+    this.updateHeader();
   }
+
+  updateHeader = () => {
+    this.headerSvc.clearHeaderOptions();
+
+    this.headerSvc.setHeaderOption('findByLocation', {
+      iconName: 'place',
+      optionText: 'Find by location',
+      isDisabled: false,
+      onClick: this.logClicked,
+    });
+
+    this.headerSvc.setHeaderOption('clearAllFilters', {
+      iconName: 'clear_all',
+      optionText: 'Clear all filters',
+      isDisabled: true,
+      onClick: this.logClicked,
+    });
+  };
 
   logClicked = () => console.log('clicked');
 }

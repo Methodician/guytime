@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { HeaderOptionMapT } from '@app/components/header/header.component';
 import { BehaviorSubject } from 'rxjs';
 import { UserI } from '@app/models/user';
 import { UserService } from '@app/services/user.service';
 import { Router } from '@angular/router';
+import { HeaderService } from '@app/services/header.service';
 
 @Component({
   selector: 'gtm-me-detail',
@@ -11,38 +11,40 @@ import { Router } from '@angular/router';
   styleUrls: ['./me-detail.component.scss'],
 })
 export class MeDetailComponent implements OnInit {
-  headerOptions: HeaderOptionMapT;
   user$ = new BehaviorSubject<UserI>(null);
   avatarUrl$ = new BehaviorSubject<string>('assets/icons/square_icon.svg');
 
   promptEvent;
 
-  constructor(private userSvc: UserService, private router: Router) {}
+  constructor(
+    private userSvc: UserService,
+    private router: Router,
+    private headerSvc: HeaderService,
+  ) {}
 
   ngOnInit(): void {
     this.user$ = this.userSvc.loggedInUser$;
     this.avatarUrl$ = this.userSvc.getLoggedInAvatarUrl();
-    this.headerOptions = new Map([
-      [
-        'editDetails',
-        {
-          iconName: 'edit',
-          optionText: 'Edit Details',
-          isDisabled: false,
-          onClick: this.onEditClicked,
-        },
-      ],
-      [
-        'connections',
-        {
-          iconName: 'people',
-          optionText: 'Connections',
-          isDisabled: false,
-          onClick: this.onConnectionsClicked,
-        },
-      ],
-    ]);
+    this.updateHeader();
   }
+
+  updateHeader = () => {
+    this.headerSvc.clearHeaderOptions();
+
+    this.headerSvc.setHeaderOption('editDetails', {
+      iconName: 'edit',
+      optionText: 'Edit Details',
+      isDisabled: false,
+      onClick: this.onEditClicked,
+    });
+
+    this.headerSvc.setHeaderOption('connections', {
+      iconName: 'people',
+      optionText: 'Connections',
+      isDisabled: false,
+      onClick: this.onConnectionsClicked,
+    });
+  };
 
   onEditClicked = () => this.router.navigate(['/me/edit']);
   onConnectionsClicked = () => this.router.navigate(['/me/connections']);

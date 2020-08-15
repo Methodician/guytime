@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { HeaderOptionMapT } from '@app/components/header/header.component';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { UserI } from '@app/models/user';
 import { UserService } from '@app/services/user.service';
@@ -11,7 +10,6 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./me-connections-list.component.scss'],
 })
 export class MeConnectionsListComponent implements OnInit {
-  headerOptions: HeaderOptionMapT;
   users$: BehaviorSubject<UserI[]> = new BehaviorSubject([]);
 
   constructor(private userSvc: UserService) {}

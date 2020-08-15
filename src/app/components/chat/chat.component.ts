@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { HeaderOptionMapT } from '../header/header.component';
+import { HeaderService } from '@app/services/header.service';
 
 @Component({
   selector: 'gtm-chat',
@@ -8,25 +8,12 @@ import { HeaderOptionMapT } from '../header/header.component';
 })
 export class ChatComponent implements OnInit {
   @ViewChild('chatList') private chatListEl: ElementRef;
-  headerOptions: HeaderOptionMapT;
   msgInput = '';
   chats = [];
 
-  constructor() {}
+  constructor(private headerSvc: HeaderService) {}
 
   ngOnInit(): void {
-    this.headerOptions = new Map([
-      [
-        'people',
-        {
-          iconName: 'people',
-          optionText: 'People',
-          isDisabled: false,
-          onClick: this.logClicked,
-        },
-      ],
-    ]);
-
     this.chats = [
       {
         sender: 'Andy',
@@ -124,7 +111,20 @@ export class ChatComponent implements OnInit {
         timestamp: new Date(),
       },
     ];
+
+    this.updateHeader();
   }
+
+  updateHeader = () => {
+    this.headerSvc.clearHeaderOptions();
+
+    this.headerSvc.setHeaderOption('people', {
+      iconName: 'people',
+      optionText: 'People',
+      isDisabled: false,
+      onClick: this.logClicked,
+    });
+  };
 
   ngAfterViewChecked() {
     this.scrollToBottom();

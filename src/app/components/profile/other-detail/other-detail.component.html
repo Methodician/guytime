@@ -1,7 +1,6 @@
 <main>
   <gtm-header
     [title]="'About ' + (user$ | async)?.fName"
-    [options]="headerOptions"
     backLocation="['../']"
   ></gtm-header>
   <gtm-profile-detail

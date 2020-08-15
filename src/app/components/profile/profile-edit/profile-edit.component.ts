@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { HeaderOptionMapT } from '@components/header/header.component';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AngularFireUploadTask } from '@angular/fire/storage';
 import { RelationshipStatusM, ActivityTypeM, UserI } from '@models/user';
@@ -7,6 +6,7 @@ import { HtmlInputEventI } from '@models/shared';
 import { UserService } from '@services/user.service';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
+import { HeaderService } from '@app/services/header.service';
 
 @Component({
   selector: 'gtm-profile-edit',
@@ -24,12 +24,11 @@ export class ProfileEditComponent implements OnInit {
     'assets/icons/square_icon.svg',
   );
 
-  headerOptions: HeaderOptionMapT;
-
   constructor(
     private fb: FormBuilder,
     private userSvc: UserService,
     private router: Router,
+    private headerSvc: HeaderService,
   ) {}
 
   ngOnInit(): void {
@@ -43,18 +42,19 @@ export class ProfileEditComponent implements OnInit {
     });
     this.watchLoggedInUser();
     this.avatarUrl$ = this.userSvc.getLoggedInAvatarUrl();
-    this.headerOptions = new Map([
-      [
-        'backToMe',
-        {
-          iconName: 'account_circle',
-          optionText: 'Back to Me',
-          isDisabled: true,
-          onClick: this.logClicked,
-        },
-      ],
-    ]);
+    this.updateHeader();
   }
+
+  updateHeader = () => {
+    this.headerSvc.clearHeaderOptions();
+    
+    this.headerSvc.setHeaderOption('backToMe', {
+      iconName: 'account_circle',
+      optionText: 'Back to Me',
+      isDisabled: true,
+      onClick: this.logClicked,
+    });
+  };
 
   watchLoggedInUser = () => {
     this.userSvc.loggedInUser$.subscribe(user => {

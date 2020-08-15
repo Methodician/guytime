@@ -1,8 +1,4 @@
 <main>
-  <gtm-header
-    title="Your Contacts"
-    [options]="headerOptions"
-    backLocation="/me"
-  ></gtm-header>
+  <gtm-header title="Your Contacts" backLocation="/me"></gtm-header>
   <gtm-profile-list [users]="users$ | async"></gtm-profile-list>
 </main>
