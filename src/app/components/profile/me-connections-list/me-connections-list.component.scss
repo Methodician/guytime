@@ -1,0 +1,10 @@
+@import 'app/styles/vars.scss';
+
+main {
+  display: grid;
+  grid-template-rows: $header_height $body_height $footer_height;
+  grid-template-areas:
+    'menu'
+    'list'
+    'navspace';
+}

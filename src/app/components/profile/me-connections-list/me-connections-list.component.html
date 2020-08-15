@@ -1,1 +1,8 @@
-<p>me-connections-list works!</p>
+<main>
+  <gtm-header
+    title="Your Contacts"
+    [options]="headerOptions"
+    backLocation="/me"
+  ></gtm-header>
+  <gtm-profile-list [users]="users$ | async"></gtm-profile-list>
+</main>

@@ -2,7 +2,7 @@
   <gtm-header
     [title]="'About ' + (user$ | async)?.fName"
     [options]="headerOptions"
-    backLocation="/guys"
+    backLocation="['../']"
   ></gtm-header>
   <gtm-profile-detail
     [userInfo]="user$ | async"
