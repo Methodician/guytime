@@ -28,7 +28,12 @@ export class BrowseGuysListComponent implements OnInit {
           }),
         ),
       )
-      .subscribe(users => this.users$.next(users));
+      .subscribe(users => {
+        const otherUsers = users.filter(
+          user => user.uid !== this.userSvc.loggedInUser$.value.uid,
+        );
+        this.users$.next(otherUsers);
+      });
 
     this.updateHeader();
   }
