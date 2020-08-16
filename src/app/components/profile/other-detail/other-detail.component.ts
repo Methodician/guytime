@@ -80,6 +80,10 @@ export class OtherDetailComponent implements OnInit {
     bothUsers$.subscribe(({ user, loggedInUser }) => {
       if (user && loggedInUser.contacts[user.uid]) {
         this.headerSvc.disableHeaderOption('addConnection');
+        this.headerSvc.enableHeaderOption('removeContact');
+      } else {
+        this.headerSvc.enableHeaderOption('addConnection');
+        this.headerSvc.disableHeaderOption('removeContact');
       }
     });
   };

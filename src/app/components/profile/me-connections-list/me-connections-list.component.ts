@@ -3,6 +3,7 @@ import { BehaviorSubject, combineLatest } from 'rxjs';
 import { UserI } from '@app/models/user';
 import { UserService } from '@app/services/user.service';
 import { map } from 'rxjs/operators';
+import { HeaderService } from '@app/services/header.service';
 
 @Component({
   selector: 'gtm-me-connections-list',
@@ -12,7 +13,7 @@ import { map } from 'rxjs/operators';
 export class MeConnectionsListComponent implements OnInit {
   users$: BehaviorSubject<UserI[]> = new BehaviorSubject([]);
 
-  constructor(private userSvc: UserService) {}
+  constructor(private userSvc: UserService, private headerSvc: HeaderService) {}
 
   ngOnInit(): void {
     this.userSvc.loggedInUser$.subscribe(user => {
@@ -35,4 +36,8 @@ export class MeConnectionsListComponent implements OnInit {
       }
     });
   }
+
+  updateHeader = () => {
+    this.headerSvc.clearHeaderOptions();
+  };
 }
