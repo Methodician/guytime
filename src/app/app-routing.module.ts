@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from '@components/login/login.component';
 import { NgGuideComponent } from '@components/ng-guide/ng-guide.component';
-import { ProfileListComponent } from '@components/profile/profile-list/profile-list.component';
 import { AuthGuard } from '@guards/auth.guard';
 import { ChatComponent } from '@components/chat/chat.component';
 import { RegisterComponent } from '@components/register/register.component';

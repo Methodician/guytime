@@ -1,16 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, combineLatest } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
 import { UserI } from '@models/user';
 import { UserService } from '@services/user.service';
 import { ActivatedRoute } from '@angular/router';
 import { HeaderService } from '@app/services/header.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'gtm-other-detail',
   templateUrl: './other-detail.component.html',
   styleUrls: ['./other-detail.component.scss'],
 })
-export class OtherDetailComponent implements OnInit {
+export class OtherDetailComponent implements OnInit, OnDestroy {
+  private unsubscribe$: Subject<void> = new Subject();
   user$ = new BehaviorSubject<UserI>(null);
 
   avatarUrl$ = new BehaviorSubject<string>('assets/icons/square_icon.svg');
@@ -20,6 +22,12 @@ export class OtherDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private headerSvc: HeaderService,
   ) {}
+
+  ngOnDestroy(): void {
+    this.headerSvc.clearHeaderOptions();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -40,8 +48,6 @@ export class OtherDetailComponent implements OnInit {
   }
 
   updateHeader = () => {
-    this.headerSvc.clearHeaderOptions();
-
     this.headerSvc.setHeaderOption('seeConnections', {
       iconName: 'people',
       optionText: 'See their contacts',
@@ -63,7 +69,7 @@ export class OtherDetailComponent implements OnInit {
       onClick: this.logClicked,
     });
 
-    this.headerSvc.setHeaderOption('removeConnection', {
+    this.headerSvc.setHeaderOption('removeContact', {
       iconName: 'person_minus',
       optionText: 'Remove contact',
       isDisabled: false,
@@ -77,15 +83,17 @@ export class OtherDetailComponent implements OnInit {
       this.userSvc.loggedInUser$,
       (user, loggedInUser) => ({ user, loggedInUser }),
     );
-    bothUsers$.subscribe(({ user, loggedInUser }) => {
-      if (user && loggedInUser.contacts[user.uid]) {
-        this.headerSvc.disableHeaderOption('addConnection');
-        this.headerSvc.enableHeaderOption('removeContact');
-      } else {
-        this.headerSvc.enableHeaderOption('addConnection');
-        this.headerSvc.disableHeaderOption('removeContact');
-      }
-    });
+    bothUsers$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(({ user, loggedInUser }) => {
+        if (user && loggedInUser.contacts[user.uid]) {
+          this.headerSvc.disableHeaderOption('addConnection');
+          this.headerSvc.enableHeaderOption('removeContact');
+        } else {
+          this.headerSvc.enableHeaderOption('addConnection');
+          this.headerSvc.disableHeaderOption('removeContact');
+        }
+      });
   };
 
   onConnectClicked = () =>

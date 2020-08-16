@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService } from '@app/services/user.service';
-import { map } from 'rxjs/operators';
-import { BehaviorSubject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { UserI } from '@app/models/user';
 import { HeaderService } from '@app/services/header.service';
 
@@ -10,10 +10,17 @@ import { HeaderService } from '@app/services/header.service';
   templateUrl: './browse-guys-list.component.html',
   styleUrls: ['./browse-guys-list.component.scss'],
 })
-export class BrowseGuysListComponent implements OnInit {
+export class BrowseGuysListComponent implements OnInit, OnDestroy {
+  private unsubscribe$: Subject<void> = new Subject();
   users$: BehaviorSubject<UserI[]> = new BehaviorSubject([]);
 
   constructor(private userSvc: UserService, private headerSvc: HeaderService) {}
+
+  ngOnDestroy(): void {
+    this.headerSvc.clearHeaderOptions();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 
   ngOnInit(): void {
     this.userSvc
@@ -27,6 +34,7 @@ export class BrowseGuysListComponent implements OnInit {
             return { uid, ...data };
           }),
         ),
+        takeUntil(this.unsubscribe$),
       )
       .subscribe(users => {
         const otherUsers = users.filter(
@@ -39,8 +47,6 @@ export class BrowseGuysListComponent implements OnInit {
   }
 
   updateHeader = () => {
-    this.headerSvc.clearHeaderOptions();
-
     this.headerSvc.setHeaderOption('findByLocation', {
       iconName: 'place',
       optionText: 'Find by location',

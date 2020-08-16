@@ -1,4 +1,13 @@
 <main>
   <gtm-header title="Your Contacts" backLocation="/me"></gtm-header>
-  <gtm-profile-list [users]="users$ | async"></gtm-profile-list>
+  <gtm-profile-list
+    *ngIf="users$.value.length > 0"
+    [users]="users$ | async"
+  ></gtm-profile-list>
+  <section *ngIf="wasUserReturned && !doesUserHaveContacts">
+    <p>
+      Looks like you don't have any connections yet. Why not
+      <a routerLink="/guys">browse guys out there</a>?
+    </p>
+  </section>
 </main>

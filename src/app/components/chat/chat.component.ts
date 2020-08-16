@@ -1,17 +1,31 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  OnDestroy,
+} from '@angular/core';
 import { HeaderService } from '@app/services/header.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'gtm-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnDestroy {
   @ViewChild('chatList') private chatListEl: ElementRef;
+  private unsubscribe$: Subject<void> = new Subject();
   msgInput = '';
   chats = [];
 
   constructor(private headerSvc: HeaderService) {}
+
+  ngOnDestroy(): void {
+    this.headerSvc.clearHeaderOptions();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 
   ngOnInit(): void {
     this.chats = [
@@ -116,8 +130,6 @@ export class ChatComponent implements OnInit {
   }
 
   updateHeader = () => {
-    this.headerSvc.clearHeaderOptions();
-
     this.headerSvc.setHeaderOption('people', {
       iconName: 'people',
       optionText: 'People',

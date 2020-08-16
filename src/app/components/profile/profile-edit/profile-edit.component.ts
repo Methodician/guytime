@@ -1,19 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AngularFireUploadTask } from '@angular/fire/storage';
 import { RelationshipStatusM, ActivityTypeM, UserI } from '@models/user';
 import { HtmlInputEventI } from '@models/shared';
 import { UserService } from '@services/user.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { Router } from '@angular/router';
 import { HeaderService } from '@app/services/header.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'gtm-profile-edit',
   templateUrl: './profile-edit.component.html',
   styleUrls: ['./profile-edit.component.scss'],
 })
-export class ProfileEditComponent implements OnInit {
+export class ProfileEditComponent implements OnInit, OnDestroy {
+  private unsubscribe$: Subject<void> = new Subject();
   relationshipStatusMap = RelationshipStatusM;
   activityTypeMap = ActivityTypeM;
 
@@ -31,6 +33,12 @@ export class ProfileEditComponent implements OnInit {
     private headerSvc: HeaderService,
   ) {}
 
+  ngOnDestroy(): void {
+    this.headerSvc.clearHeaderOptions();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   ngOnInit(): void {
     this.form = this.fb.group({
       fName: ['', Validators.required],
@@ -46,8 +54,6 @@ export class ProfileEditComponent implements OnInit {
   }
 
   updateHeader = () => {
-    this.headerSvc.clearHeaderOptions();
-    
     this.headerSvc.setHeaderOption('backToMe', {
       iconName: 'account_circle',
       optionText: 'Back to Me',
@@ -57,9 +63,11 @@ export class ProfileEditComponent implements OnInit {
   };
 
   watchLoggedInUser = () => {
-    this.userSvc.loggedInUser$.subscribe(user => {
-      this.form.patchValue(user);
-    });
+    this.userSvc.loggedInUser$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(user => {
+        this.form.patchValue(user);
+      });
   };
 
   onSelectAvatar = ($e: HtmlInputEventI) => {
@@ -98,8 +106,9 @@ export class ProfileEditComponent implements OnInit {
       alert('Please make sure all required fields are filled before saving');
       return;
     }
-    const profileImageSub = this.saveProfileImage().subscribe(
-      async isComplete => {
+    const profileImageSub = this.saveProfileImage()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(async isComplete => {
         if (!isComplete) return;
 
         try {
@@ -112,8 +121,7 @@ export class ProfileEditComponent implements OnInit {
           if (profileImageSub) profileImageSub.unsubscribe();
           return;
         }
-      },
-    );
+      });
   };
 
   saveProfileImage = () => {

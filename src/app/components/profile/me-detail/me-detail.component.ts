@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { UserI } from '@app/models/user';
 import { UserService } from '@app/services/user.service';
 import { Router } from '@angular/router';
@@ -10,7 +10,8 @@ import { HeaderService } from '@app/services/header.service';
   templateUrl: './me-detail.component.html',
   styleUrls: ['./me-detail.component.scss'],
 })
-export class MeDetailComponent implements OnInit {
+export class MeDetailComponent implements OnInit, OnDestroy {
+  private unsubscribe$: Subject<void> = new Subject();
   user$ = new BehaviorSubject<UserI>(null);
   avatarUrl$ = new BehaviorSubject<string>('assets/icons/square_icon.svg');
 
@@ -22,6 +23,12 @@ export class MeDetailComponent implements OnInit {
     private headerSvc: HeaderService,
   ) {}
 
+  ngOnDestroy(): void {
+    this.headerSvc.clearHeaderOptions();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   ngOnInit(): void {
     this.user$ = this.userSvc.loggedInUser$;
     this.avatarUrl$ = this.userSvc.getLoggedInAvatarUrl();
@@ -29,8 +36,6 @@ export class MeDetailComponent implements OnInit {
   }
 
   updateHeader = () => {
-    this.headerSvc.clearHeaderOptions();
-
     this.headerSvc.setHeaderOption('editDetails', {
       iconName: 'edit',
       optionText: 'Edit Details',
