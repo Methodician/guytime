@@ -119,4 +119,6 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
     );
 
   onXClicked = () => this.router.navigateByUrl('/guys');
+
+  logClicked = () => console.log('clicked');
 }
