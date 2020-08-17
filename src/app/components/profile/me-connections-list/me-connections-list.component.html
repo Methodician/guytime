@@ -1,5 +1,4 @@
 <main>
-  <gtm-header title="Your Contacts" backLocation="/me"></gtm-header>
   <gtm-profile-list
     *ngIf="users$.value.length > 0"
     [users]="users$ | async"

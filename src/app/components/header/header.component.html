@@ -1,4 +1,4 @@
-<main>
+<main *ngIf="(options$ | async) && (headerText$ | async)">
   <div class="menu">
     <button
       class="menu_button"
@@ -10,7 +10,7 @@
     </button>
     <mat-menu #menu="matMenu">
       <button
-        *ngFor="let option of options | keyvalue"
+        *ngFor="let option of options$ | async | keyvalue"
         mat-menu-item
         [disabled]="option.value.isDisabled"
         (click)="option.value.onClick()"
@@ -28,13 +28,13 @@
       </button>
     </mat-menu>
   </div>
-  <b class="page_title">{{ title }}</b>
+  <b class="page_title">{{ headerText$ | async }}</b>
   <button
-    (click)="onBackClicked()"
+    (click)="onXClicked()"
     class="back_button"
     mat-icon-button
     aria-label="Back Button"
   >
-    <mat-icon *ngIf="backLocation">close</mat-icon>
+    <mat-icon *ngIf="XAction">close</mat-icon>
   </button>
 </main>

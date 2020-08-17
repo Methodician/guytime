@@ -1,8 +1,4 @@
 <main>
-  <gtm-header
-    [title]="'About ' + (user$ | async)?.fName"
-    backLocation="['../']"
-  ></gtm-header>
   <gtm-profile-detail
     [userInfo]="user$ | async"
     [avatarUrl]="avatarUrl$ | async"

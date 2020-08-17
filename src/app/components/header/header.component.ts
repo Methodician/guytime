@@ -1,8 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PwaService } from '@services/pwa.service';
 import { AuthService } from '@services/auth.service';
-import { Router } from '@angular/router';
 import { HeaderService, HeaderOptionMapT } from '@app/services/header.service';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { delay, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'gtm-header',
@@ -10,27 +11,43 @@ import { HeaderService, HeaderOptionMapT } from '@app/services/header.service';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  @Input() title: string;
-  // Icon will not display without a backLocation
-  @Input() backLocation: string;
+  private unsubscribe$: Subject<void> = new Subject();
+  options$: BehaviorSubject<HeaderOptionMapT> = new BehaviorSubject(new Map());
+  options: HeaderOptionMapT = null;
+  // Icon will not display without a XAction
+  XAction: () => void = null;
+  headerText$: BehaviorSubject<string> = new BehaviorSubject('Guy Time');
 
-  options: HeaderOptionMapT;
   promptEvent;
 
   constructor(
-    private router: Router,
     private authSvc: AuthService,
     private pwaSvc: PwaService,
     private headerSvc: HeaderService,
   ) {
     this.pwaSvc.promptEvent$.subscribe(e => (this.promptEvent = e));
-    this.options = this.headerSvc.headerOptions;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.XAction = this.headerSvc.XAction;
+    this.headerSvc.headerOptions$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(headerOptions => this.options$.next(headerOptions));
+    this.headerSvc.headerText$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(headerText => {
+        this.headerText$.next(headerText);
+      });
+  }
 
-  onBackClicked = () => {
-    this.router.navigateByUrl(this.backLocation);
+  ngOnDestroy(): void {
+    this.headerSvc.resetHeader();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  onXClicked = () => {
+    this.XAction();
   };
 
   installPwa = () => this.promptEvent.prompt();

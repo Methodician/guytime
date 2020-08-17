@@ -24,7 +24,7 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnDestroy(): void {
-    this.headerSvc.clearHeaderOptions();
+    this.headerSvc.resetHeader();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
@@ -43,8 +43,9 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.watchForConnection();
-    this.updateHeader();
+    setTimeout(() => {
+      this.updateHeader();
+    });
   }
 
   updateHeader = () => {
@@ -75,6 +76,7 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
       isDisabled: false,
       onClick: this.onDisconnectClicked,
     });
+    this.watchForConnection();
   };
 
   watchForConnection = () => {

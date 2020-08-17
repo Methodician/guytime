@@ -1,5 +1,7 @@
-<router-outlet></router-outlet>
-<gtm-navbar></gtm-navbar>
-<!-- <ul>
-  <li *ngFor="let item of items | async">{{ item | json }}</li>
-</ul> -->
+<main>
+  <gtm-header *ngIf="isLoggedIn$ | async"></gtm-header>
+  <div *ngIf="!(isLoggedIn$ | async)"></div>
+  <router-outlet></router-outlet>
+  <div *ngIf="!(isLoggedIn$ | async)"></div>
+  <gtm-navbar *ngIf="isLoggedIn$ | async"></gtm-navbar>
+</main>

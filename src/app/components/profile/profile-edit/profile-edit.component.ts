@@ -34,7 +34,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnDestroy(): void {
-    this.headerSvc.clearHeaderOptions();
+    this.headerSvc.resetHeader();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
@@ -54,13 +54,11 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   }
 
   updateHeader = () => {
-    this.headerSvc.setHeaderOption('backToMe', {
-      iconName: 'account_circle',
-      optionText: 'Back to Me',
-      isDisabled: true,
-      onClick: this.logClicked,
-    });
+    this.headerSvc.setHeaderText('Update Your Info');
+    this.headerSvc.setXAction(this.onBackClicked);
   };
+
+  onBackClicked = () => this.router.navigateByUrl('/me');
 
   watchLoggedInUser = () => {
     this.userSvc.loggedInUser$

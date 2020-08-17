@@ -17,7 +17,7 @@ export class BrowseGuysListComponent implements OnInit, OnDestroy {
   constructor(private userSvc: UserService, private headerSvc: HeaderService) {}
 
   ngOnDestroy(): void {
-    this.headerSvc.clearHeaderOptions();
+    this.headerSvc.resetHeader();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
@@ -43,7 +43,7 @@ export class BrowseGuysListComponent implements OnInit, OnDestroy {
         this.users$.next(otherUsers);
       });
 
-    this.updateHeader();
+    setTimeout(() => this.updateHeader());
   }
 
   updateHeader = () => {

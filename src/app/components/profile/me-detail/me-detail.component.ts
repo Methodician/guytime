@@ -4,6 +4,7 @@ import { UserI } from '@app/models/user';
 import { UserService } from '@app/services/user.service';
 import { Router } from '@angular/router';
 import { HeaderService } from '@app/services/header.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'gtm-me-detail',
@@ -24,7 +25,7 @@ export class MeDetailComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnDestroy(): void {
-    this.headerSvc.clearHeaderOptions();
+    this.headerSvc.resetHeader();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
@@ -32,7 +33,7 @@ export class MeDetailComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.user$ = this.userSvc.loggedInUser$;
     this.avatarUrl$ = this.userSvc.getLoggedInAvatarUrl();
-    this.updateHeader();
+    setTimeout(() => this.updateHeader());
   }
 
   updateHeader = () => {
@@ -48,6 +49,10 @@ export class MeDetailComponent implements OnInit, OnDestroy {
       optionText: 'Connections',
       isDisabled: false,
       onClick: this.onConnectionsClicked,
+    });
+
+    this.user$.pipe(takeUntil(this.unsubscribe$)).subscribe(user => {
+      this.headerSvc.setHeaderText(`About ${user.fName}`);
     });
   };
 
