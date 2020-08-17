@@ -50,7 +50,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     });
     this.watchLoggedInUser();
     this.avatarUrl$ = this.userSvc.getLoggedInAvatarUrl();
-    this.updateHeader();
+    setTimeout(() => this.updateHeader());
   }
 
   updateHeader = () => {

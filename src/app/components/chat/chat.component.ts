@@ -22,7 +22,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   constructor(private headerSvc: HeaderService) {}
 
   ngOnDestroy(): void {
-    this.headerSvc.clearHeaderOptions();
+    this.headerSvc.resetHeader();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
@@ -126,7 +126,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       },
     ];
 
-    this.updateHeader();
+    setTimeout(() => this.updateHeader());
   }
 
   updateHeader = () => {

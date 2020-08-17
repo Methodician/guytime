@@ -60,6 +60,8 @@ export class BrowseGuysListComponent implements OnInit, OnDestroy {
       isDisabled: true,
       onClick: this.logClicked,
     });
+
+    this.headerSvc.setHeaderText('Guys Out There');
   };
 
   logClicked = () => console.log('clicked');

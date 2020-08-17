@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
 import { UserI } from '@models/user';
 import { UserService } from '@services/user.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HeaderService } from '@app/services/header.service';
 import { takeUntil } from 'rxjs/operators';
 
@@ -20,6 +20,7 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
   constructor(
     private userSvc: UserService,
     private route: ActivatedRoute,
+    private router: Router,
     private headerSvc: HeaderService,
   ) {}
 
@@ -76,7 +77,15 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
       isDisabled: false,
       onClick: this.onDisconnectClicked,
     });
+
     this.watchForConnection();
+
+    this.user$.pipe(takeUntil(this.unsubscribe$)).subscribe(user => {
+      if (user && user.fName)
+        this.headerSvc.setHeaderText(`About ${user.fName}`);
+    });
+
+    this.headerSvc.setXAction(this.onXClicked);
   };
 
   watchForConnection = () => {
@@ -109,5 +118,5 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
       'Please remind us to implement the disconnect feature if this is important',
     );
 
-  logClicked = () => console.log('clicked');
+  onXClicked = () => this.router.navigateByUrl('/guys');
 }

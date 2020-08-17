@@ -13,9 +13,8 @@ import { delay, takeUntil } from 'rxjs/operators';
 export class HeaderComponent implements OnInit {
   private unsubscribe$: Subject<void> = new Subject();
   options$: BehaviorSubject<HeaderOptionMapT> = new BehaviorSubject(new Map());
-  options: HeaderOptionMapT = null;
   // Icon will not display without a XAction
-  XAction: () => void = null;
+  XAction$: BehaviorSubject<() => void> = new BehaviorSubject(null);
   headerText$: BehaviorSubject<string> = new BehaviorSubject('Guy Time');
 
   promptEvent;
@@ -29,10 +28,14 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.XAction = this.headerSvc.XAction;
+    this.headerSvc.XAction$.pipe(
+      takeUntil(this.unsubscribe$),
+    ).subscribe(action => this.XAction$.next(action));
+
     this.headerSvc.headerOptions$
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(headerOptions => this.options$.next(headerOptions));
+
     this.headerSvc.headerText$
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(headerText => {
@@ -47,7 +50,8 @@ export class HeaderComponent implements OnInit {
   }
 
   onXClicked = () => {
-    this.XAction();
+    const XAction = this.XAction$.value;
+    XAction();
   };
 
   installPwa = () => this.promptEvent.prompt();

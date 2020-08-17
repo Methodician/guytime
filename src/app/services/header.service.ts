@@ -11,6 +11,7 @@ export class HeaderService {
   headerOptions: HeaderOptionMapT = new Map();
 
   XAction: () => void = null;
+  XAction$: BehaviorSubject<() => void> = new BehaviorSubject(null);
 
   headerText$ = new BehaviorSubject('Guy Time');
 
@@ -45,7 +46,7 @@ export class HeaderService {
     this.headerOptions$.next(this.headerOptions);
   };
 
-  setXAction = (action: () => void) => (this.XAction = action);
+  setXAction = (action: () => void) => this.XAction$.next(action);
 
   setHeaderText = (text: string) => this.headerText$.next(text);
 

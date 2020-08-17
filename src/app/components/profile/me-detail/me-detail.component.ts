@@ -52,7 +52,8 @@ export class MeDetailComponent implements OnInit, OnDestroy {
     });
 
     this.user$.pipe(takeUntil(this.unsubscribe$)).subscribe(user => {
-      this.headerSvc.setHeaderText(`About ${user.fName}`);
+      if (user && user.fName)
+        this.headerSvc.setHeaderText(`About ${user.fName}`);
     });
   };
 
