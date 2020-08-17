@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from '@components/login/login.component';
 import { NgGuideComponent } from '@components/ng-guide/ng-guide.component';
-import { ProfileListComponent } from '@components/profile/profile-list/profile-list.component';
 import { AuthGuard } from '@guards/auth.guard';
 import { ChatComponent } from '@components/chat/chat.component';
 import { RegisterComponent } from '@components/register/register.component';
@@ -11,6 +10,8 @@ import { ProfileEditComponent } from '@components/profile/profile-edit/profile-e
 import { HasValidProfileGuard } from '@guards/has-valid-profile.guard';
 import { OtherDetailComponent } from '@components/profile/other-detail/other-detail.component';
 import { MeDetailComponent } from '@components/profile/me-detail/me-detail.component';
+import { BrowseGuysListComponent } from './components/profile/browse-guys-list/browse-guys-list.component';
+import { MeConnectionsListComponent } from './components/profile/me-connections-list/me-connections-list.component';
 
 const routes: Routes = [
   // Should ultimately go to home (browse/filter profiles) which will redirect to login if you're not logged in
@@ -27,7 +28,16 @@ const routes: Routes = [
     component: ProfileEditComponent,
     canActivate: [AuthGuard],
   },
-  { path: 'guys', component: ProfileListComponent, canActivate: [AuthGuard] },
+  {
+    path: 'me/connections',
+    component: MeConnectionsListComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'guys',
+    component: BrowseGuysListComponent,
+    canActivate: [AuthGuard],
+  },
   {
     path: 'guys/:id',
     component: OtherDetailComponent,

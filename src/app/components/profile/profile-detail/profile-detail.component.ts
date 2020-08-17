@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { UserI, RelationshipStatusM } from '@app/models/user';
 
 @Component({

@@ -1,9 +1,9 @@
+@import 'app/styles/vars.scss';
+
 main {
   .chat_list {
-    position: absolute;
-    top: 40px;
     overflow-y: scroll;
-    height: calc(100vh - 140px);
+    height: calc(#{$body_height} - 50px);
     .chat_box {
       display: grid;
       grid-template-columns: 60px auto;

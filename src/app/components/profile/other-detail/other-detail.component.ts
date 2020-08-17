@@ -1,22 +1,34 @@
-import { Component, OnInit } from '@angular/core';
-import { IHeaderOption } from '@components/header/header.component';
-import { BehaviorSubject } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
 import { UserI } from '@models/user';
 import { UserService } from '@services/user.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HeaderService } from '@app/services/header.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'gtm-other-detail',
   templateUrl: './other-detail.component.html',
   styleUrls: ['./other-detail.component.scss'],
 })
-export class OtherDetailComponent implements OnInit {
-  headerOptions: IHeaderOption[];
+export class OtherDetailComponent implements OnInit, OnDestroy {
+  private unsubscribe$: Subject<void> = new Subject();
   user$ = new BehaviorSubject<UserI>(null);
 
   avatarUrl$ = new BehaviorSubject<string>('assets/icons/square_icon.svg');
 
-  constructor(private userSvc: UserService, private route: ActivatedRoute) {}
+  constructor(
+    private userSvc: UserService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private headerSvc: HeaderService,
+  ) {}
+
+  ngOnDestroy(): void {
+    this.headerSvc.resetHeader();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -25,34 +37,88 @@ export class OtherDetailComponent implements OnInit {
         this.userSvc
           .userRef(uid)
           .valueChanges()
-          .subscribe(user => this.user$.next(user));
+          .subscribe(user => this.user$.next({ ...user, uid }));
         this.userSvc
           .getAvatarUrl(uid)
           .subscribe(url => this.avatarUrl$.next(url));
       }
     });
 
-    this.headerOptions = [
-      {
-        iconName: 'people',
-        optionText: 'See their connections',
-        isDisabled: false,
-        onClick: this.logClicked,
-      },
-      {
-        iconName: 'person_add',
-        optionText: 'Connect with them',
-        isDisabled: true,
-        onClick: this.logClicked,
-      },
-      {
-        iconName: 'message',
-        optionText: 'Chat with them',
-        isDisabled: true,
-        onClick: this.logClicked,
-      },
-    ];
+    setTimeout(() => {
+      this.updateHeader();
+    });
   }
+
+  updateHeader = () => {
+    this.headerSvc.setHeaderOption('seeConnections', {
+      iconName: 'people',
+      optionText: 'See their contacts',
+      isDisabled: true,
+      onClick: this.logClicked,
+    });
+
+    this.headerSvc.setHeaderOption('addConnection', {
+      iconName: 'person_add',
+      optionText: 'Add them to contacts',
+      isDisabled: false,
+      onClick: this.onConnectClicked,
+    });
+
+    this.headerSvc.setHeaderOption('sendMessage', {
+      iconName: 'message',
+      optionText: 'Chat with them',
+      isDisabled: true,
+      onClick: this.logClicked,
+    });
+
+    this.headerSvc.setHeaderOption('removeContact', {
+      iconName: 'person_minus',
+      optionText: 'Remove contact',
+      isDisabled: false,
+      onClick: this.onDisconnectClicked,
+    });
+
+    this.watchForConnection();
+
+    this.user$.pipe(takeUntil(this.unsubscribe$)).subscribe(user => {
+      if (user && user.fName)
+        this.headerSvc.setHeaderText(`About ${user.fName}`);
+    });
+
+    this.headerSvc.setXAction(this.onXClicked);
+  };
+
+  watchForConnection = () => {
+    const bothUsers$ = combineLatest(
+      this.user$,
+      this.userSvc.loggedInUser$,
+      (user, loggedInUser) => ({ user, loggedInUser }),
+    );
+    bothUsers$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(({ user, loggedInUser }) => {
+        if (user && loggedInUser.contacts[user.uid]) {
+          this.headerSvc.disableHeaderOption('addConnection');
+          this.headerSvc.enableHeaderOption('removeContact');
+        } else {
+          this.headerSvc.enableHeaderOption('addConnection');
+          this.headerSvc.disableHeaderOption('removeContact');
+        }
+      });
+  };
+
+  onConnectClicked = () =>
+    this.userSvc.addUserContact(
+      this.userSvc.loggedInUser$.value.uid,
+      this.user$.value.uid,
+    );
+
+  onDisconnectClicked = () =>
+    alert(
+      'Please remind us to implement the disconnect feature if this is important',
+    );
+
+  onXClicked = () => this.router.navigateByUrl('/guys');
 
   logClicked = () => console.log('clicked');
 }

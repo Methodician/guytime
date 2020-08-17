@@ -1,5 +1,5 @@
 <main>
-  <mat-card [routerLink]="[user.uid]">
+  <mat-card [routerLink]="'/guys/' + user.uid">
     <div
       mat-card-avatar
       [style.background-image]="'url(' + (avatarUrl$ | async) + ')'"

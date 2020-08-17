@@ -43,6 +43,8 @@ import { ActivitiesSpanComponent } from '@components/shared/activities-span/acti
 import { ProfilePreviewCardComponent } from '@components/shares/profile-preview-card/profile-preview-card.component';
 import { OtherDetailComponent } from '@components/profile/other-detail/other-detail.component';
 import { MeDetailComponent } from '@components/profile/me-detail/me-detail.component';
+import { MeConnectionsListComponent } from './components/profile/me-connections-list/me-connections-list.component';
+import { BrowseGuysListComponent } from './components/profile/browse-guys-list/browse-guys-list.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +64,8 @@ import { MeDetailComponent } from '@components/profile/me-detail/me-detail.compo
     ProfilePreviewCardComponent,
     OtherDetailComponent,
     MeDetailComponent,
+    MeConnectionsListComponent,
+    BrowseGuysListComponent,
   ],
   imports: [
     BrowserModule,

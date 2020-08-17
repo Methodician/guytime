@@ -1,8 +1,9 @@
+@import 'app/styles/vars.scss';
+
 main {
   overflow: auto;
   mat-list {
-    margin-top: 40px;
-    height: calc(100vh - 100px);
+    height: $body_height;
     overflow: scroll;
     mat-list-item {
       margin-bottom: 6px;

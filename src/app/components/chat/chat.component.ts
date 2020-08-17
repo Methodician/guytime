@@ -1,29 +1,33 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { IHeaderOption } from '../header/header.component';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  OnDestroy,
+} from '@angular/core';
+import { HeaderService } from '@app/services/header.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'gtm-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnDestroy {
   @ViewChild('chatList') private chatListEl: ElementRef;
-  headerOptions: IHeaderOption[];
+  private unsubscribe$: Subject<void> = new Subject();
   msgInput = '';
   chats = [];
 
-  constructor() {}
+  constructor(private headerSvc: HeaderService) {}
+
+  ngOnDestroy(): void {
+    this.headerSvc.resetHeader();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 
   ngOnInit(): void {
-    this.headerOptions = [
-      {
-        iconName: 'people',
-        optionText: 'People',
-        isDisabled: false,
-        onClick: this.logClicked,
-      },
-    ];
-
     this.chats = [
       {
         sender: 'Andy',
@@ -121,7 +125,18 @@ export class ChatComponent implements OnInit {
         timestamp: new Date(),
       },
     ];
+
+    setTimeout(() => this.updateHeader());
   }
+
+  updateHeader = () => {
+    this.headerSvc.setHeaderOption('people', {
+      iconName: 'people',
+      optionText: 'People',
+      isDisabled: false,
+      onClick: this.logClicked,
+    });
+  };
 
   ngAfterViewChecked() {
     this.scrollToBottom();

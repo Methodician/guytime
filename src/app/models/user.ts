@@ -43,6 +43,7 @@ export interface UserI {
   bio: string;
   activityTypes: ActivityTypeT[];
   connectionIds: string[];
+  contacts?: any;
   createdAt?: any;
 }
 

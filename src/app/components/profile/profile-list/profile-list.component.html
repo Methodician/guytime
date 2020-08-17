@@ -1,8 +1,6 @@
 <main>
-  <gtm-header title="Guys Out There" [options]="headerOptions"></gtm-header>
-
   <mat-list>
-    <mat-list-item *ngFor="let user of users$ | async">
+    <mat-list-item *ngFor="let user of users">
       <gtm-profile-preview-card
         [user]="user"
         style="width: 100%;"
