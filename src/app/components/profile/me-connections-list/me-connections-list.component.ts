@@ -51,7 +51,8 @@ export class MeConnectionsListComponent implements OnInit {
             .subscribe(contacts => this.users$.next(contacts));
         }
       });
-    this.updateHeader();
+
+    setTimeout(() => this.updateHeader());
   }
 
   ngOnDestroy() {
