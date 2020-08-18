@@ -12,6 +12,7 @@ import { HeaderService } from '@app/services/header.service';
 })
 export class MeConnectionsListComponent implements OnInit {
   private unsubscribe$: Subject<void> = new Subject();
+
   users$: BehaviorSubject<UserI[]> = new BehaviorSubject([]);
   doesUserHaveContacts = false;
   wasUserReturned = false;
