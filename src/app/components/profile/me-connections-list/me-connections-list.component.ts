@@ -27,7 +27,6 @@ export class MeConnectionsListComponent implements OnInit {
     this.userSvc.loggedInUser$
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(user => {
-        console.log(user);
         if (user && user.uid) {
           this.wasUserReturned = true;
         }
