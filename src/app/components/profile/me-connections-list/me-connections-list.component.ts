@@ -4,6 +4,7 @@ import { UserI } from '@app/models/user';
 import { UserService } from '@app/services/user.service';
 import { map, takeUntil } from 'rxjs/operators';
 import { HeaderService } from '@app/services/header.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'gtm-me-connections-list',
@@ -16,7 +17,11 @@ export class MeConnectionsListComponent implements OnInit {
   users$: BehaviorSubject<UserI[]> = new BehaviorSubject([]);
   doesUserHaveContacts = false;
   wasUserReturned = false;
-  constructor(private userSvc: UserService, private headerSvc: HeaderService) {}
+  constructor(
+    private userSvc: UserService,
+    private headerSvc: HeaderService,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.userSvc.loggedInUser$
@@ -47,6 +52,7 @@ export class MeConnectionsListComponent implements OnInit {
             .subscribe(contacts => this.users$.next(contacts));
         }
       });
+    this.updateHeader();
   }
 
   ngOnDestroy() {
@@ -55,5 +61,9 @@ export class MeConnectionsListComponent implements OnInit {
     this.unsubscribe$.complete();
   }
 
-  updateHeader = () => {};
+  updateHeader = () => {
+    this.headerSvc.setXAction(this.onXClicked);
+  };
+
+  onXClicked = () => this.router.navigateByUrl('/me');
 }
