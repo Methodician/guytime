@@ -1,9 +1,11 @@
-<div *ngIf="user$ | async as user">
-  <p *ngFor="let connectedUsers of connectedUsers$ | async">
-    {{ connectedUsers.fName }}
-  </p>
+<main *ngIf="user$ | async as user">
+  <gtm-profile-list
+    *ngIf="connectedUsers$.value.length > 0"
+    [users]="connectedUsers$ | async"
+  >
+  </gtm-profile-list>
 
-  <div *ngIf="wasUserReturned && !doesUserHaveContacts">
+  <section *ngIf="wasUserReturned && !doesUserHaveContacts">
     <p>looks like {{ user.fName }} doesn't have any connections yet</p>
-  </div>
-</div>
+  </section>
+</main>
