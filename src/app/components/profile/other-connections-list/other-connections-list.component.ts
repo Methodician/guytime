@@ -5,6 +5,7 @@ import { UserI } from '@models/user';
 import { Subject, BehaviorSubject, combineLatest } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
 import { HeaderService } from '@app/services/header.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'gtm-other-connections-list',
@@ -22,6 +23,7 @@ export class OtherConnectionsListComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private userSvc: UserService,
     private headerSvc: HeaderService,
+    private router: Router,
   ) {}
 
   ngOnDestroy(): void {
@@ -75,6 +77,11 @@ export class OtherConnectionsListComponent implements OnInit, OnDestroy {
     this.user$.pipe(takeUntil(this.unsubscribe$)).subscribe(user => {
       if (user && user.fName)
         this.headerSvc.setHeaderText(`Connections of ${user.fName}`);
+      this.headerSvc.setXAction(() => this.onXClicked(user.uid));
     });
+  };
+
+  onXClicked = id => {
+    this.router.navigateByUrl(`/guys/${id}`);
   };
 }
