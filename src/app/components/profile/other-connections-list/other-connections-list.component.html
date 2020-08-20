@@ -1,1 +1,7 @@
-<p>other-connections-list works!</p>
+<div *ngFor="let user of connectedUsers$ | async">
+  <p>{{ user.fName }}</p>
+</div>
+
+<!-- <div *ngIf="wasUserReturned && !doesUserHaveContacts" [user]="user$ | async">
+  <p>No connections {{ user.fName }}</p>
+</div> -->
