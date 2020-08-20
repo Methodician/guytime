@@ -13,6 +13,7 @@ import { takeUntil, map } from 'rxjs/operators';
 export class OtherConnectionsListComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<void> = new Subject();
   connectedUsers$ = new BehaviorSubject<UserI[]>([]);
+  user$ = new BehaviorSubject<UserI>(null);
   doesUserHaveContacts = false;
   wasUserReturned = false;
 
@@ -27,10 +28,12 @@ export class OtherConnectionsListComponent implements OnInit, OnDestroy {
     this.route.params.subscribe(params => {
       if (params['id']) {
         const uid = params['id'];
-        const user$ = this.getUserObservable(uid);
-        user$.pipe(takeUntil(this.unsubscribe$)).subscribe(user => {
-          this.watchUserContacts(user);
-        });
+        this.getUserObservable(uid)
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe(user => {
+            this.user$.next(user);
+            this.watchUserContacts(user);
+          });
       }
     });
   }
@@ -43,7 +46,6 @@ export class OtherConnectionsListComponent implements OnInit, OnDestroy {
   };
 
   watchUserContacts = (user: UserI) => {
-    console.log(user);
     if (user && user.uid) {
       this.wasUserReturned = true;
     }
