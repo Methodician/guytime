@@ -1,8 +1,8 @@
 <div *ngIf="user$ | async as user">
-  <h2>Connections of {{ user.fName }}</h2>
+  <!-- <h2>Connections of {{ user.fName }}</h2>
   <p *ngFor="let connectedUsers of connectedUsers$ | async">
     {{ connectedUsers.fName }}
-  </p>
+  </p> -->
 
   <div *ngIf="wasUserReturned && !doesUserHaveContacts">
     <p>looks like {{ user.fName }} doesn't have any connections yet</p>

@@ -4,6 +4,7 @@ import { UserService } from '@app/services/user.service';
 import { UserI } from '@models/user';
 import { Subject, BehaviorSubject, combineLatest } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
+import { HeaderService } from '@app/services/header.service';
 
 @Component({
   selector: 'gtm-other-connections-list',
@@ -17,11 +18,16 @@ export class OtherConnectionsListComponent implements OnInit, OnDestroy {
   doesUserHaveContacts = false;
   wasUserReturned = false;
 
-  constructor(private route: ActivatedRoute, private userSvc: UserService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private userSvc: UserService,
+    private headerSvc: HeaderService,
+  ) {}
 
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+    this.headerSvc.resetHeader();
   }
 
   ngOnInit(): void {
@@ -33,6 +39,9 @@ export class OtherConnectionsListComponent implements OnInit, OnDestroy {
           .subscribe(user => {
             this.user$.next(user);
             this.watchUserContacts(user);
+            setTimeout(() => {
+              this.updateHeader();
+            });
           });
       }
     });
@@ -60,5 +69,12 @@ export class OtherConnectionsListComponent implements OnInit, OnDestroy {
         this.connectedUsers$.next(contacts),
       );
     }
+  };
+
+  updateHeader = () => {
+    this.user$.pipe(takeUntil(this.unsubscribe$)).subscribe(user => {
+      if (user && user.fName)
+        this.headerSvc.setHeaderText(`Connections of ${user.fName}`);
+    });
   };
 }
