@@ -5,7 +5,6 @@ import { UserService } from '@services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HeaderService } from '@app/services/header.service';
 import { takeUntil } from 'rxjs/operators';
-//import { Location } from '@angular/common';
 
 @Component({
   selector: 'gtm-other-detail',
@@ -23,8 +22,7 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private headerSvc: HeaderService,
-  ) //private location: Location,
-  {}
+  ) {}
 
   ngOnDestroy(): void {
     this.headerSvc.resetHeader();
@@ -121,7 +119,6 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
     );
 
   onXClicked = () => this.router.navigateByUrl('/guys');
-  //onXClicked = () => this.location.back();
 
   logClicked = () => console.log('clicked');
 }
