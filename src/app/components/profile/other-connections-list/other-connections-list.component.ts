@@ -75,7 +75,7 @@ export class OtherConnectionsListComponent implements OnInit, OnDestroy {
   };
 
   updateHeader = () => {
-    this.user$.pipe(takeUntil(this.unsubscribe$)).subscribe(user => {
+    this.user$.subscribe(user => {
       if (user && user.fName)
         this.headerSvc.setHeaderText(`${user.fName}'s contacts`);
       this.headerSvc.setXAction(() => this.onXClicked(user.uid));
