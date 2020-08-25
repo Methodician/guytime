@@ -36,15 +36,13 @@ export class OtherConnectionsListComponent implements OnInit, OnDestroy {
     this.route.params.subscribe(params => {
       if (params['id']) {
         const uid = params['id'];
-        this.getUserObservable(uid)
-          .pipe(takeUntil(this.unsubscribe$))
-          .subscribe(user => {
-            this.user$.next(user);
-            this.watchUserContacts(user);
-            setTimeout(() => {
-              this.updateHeader();
-            });
+        this.getUserObservable(uid).subscribe(user => {
+          this.user$.next(user);
+          this.watchUserContacts(user);
+          setTimeout(() => {
+            this.updateHeader();
           });
+        });
       }
     });
   }
@@ -53,7 +51,10 @@ export class OtherConnectionsListComponent implements OnInit, OnDestroy {
     return this.userSvc
       .userRef(uid)
       .valueChanges()
-      .pipe(map(user => ({ ...user, uid })));
+      .pipe(
+        map(user => ({ ...user, uid })),
+        takeUntil(this.unsubscribe$),
+      );
   };
 
   watchUserContacts = (user: UserI) => {
@@ -67,16 +68,16 @@ export class OtherConnectionsListComponent implements OnInit, OnDestroy {
         this.getUserObservable(id),
       );
       const contactsObservable = combineLatest(contactObservables);
-      contactsObservable.subscribe(contacts =>
-        this.connectedUsers$.next(contacts),
-      );
+      contactsObservable
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(contacts => this.connectedUsers$.next(contacts));
     }
   };
 
   updateHeader = () => {
     this.user$.pipe(takeUntil(this.unsubscribe$)).subscribe(user => {
       if (user && user.fName)
-        this.headerSvc.setHeaderText(`Connections of ${user.fName}`);
+        this.headerSvc.setHeaderText(`${user.fName}'s contacts`);
       this.headerSvc.setXAction(() => this.onXClicked(user.uid));
     });
   };
