@@ -53,8 +53,8 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
     this.headerSvc.setHeaderOption('seeConnections', {
       iconName: 'people',
       optionText: 'See their contacts',
-      isDisabled: true,
-      onClick: this.logClicked,
+      isDisabled: false,
+      onClick: this.onSeeConnectionsClicked,
     });
 
     this.headerSvc.setHeaderOption('addConnection', {
@@ -120,5 +120,8 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
 
   onXClicked = () => this.router.navigateByUrl('/guys');
 
-  logClicked = () => console.log('clicked');
+  logClicked = () => console.log(this.user$.value.uid);
+
+  onSeeConnectionsClicked = () =>
+    this.router.navigateByUrl(`/guys/${this.user$.value.uid}/connections`);
 }

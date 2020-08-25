@@ -1,0 +1,11 @@
+<main *ngIf="user$ | async as user">
+  <gtm-profile-list
+    *ngIf="connectedUsers$.value.length > 0"
+    [users]="connectedUsers$ | async"
+  >
+  </gtm-profile-list>
+
+  <section *ngIf="wasUserReturned && !doesUserHaveContacts">
+    <p>It looks like {{ user.fName }} doesn't have any contacts yet</p>
+  </section>
+</main>

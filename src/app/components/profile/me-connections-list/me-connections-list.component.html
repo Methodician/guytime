@@ -3,6 +3,7 @@
     *ngIf="users$.value.length > 0"
     [users]="users$ | async"
   ></gtm-profile-list>
+
   <section *ngIf="wasUserReturned && !doesUserHaveContacts">
     <p>
       Looks like you don't have any connections yet. Why not

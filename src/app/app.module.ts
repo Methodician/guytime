@@ -45,6 +45,7 @@ import { OtherDetailComponent } from '@components/profile/other-detail/other-det
 import { MeDetailComponent } from '@components/profile/me-detail/me-detail.component';
 import { MeConnectionsListComponent } from './components/profile/me-connections-list/me-connections-list.component';
 import { BrowseGuysListComponent } from './components/profile/browse-guys-list/browse-guys-list.component';
+import { OtherConnectionsListComponent } from './components/profile/other-connections-list/other-connections-list.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { BrowseGuysListComponent } from './components/profile/browse-guys-list/b
     MeDetailComponent,
     MeConnectionsListComponent,
     BrowseGuysListComponent,
+    OtherConnectionsListComponent,
   ],
   imports: [
     BrowserModule,
