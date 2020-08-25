@@ -23,6 +23,12 @@ export class MeConnectionsListComponent implements OnInit {
     private router: Router,
   ) {}
 
+  ngOnDestroy() {
+    this.headerSvc.clearHeaderOptions();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   ngOnInit(): void {
     this.userSvc.loggedInUser$
       .pipe(takeUntil(this.unsubscribe$))
@@ -55,14 +61,9 @@ export class MeConnectionsListComponent implements OnInit {
     setTimeout(() => this.updateHeader());
   }
 
-  ngOnDestroy() {
-    this.headerSvc.clearHeaderOptions();
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-  }
-
   updateHeader = () => {
     this.headerSvc.setXAction(this.onXClicked);
+    this.headerSvc.setHeaderText('My connections');
   };
 
   onXClicked = () => this.router.navigateByUrl('/me');
