@@ -1,9 +1,8 @@
 import { Timestamp } from '@google-cloud/firestore';
-import { IMessage } from './message';
+import { MessageI } from './message';
 
-export interface IChatGroup {
+export interface ChatGroupI {
   participantIds: string[];
-  messages: IMessage[];
   name?: string;
   createdAt: Timestamp;
 }
