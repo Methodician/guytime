@@ -16,7 +16,8 @@ export class HeaderService {
 
   headerText$ = new BehaviorSubject('Guy Time');
 
-  lastUrl = null;
+  wasXJustClicked = false;
+  previousUrls = [];
   currentUrl = null;
   defaultUrl = null;
 
@@ -28,8 +29,12 @@ export class HeaderService {
     this.router.events
       .pipe(filter(($e: any) => $e instanceof NavigationEnd))
       .subscribe($e => {
-        this.lastUrl = this.currentUrl;
-        this.currentUrl = $e.url;
+        if (!this.wasXJustClicked) {
+          this.currentUrl && this.previousUrls.push(this.currentUrl);
+          this.previousUrls.length > 10 && this.previousUrls.shift();
+          this.currentUrl = $e.url;
+        }
+        this.wasXJustClicked = false;
       });
   };
 
@@ -68,7 +73,6 @@ export class HeaderService {
   };
 
   setShouldShowX = (shouldShowX: boolean) => {
-    console.log(this.defaultUrl, shouldShowX);
     if (!this.defaultUrl && shouldShowX) {
       throw new Error(
         'X can not be displayed without a default URL in the HeaderService. Set a defaultUrl first',
@@ -78,8 +82,10 @@ export class HeaderService {
   };
 
   onXClicked = () => {
-    if (this.lastUrl) {
-      this.router.navigateByUrl(this.lastUrl);
+    this.wasXJustClicked = true;
+    if (this.previousUrls.length > 0) {
+      const lastUrl = this.previousUrls.pop();
+      this.router.navigateByUrl(lastUrl);
     } else if (this.defaultUrl) {
       this.router.navigateByUrl(this.defaultUrl);
     } else {
