@@ -20,7 +20,7 @@ export class MeConnectionsListComponent implements OnInit {
   constructor(private userSvc: UserService, private headerSvc: HeaderService) {}
 
   ngOnDestroy() {
-    this.headerSvc.clearHeaderOptions();
+    this.headerSvc.resetHeader();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
