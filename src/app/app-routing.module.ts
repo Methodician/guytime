@@ -6,6 +6,7 @@ import { AuthGuard } from '@guards/auth.guard';
 import { ChatComponent } from '@components/chat/chat.component';
 import { RegisterComponent } from '@components/register/register.component';
 import { ChatListComponent } from '@components/chat-list/chat-list.component';
+import { ChatDetailComponent } from '@components/chat/chat-detail/chat-detail.component';
 import { ProfileEditComponent } from '@components/profile/profile-edit/profile-edit.component';
 import { HasValidProfileGuard } from '@guards/has-valid-profile.guard';
 import { OtherDetailComponent } from '@components/profile/other-detail/other-detail.component';
@@ -24,6 +25,7 @@ const routes: Routes = [
     component: MeDetailComponent,
     canActivate: [AuthGuard, HasValidProfileGuard],
   },
+
   {
     path: 'me/edit',
     component: ProfileEditComponent,
@@ -56,6 +58,13 @@ const routes: Routes = [
     component: ChatComponent,
     canActivate: [AuthGuard],
   },
+
+  {
+    path: 'chat-detail/:id',
+    component: ChatDetailComponent,
+    canActivate: [AuthGuard],
+  },
+
   { path: 'guide', component: NgGuideComponent },
 ];
 

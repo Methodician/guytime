@@ -67,7 +67,7 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
     this.headerSvc.setHeaderOption('sendMessage', {
       iconName: 'message',
       optionText: 'Chat with them',
-      isDisabled: true,
+      isDisabled: false,
       onClick: this.logClicked,
     });
 
