@@ -55,10 +55,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
 
   updateHeader = () => {
     this.headerSvc.setHeaderText('Update Your Info');
-    this.headerSvc.setXAction(this.onBackClicked);
+    this.headerSvc.setDefaultXUrl('/me');
   };
-
-  onBackClicked = () => this.router.navigateByUrl('/me');
 
   watchLoggedInUser = () => {
     this.userSvc.loggedInUser$
