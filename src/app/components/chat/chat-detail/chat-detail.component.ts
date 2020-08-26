@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'gtm-chat-detail',
@@ -7,11 +6,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./chat-detail.component.scss'],
 })
 export class ChatDetailComponent implements OnInit {
-  constructor(private router: Router) {}
+  constructor() {}
 
   ngOnInit(): void {}
-
-  somefunction = id => {
-    this.router.navigateByUrl(`/chat-detail/${id}`);
-  };
 }
