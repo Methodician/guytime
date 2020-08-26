@@ -36,6 +36,7 @@ export class UserService {
           .subscribe(user => {
             const { uid } = authInfo;
             this.loggedInUser$.next({ ...user, uid });
+            //console.log(this.loggedInUser$);
           });
       }
     });

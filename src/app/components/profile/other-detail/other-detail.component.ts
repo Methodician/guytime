@@ -4,6 +4,7 @@ import { UserI } from '@models/user';
 import { UserService } from '@services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HeaderService } from '@app/services/header.service';
+import { ChatService } from '@app/services/chat.service';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -22,6 +23,7 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private headerSvc: HeaderService,
+    private chatSvc: ChatService,
   ) {}
 
   ngOnDestroy(): void {
@@ -68,7 +70,7 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
       iconName: 'message',
       optionText: 'Chat with them',
       isDisabled: false,
-      onClick: this.logClicked,
+      onClick: this.onChatClicked,
     });
 
     this.headerSvc.setHeaderOption('removeContact', {
@@ -124,4 +126,12 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
 
   onSeeConnectionsClicked = () =>
     this.router.navigateByUrl(`/guys/${this.user$.value.uid}/connections`);
+
+  onChatClicked = () => {
+    const participantIds = [
+      this.userSvc.loggedInUser$.value.uid,
+      this.user$.value.uid,
+    ];
+    this.chatSvc.createChat(participantIds);
+  };
 }
