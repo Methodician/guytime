@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -10,12 +12,26 @@ export class HeaderService {
   );
   headerOptions: HeaderOptionMapT = new Map();
 
-  XAction: () => void = null;
-  XAction$: BehaviorSubject<() => void> = new BehaviorSubject(null);
+  shouldShowX$ = new BehaviorSubject(false);
 
   headerText$ = new BehaviorSubject('Guy Time');
 
-  constructor() {}
+  lastUrl = null;
+  currentUrl = null;
+  defaultUrl = null;
+
+  constructor(private router: Router) {
+    this.watchNavigation();
+  }
+
+  watchNavigation = () => {
+    this.router.events
+      .pipe(filter(($e: any) => $e instanceof NavigationEnd))
+      .subscribe($e => {
+        this.lastUrl = this.currentUrl;
+        this.currentUrl = $e.url;
+      });
+  };
 
   setHeaderOption = (name: string, option: HeaderOptionI) => {
     this.headerOptions.set(name, option);
@@ -46,14 +62,40 @@ export class HeaderService {
     this.headerOptions$.next(this.headerOptions);
   };
 
-  setXAction = (action: () => void) => this.XAction$.next(action);
+  setDefaultXUrl = (url: string) => {
+    this.defaultUrl = url;
+    this.setShouldShowX(true);
+  };
+
+  setShouldShowX = (shouldShowX: boolean) => {
+    console.log(this.defaultUrl, shouldShowX);
+    if (!this.defaultUrl && shouldShowX) {
+      throw new Error(
+        'X can not be displayed without a default URL in the HeaderService. Set a defaultUrl first',
+      );
+    }
+    this.shouldShowX$.next(shouldShowX);
+  };
+
+  onXClicked = () => {
+    if (this.lastUrl) {
+      this.router.navigateByUrl(this.lastUrl);
+    } else if (this.defaultUrl) {
+      this.router.navigateByUrl(this.defaultUrl);
+    } else {
+      throw new Error(
+        'X can not be displayed without a default URL in the HeaderService',
+      );
+    }
+  };
 
   setHeaderText = (text: string) => this.headerText$.next(text);
 
   resetHeader = () => {
     this.clearHeaderOptions();
     this.setHeaderText('Guy Time');
-    this.setXAction(null);
+    this.setShouldShowX(false);
+    this.defaultUrl = null;
   };
 }
 

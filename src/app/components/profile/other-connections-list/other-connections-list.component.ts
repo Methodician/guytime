@@ -78,11 +78,7 @@ export class OtherConnectionsListComponent implements OnInit, OnDestroy {
     this.user$.subscribe(user => {
       if (user && user.fName)
         this.headerSvc.setHeaderText(`${user.fName}'s contacts`);
-      this.headerSvc.setXAction(() => this.onXClicked(user.uid));
+      this.headerSvc.setDefaultXUrl(`/guys/${user.uid}`);
     });
-  };
-
-  onXClicked = id => {
-    this.router.navigateByUrl(`/guys/${id}`);
   };
 }

@@ -35,6 +35,6 @@
     mat-icon-button
     aria-label="Back Button"
   >
-    <mat-icon *ngIf="XAction$ | async">close</mat-icon>
+    <mat-icon *ngIf="shouldShowX$ | async">close</mat-icon>
   </button>
 </main>

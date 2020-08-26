@@ -17,11 +17,7 @@ export class MeConnectionsListComponent implements OnInit {
   users$: BehaviorSubject<UserI[]> = new BehaviorSubject([]);
   doesUserHaveContacts = false;
   wasUserReturned = false;
-  constructor(
-    private userSvc: UserService,
-    private headerSvc: HeaderService,
-    private router: Router,
-  ) {}
+  constructor(private userSvc: UserService, private headerSvc: HeaderService) {}
 
   ngOnDestroy() {
     this.headerSvc.clearHeaderOptions();
@@ -62,9 +58,7 @@ export class MeConnectionsListComponent implements OnInit {
   }
 
   updateHeader = () => {
-    this.headerSvc.setXAction(this.onXClicked);
+    this.headerSvc.setDefaultXUrl('/me');
     this.headerSvc.setHeaderText('My connections');
   };
-
-  onXClicked = () => this.router.navigateByUrl('/me');
 }

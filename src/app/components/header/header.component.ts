@@ -14,8 +14,7 @@ export class HeaderComponent implements OnInit {
 
   options$: BehaviorSubject<HeaderOptionMapT> = new BehaviorSubject(new Map());
   headerText$: BehaviorSubject<string> = new BehaviorSubject('Guy Time');
-  // Icon will not display without a XAction
-  XAction$: BehaviorSubject<() => void> = new BehaviorSubject(null);
+  shouldShowX$ = new BehaviorSubject(false);
 
   promptEvent;
 
@@ -30,7 +29,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.options$ = this.headerSvc.headerOptions$;
     this.headerText$ = this.headerSvc.headerText$;
-    this.XAction$ = this.headerSvc.XAction$;
+    this.shouldShowX$ = this.headerSvc.shouldShowX$;
   }
 
   ngOnDestroy(): void {
@@ -40,8 +39,7 @@ export class HeaderComponent implements OnInit {
   }
 
   onXClicked = () => {
-    const XAction = this.XAction$.value;
-    XAction();
+    this.headerSvc.onXClicked();
   };
 
   installPwa = () => this.promptEvent.prompt();

@@ -85,7 +85,7 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
         this.headerSvc.setHeaderText(`About ${user.fName}`);
     });
 
-    this.headerSvc.setXAction(this.onXClicked);
+    this.headerSvc.setDefaultXUrl('/guys');
   };
 
   watchForConnection = () => {
@@ -117,8 +117,6 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
     alert(
       'Please remind us to implement the disconnect feature if this is important',
     );
-
-  onXClicked = () => this.router.navigateByUrl('/guys');
 
   logClicked = () => console.log(this.user$.value.uid);
 
