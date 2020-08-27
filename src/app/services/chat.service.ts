@@ -2,17 +2,12 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FirebaseService } from './firebase.service';
 import { ChatGroupI } from '../models/chat-group';
-import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChatService {
-  constructor(
-    private afs: AngularFirestore,
-    private fbSvc: FirebaseService,
-    private router: Router,
-  ) {}
+  constructor(private afs: AngularFirestore, private fbSvc: FirebaseService) {}
 
   createChat = async (participants: string[]) => {
     const chatId = this.afs.createId();
@@ -22,6 +17,16 @@ export class ChatService {
     };
 
     await this.afs.collection('chats').doc(chatId).set(chatGroup);
-    this.router.navigateByUrl(`/chat-detail/${chatId}`);
+    return chatId;
+
+    // separation of concerns. This function should do one thing only which is
+    // Create chat group and return the chatId
+    // The component that gets the chatId can route the user to the new location.
+    // ok we can move some code to other-detail than
+    //this.router.navigateByUrl(`/chat-detail/${chatId}`);
   };
+
+  chatGroupsRef = () => this.afs.collection<ChatGroupI>('chats');
+  chatGroupRef = (chatGroupId: string) =>
+    this.chatGroupsRef().doc<ChatGroupI>(chatGroupId);
 }
