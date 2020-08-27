@@ -1,9 +1,8 @@
-import { FieldValue } from '@google-cloud/firestore';
+import { FieldValue, Timestamp } from '@google-cloud/firestore';
 
 export interface ChatGroupI {
   id?: string;
   name?: string;
   participantIds: string[];
-  createdAt: FieldValue;
-  //instead of timestamp
+  createdAt: FieldValue | Timestamp;
 }

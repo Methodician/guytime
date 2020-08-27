@@ -15,6 +15,9 @@ import { UserI } from '@models/user';
 export class ChatDetailComponent implements OnInit {
   private unsubscribe$: Subject<void> = new Subject();
   chatUsers$ = new BehaviorSubject<UserI[]>([]);
+  chatGroup$;
+  msgInput = '';
+  chats = [];
 
   constructor(
     private headerSvc: HeaderService,
@@ -33,48 +36,57 @@ export class ChatDetailComponent implements OnInit {
     this.route.params.subscribe(params => {
       if (params['id']) {
         const chatId = params['id'];
-        // const docRef = this.afs.collection('chats').doc<ChatGroupI>(chatId); // please don't delete for now
-        // const docRef = this.chatSvc.chatGroupRef(chatId);
-        // const chatObservable$ = docRef.valueChanges();
         const chatObservable$ = this.getChatObservables(chatId);
-        // chatObservable$.subscribe(chat => console.log(chat.participantIds));
-        chatObservable$.subscribe(chatGroup =>
-          this.watchChatUsers(chatGroup.participantIds),
-        );
+        this.chatGroup$ = chatObservable$;
+        chatObservable$.subscribe(chatGroup => {
+          this.watchChatUsers(chatGroup.participantIds);
+        });
         setTimeout(() => this.updateHeader());
       }
     });
+
+    this.chats = [
+      {
+        sender: 'Andy',
+        avatar:
+          'https://thumbs-prod.si-cdn.com/qXrJJ-l_jMrQbARjnToD0fi-Tsg=/800x600/filters:no_upscale()/https://public-media.si-cdn.com/filer/d6/93/d6939718-4e41-44a8-a8f3-d13648d2bcd0/c3npbx.jpg',
+        text: `but that's nothing new. We have been chatting for like a month and we keep comming back so someone must be having fun. I mean look at me. I'm a puffer fish...`,
+        timestamp: new Date(),
+      },
+      {
+        sender: 'Jim',
+        avatar: 'https://material.angular.io/assets/img/examples/shiba1.jpg',
+        text: 'Totes but I dig it too. I mean we can chat all day',
+        timestamp: new Date(),
+      },
+      {
+        sender: 'Nathan',
+        avatar: 'https://material.angular.io/assets/img/examples/shiba1.jpg',
+        text: 'I like chatting with you guys',
+        timestamp: new Date(),
+      },
+      {
+        sender: 'Andy',
+        avatar:
+          'https://thumbs-prod.si-cdn.com/qXrJJ-l_jMrQbARjnToD0fi-Tsg=/800x600/filters:no_upscale()/https://public-media.si-cdn.com/filer/d6/93/d6939718-4e41-44a8-a8f3-d13648d2bcd0/c3npbx.jpg',
+        text: `but that's nothing new. We have been chatting for like a month and we keep comming back so someone must be having fun. I mean look at me. I'm a puffer fish...`,
+        timestamp: new Date(),
+      },
+    ];
   }
 
   getChatObservables = (chatId: string) => {
-    // return the results of piping chatSvc.chatGroupRef through valueChanges and map takeUntil (like in OtherConnectionsListComponent)
     return this.chatSvc
       .chatGroupRef(chatId)
       .valueChanges()
-      .pipe(
-        map(chatGroup => ({ ...chatGroup, chatId })), //??
-        takeUntil(this.unsubscribe$),
-      );
+      .pipe(takeUntil(this.unsubscribe$));
   };
 
   watchChatUsers = (userIds: string[]) => {
-    // Feel free to start by just writing code inside ngOnInit and logging results to console one step at a time
-    console.log(userIds);
-    // create an observable that emits an array of UserI objects, as in watchUserContacts inside OtherConnectionsListComponent
     const userObservables = userIds.map(uid => this.getUserObservable(uid));
-    // Might use those ids to call this method next but start by just logging the user DocRefs to console
-    console.log(userObservables);
-    // Then log the observables they provide, then subscribe to each and log the users, then try to make the RxJS piping work to convert it all to an observable that emits an array of users
-
-    // delete this later, just for demonstration...?????
-    for (let user$ of userObservables) {
-      user$.subscribe(console.log);
-    }
 
     const users$ = combineLatest(userObservables);
-    console.log(users$);
     users$.subscribe(users => {
-      console.log(users);
       this.chatUsers$.next(users);
     });
   };
@@ -91,5 +103,9 @@ export class ChatDetailComponent implements OnInit {
       const namesList = firstNames.join(', ');
       this.headerSvc.setHeaderText(namesList);
     });
+  };
+
+  sendMessage = () => {
+    console.log(this.msgInput);
   };
 }
