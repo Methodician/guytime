@@ -15,7 +15,6 @@ import { UserI } from '@models/user';
 export class ChatDetailComponent implements OnInit {
   private unsubscribe$: Subject<void> = new Subject();
   chatUsers$ = new BehaviorSubject<UserI[]>([]);
-  chatGroup$;
   msgInput = '';
   chats = [];
 
@@ -24,7 +23,7 @@ export class ChatDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private chatSvc: ChatService,
     private userSvc: UserService,
-  ) {}
+  ) { }
 
   ngOnDestroy(): void {
     this.headerSvc.resetHeader();
@@ -36,8 +35,7 @@ export class ChatDetailComponent implements OnInit {
     this.route.params.subscribe(params => {
       if (params['id']) {
         const chatId = params['id'];
-        const chatObservable$ = this.getChatObservables(chatId);
-        this.chatGroup$ = chatObservable$;
+        const chatObservable$ = this.getChatObservable(chatId);
         chatObservable$.subscribe(chatGroup => {
           this.watchChatUsers(chatGroup.participantIds);
         });
@@ -75,7 +73,7 @@ export class ChatDetailComponent implements OnInit {
     ];
   }
 
-  getChatObservables = (chatId: string) => {
+  getChatObservable = (chatId: string) => {
     return this.chatSvc
       .chatGroupRef(chatId)
       .valueChanges()
