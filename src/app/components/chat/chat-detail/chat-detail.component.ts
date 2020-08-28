@@ -24,7 +24,7 @@ export class ChatDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private chatSvc: ChatService,
     private userSvc: UserService,
-  ) {}
+  ) { }
 
   ngOnDestroy(): void {
     this.headerSvc.resetHeader();
@@ -36,7 +36,7 @@ export class ChatDetailComponent implements OnInit {
     this.route.params.subscribe(params => {
       if (params['id']) {
         const chatId = params['id'];
-        const chatObservable$ = this.getChatObservables(chatId);
+        const chatObservable$ = this.getChatObservable(chatId);
         this.chatGroup$ = chatObservable$;
         chatObservable$.subscribe(chatGroup => {
           this.watchChatUsers(chatGroup.participantIds);
@@ -75,7 +75,7 @@ export class ChatDetailComponent implements OnInit {
     ];
   }
 
-  getChatObservables = (chatId: string) => {
+  getChatObservable = (chatId: string) => {
     return this.chatSvc
       .chatGroupRef(chatId)
       .valueChanges()
