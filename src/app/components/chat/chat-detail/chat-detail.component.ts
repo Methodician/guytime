@@ -15,7 +15,6 @@ import { UserI } from '@models/user';
 export class ChatDetailComponent implements OnInit {
   private unsubscribe$: Subject<void> = new Subject();
   chatUsers$ = new BehaviorSubject<UserI[]>([]);
-  chatGroup$;
   msgInput = '';
   chats = [];
 
