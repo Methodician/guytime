@@ -25,7 +25,6 @@ const routes: Routes = [
     component: MeDetailComponent,
     canActivate: [AuthGuard, HasValidProfileGuard],
   },
-
   {
     path: 'me/edit',
     component: ProfileEditComponent,
@@ -58,14 +57,15 @@ const routes: Routes = [
     component: ChatComponent,
     canActivate: [AuthGuard],
   },
-
   {
     path: 'chat-detail/:id',
     component: ChatDetailComponent,
     canActivate: [AuthGuard],
   },
-
-  { path: 'guide', component: NgGuideComponent },
+  {
+    path: 'guide',
+    component: NgGuideComponent,
+  },
 ];
 
 @NgModule({
