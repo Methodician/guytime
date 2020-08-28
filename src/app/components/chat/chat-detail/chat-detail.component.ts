@@ -37,7 +37,6 @@ export class ChatDetailComponent implements OnInit {
       if (params['id']) {
         const chatId = params['id'];
         const chatObservable$ = this.getChatObservables(chatId);
-        this.chatGroup$ = chatObservable$;
         chatObservable$.subscribe(chatGroup => {
           this.watchChatUsers(chatGroup.participantIds);
         });
