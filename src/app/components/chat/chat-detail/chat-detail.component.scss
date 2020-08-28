@@ -1,0 +1,58 @@
+@import 'app/styles/vars.scss';
+
+main {
+  .chat_list {
+    overflow-y: scroll;
+    height: calc(#{$body_height} - 50px);
+    .chat_box {
+      display: grid;
+      grid-template-columns: 60px auto;
+      margin: 8px;
+    }
+    .owned_chat {
+      grid-template-columns: auto 60px;
+      mat-card {
+        background-color: rgb(214, 244, 253);
+      }
+    }
+    .avatar {
+      justify-self: center;
+      align-self: top;
+    }
+    mat-card-content {
+      margin-bottom: 0.7rem;
+      white-space: pre-wrap;
+    }
+    mat-card-footer {
+      font-size: 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      height: 2rem;
+      padding: 4px;
+    }
+  }
+  .chat_input_wrapper {
+    width: 100%;
+    position: fixed;
+    bottom: 50px;
+    background-color: lightblue;
+    height: 50px;
+    z-index: 1000;
+    .chat_input {
+      position: absolute;
+      bottom: 10px;
+      border-radius: 10px;
+      border: none;
+      margin: 0 5px;
+      width: stretch;
+    }
+    .chat_input_has_text {
+      height: 100px;
+    }
+
+    .send_button {
+      position: absolute;
+      right: 5px;
+    }
+  }
+}
