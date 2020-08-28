@@ -15,7 +15,6 @@ import { UserI } from '@models/user';
 export class ChatDetailComponent implements OnInit {
   private unsubscribe$: Subject<void> = new Subject();
   chatUsers$ = new BehaviorSubject<UserI[]>([]);
-  chatGroup$;
   msgInput = '';
   chats = [];
 
@@ -37,7 +36,6 @@ export class ChatDetailComponent implements OnInit {
       if (params['id']) {
         const chatId = params['id'];
         const chatObservable$ = this.getChatObservable(chatId);
-        this.chatGroup$ = chatObservable$;
         chatObservable$.subscribe(chatGroup => {
           this.watchChatUsers(chatGroup.participantIds);
         });
