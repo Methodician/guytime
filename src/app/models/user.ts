@@ -61,11 +61,23 @@ export const RelationshipStatusM = new Map<RelationshipStatusT, DisplayNameI>([
   ['UNSPECIFIED', { displayName: 'Unspecified' }],
 ]);
 
-export type ActivityTypeT = 'INDOOR' | 'OUTDOOR';
+export type ActivityTypeT =
+  | 'OUTDOOR'
+  | 'SPORTS'
+  | 'MOVIES'
+  | 'ARTS'
+  | 'READING'
+  | 'GAMING'
+  | 'COMMUNITY';
 
 export const ActivityTypeM = new Map<ActivityTypeT, ActivityTypeI>([
-  ['INDOOR', { displayName: 'Indoor', iconName: 'home_work' }],
   ['OUTDOOR', { displayName: 'Outdoor', iconName: 'nature_people' }],
+  ['SPORTS', { displayName: 'Sports', iconName: 'sports_football' }],
+  ['MOVIES', { displayName: 'Movies', iconName: 'local_movies' }],
+  ['ARTS', { displayName: 'Arts', iconName: 'brush' }],
+  ['READING', { displayName: 'Reading', iconName: 'menu_book' }],
+  ['GAMING', { displayName: 'Gaming', iconName: 'videogame_asset' }],
+  ['COMMUNITY', { displayName: 'Community', iconName: 'emoji_people' }],
 ]);
 
 export interface ActivityTypeI extends DisplayNameI {
