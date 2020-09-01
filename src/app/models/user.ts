@@ -53,6 +53,7 @@ export type RelationshipStatusT =
   | 'DATING'
   | 'OTHER'
   | 'UNSPECIFIED';
+
 export const RelationshipStatusM = new Map<RelationshipStatusT, DisplayNameI>([
   ['SINGLE', { displayName: 'Single' }],
   ['MARRIED', { displayName: 'Married' }],
@@ -61,11 +62,24 @@ export const RelationshipStatusM = new Map<RelationshipStatusT, DisplayNameI>([
   ['UNSPECIFIED', { displayName: 'Unspecified' }],
 ]);
 
-export type ActivityTypeT = 'INDOOR' | 'OUTDOOR';
+
+export type ActivityTypeT =
+  | 'OUTDOOR'
+  | 'SPORTS'
+  | 'MOVIES'
+  | 'ART_DESIGN'
+  | 'READING'
+  | 'GAMING'
+  | 'COMMUNITY_SVC';
 
 export const ActivityTypeM = new Map<ActivityTypeT, ActivityTypeI>([
-  ['INDOOR', { displayName: 'Indoor', iconName: 'home_work' }],
-  ['OUTDOOR', { displayName: 'Outdoor', iconName: 'nature_people' }],
+  ['OUTDOOR', { displayName: 'Great Outdoors', iconName: 'nature_people' }],
+  ['SPORTS', { displayName: 'Sports', iconName: 'sports_football' }],
+  ['MOVIES', { displayName: 'Movies', iconName: 'local_movies' }],
+  ['ART_DESIGN', { displayName: 'Arts and Design', iconName: 'brush' }],
+  ['READING', { displayName: 'Reading', iconName: 'menu_book' }],
+  ['GAMING', { displayName: 'Gaming', iconName: 'videogame_asset' }],
+  ['COMMUNITY_SVC', { displayName: 'Community Service', iconName: 'emoji_people' }],
 ]);
 
 export interface ActivityTypeI extends DisplayNameI {

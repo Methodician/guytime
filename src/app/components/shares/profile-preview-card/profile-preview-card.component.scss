@@ -3,7 +3,7 @@ main {
 
   mat-card {
     display: grid;
-    grid-template-columns: 15% 30% 55%;
+    grid-template-columns: 15% 25% 60%;
     grid-template-rows: 40% 60%;
     grid-template-areas:
       'avatar name relationship_status'

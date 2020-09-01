@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { UserI, RelationshipStatusM } from '@models/user';
+import { UserI } from '@models/user';
 import { Observable } from 'rxjs';
 import { UserService } from '@services/user.service';
 
@@ -12,8 +12,6 @@ export class ProfilePreviewCardComponent implements OnInit {
   @Input() user: UserI;
 
   avatarUrl$: Observable<string>;
-
-  relationshipStatusMap = RelationshipStatusM;
 
   constructor(private userSvc: UserService) {}
 
