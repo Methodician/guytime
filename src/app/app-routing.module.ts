@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { LoginComponent } from '@components/login/login.component';
+import { LoginComponent } from '@components/auth/login/login.component';
 import { NgGuideComponent } from '@components/ng-guide/ng-guide.component';
 import { AuthGuard } from '@guards/auth.guard';
 import { ChatComponent } from '@components/chat/chat.component';
-import { RegisterComponent } from '@components/register/register.component';
-import { ChatListComponent } from '@components/chat-list/chat-list.component';
+import { RegisterComponent } from '@components/auth/register/register.component';
+import { ChatListComponent } from '@components/chat/chat-list/chat-list.component';
 import { ChatDetailComponent } from '@components/chat/chat-detail/chat-detail.component';
 import { ProfileEditComponent } from '@components/profile/profile-edit/profile-edit.component';
 import { HasValidProfileGuard } from '@guards/has-valid-profile.guard';
@@ -72,4 +72,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
