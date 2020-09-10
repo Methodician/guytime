@@ -8,8 +8,6 @@ import { ChatGroupI } from '../models/chat-group';
 })
 export class ChatService {
   constructor(private afs: AngularFirestore, private fbSvc: FirebaseService) {
-    // ["da4RmsE4fUX3TjXvyUqzlxFW19a2", "P9X37J3EXQNz4b8WZPJWTIR81eN2"]
-
     this.pairChatColQuery(
       'da4RmsE4fUX3TjXvyUqzlxFW19a2',
       'P9X37J3EXQNz4b8WZPJWTIR81eN2',
@@ -20,11 +18,9 @@ export class ChatService {
 
   createPairChat = async (uid1: string, uid2: string) => {
     const existingChats = await this.getPairChat(uid1, uid2);
-    console.log('existing chats', existingChats);
     if (existingChats.length > 0) {
       const existingChat = existingChats[0];
       const { id } = existingChat;
-      console.log('a chat exists, returning its id', id);
       return id;
     }
     const participantsMap = {
@@ -37,12 +33,10 @@ export class ChatService {
       createdAt: this.fbSvc.fsTimestamp(),
     };
     await this.pairChatsCol().doc(chatId).set(chatGroup);
-    console.log('no chat exists, creating a new one');
     return chatId;
   };
 
   getPairChat = async (uid1: string, uid2: string): Promise<ChatGroupI[]> => {
-    console.log('checking for chats with ids of', uid1, uid2);
     const chatsRef = this.pairChatColQuery(uid1, uid2);
     const matchingChats = await chatsRef.get().toPromise();
     const chatGroups = matchingChats.docs.map(doc => {
