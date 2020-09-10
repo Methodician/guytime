@@ -126,12 +126,10 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(`/guys/${this.user$.value.uid}/connections`);
 
   onChatClicked = async () => {
-    const participantIds = [
-      this.userSvc.loggedInUser$.value.uid,
-      this.user$.value.uid,
-    ];
+    const uid1 = this.userSvc.loggedInUser$.value.uid,
+      uid2 = this.user$.value.uid;
 
-    const chatId = await this.chatSvc.createChat(participantIds);
+    const chatId = await this.chatSvc.createPairChat(uid1, uid2);
     this.router.navigateByUrl(`/chat-detail/${chatId}`);
   };
 }

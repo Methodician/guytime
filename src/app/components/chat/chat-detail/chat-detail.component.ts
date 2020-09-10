@@ -37,10 +37,12 @@ export class ChatDetailComponent implements OnInit {
         const chatId = params['id'];
         const chatObservable$ = this.getChatObservable(chatId);
         chatObservable$.subscribe(chatGroup => {
-          const participantIds = Object.keys(chatGroup.participantIds).map(
-            uid => uid,
-          );
-          this.watchChatUsers(participantIds);
+          if (chatGroup && chatGroup.participantIds) {
+            const participantIds = Object.keys(chatGroup.participantIds).map(
+              uid => uid,
+            );
+            this.watchChatUsers(participantIds);
+          }
         });
         setTimeout(() => this.updateHeader());
       }
@@ -78,7 +80,7 @@ export class ChatDetailComponent implements OnInit {
 
   getChatObservable = (chatId: string) => {
     return this.chatSvc
-      .chatGroupRef(chatId)
+      .pairChatDoc(chatId)
       .valueChanges()
       .pipe(takeUntil(this.unsubscribe$));
   };
