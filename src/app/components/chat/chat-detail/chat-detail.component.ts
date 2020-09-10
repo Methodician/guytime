@@ -23,7 +23,7 @@ export class ChatDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private chatSvc: ChatService,
     private userSvc: UserService,
-  ) { }
+  ) {}
 
   ngOnDestroy(): void {
     this.headerSvc.resetHeader();
@@ -37,7 +37,10 @@ export class ChatDetailComponent implements OnInit {
         const chatId = params['id'];
         const chatObservable$ = this.getChatObservable(chatId);
         chatObservable$.subscribe(chatGroup => {
-          this.watchChatUsers(chatGroup.participantIds);
+          const participantIds = Object.keys(chatGroup.participantIds).map(
+            uid => uid,
+          );
+          this.watchChatUsers(participantIds);
         });
         setTimeout(() => this.updateHeader());
       }

@@ -11,3 +11,11 @@ export interface HtmlInputEventI extends Event {
 // export type SettableTimestampT = Timestamp | FieldValue | Date | undefined;
 
 export type NonEmptyArrayT<T> = [T, ...T[]];
+
+export interface KeyMapI<T> {
+  [key: string]: T;
+}
+
+export interface example {
+  notEmptyArray: NonEmptyArrayT<boolean>;
+}

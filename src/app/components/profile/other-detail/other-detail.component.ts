@@ -99,7 +99,7 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
     bothUsers$
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(({ user, loggedInUser }) => {
-        if (user && loggedInUser.contacts[user.uid]) {
+        if (user && loggedInUser.contacts && loggedInUser.contacts[user.uid]) {
           this.headerSvc.disableHeaderOption('addConnection');
           this.headerSvc.enableHeaderOption('removeContact');
         } else {
@@ -130,6 +130,7 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
       this.userSvc.loggedInUser$.value.uid,
       this.user$.value.uid,
     ];
+
     const chatId = await this.chatSvc.createChat(participantIds);
     this.router.navigateByUrl(`/chat-detail/${chatId}`);
   };
