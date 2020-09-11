@@ -47,6 +47,7 @@ import { MeConnectionsListComponent } from '@components/profile/me-connections-l
 import { BrowseGuysListComponent } from '@components/profile/browse-guys-list/browse-guys-list.component';
 import { OtherConnectionsListComponent } from '@components/profile/other-connections-list/other-connections-list.component';
 import { ChatDetailComponent } from '@components/chat/chat-detail/chat-detail.component';
+import { ChatMessageComponent } from './components/chat/chat-message/chat-message.component';
 
 @NgModule({
   declarations: [
@@ -70,6 +71,7 @@ import { ChatDetailComponent } from '@components/chat/chat-detail/chat-detail.co
     BrowseGuysListComponent,
     OtherConnectionsListComponent,
     ChatDetailComponent,
+    ChatMessageComponent,
   ],
   imports: [
     BrowserModule,

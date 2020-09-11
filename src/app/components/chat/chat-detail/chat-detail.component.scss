@@ -4,32 +4,6 @@ main {
   .chat_list {
     overflow-y: scroll;
     height: calc(#{$body_height} - 50px);
-    .chat_box {
-      display: grid;
-      grid-template-columns: 60px auto;
-      margin: 8px;
-    }
-    .owned_chat {
-      grid-template-columns: auto 60px;
-      mat-card {
-        background-color: rgb(214, 244, 253);
-      }
-    }
-    .avatar {
-      justify-self: center;
-      align-self: top;
-    }
-    mat-card-content {
-      margin-bottom: 0.7rem;
-      white-space: pre-wrap;
-    }
-    mat-card-footer {
-      font-size: 0.75rem;
-      display: flex;
-      justify-content: space-between;
-      height: 2rem;
-      padding: 4px;
-    }
   }
   .chat_input_wrapper {
     width: 100%;

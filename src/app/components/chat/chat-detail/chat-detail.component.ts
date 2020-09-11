@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HeaderService } from '@app/services/header.service';
 import { ActivatedRoute } from '@angular/router';
-import { Subject, BehaviorSubject, combineLatest } from 'rxjs';
+import { Subject, BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
 import { ChatService } from '@services/chat.service';
 import { UserService } from '@app/services/user.service';
@@ -37,10 +37,10 @@ export class ChatDetailComponent implements OnInit {
         const chatId = params['id'];
         const chatObservable$ = this.getChatObservable(chatId);
         chatObservable$.subscribe(chatGroup => {
-          if (chatGroup && chatGroup.participantIds) {
-            const participantIds = Object.keys(chatGroup.participantIds);
-            this.watchChatUsers(participantIds);
-          }
+          const participantIds: string[] = Object.keys(
+            chatGroup.participantIds,
+          );
+          this.watchChatUsers(participantIds);
         });
         setTimeout(() => this.updateHeader());
       }
@@ -96,7 +96,12 @@ export class ChatDetailComponent implements OnInit {
     this.userSvc
       .userRef(uid)
       .valueChanges()
-      .pipe(map(user => ({ ...user, uid }), takeUntil(this.unsubscribe$)));
+      .pipe(
+        map(
+          user => ({ ...(user as object), uid }),
+          takeUntil(this.unsubscribe$),
+        ),
+      ) as Observable<UserI>;
 
   updateHeader = () => {
     this.chatUsers$.subscribe(users => {

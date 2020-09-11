@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '@app/services/user.service';
 import { UserI } from '@models/user';
-import { Subject, BehaviorSubject, combineLatest } from 'rxjs';
+import { Subject, BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
 import { HeaderService } from '@app/services/header.service';
 import { Router } from '@angular/router';
@@ -52,9 +52,9 @@ export class OtherConnectionsListComponent implements OnInit, OnDestroy {
       .userRef(uid)
       .valueChanges()
       .pipe(
-        map(user => ({ ...user, uid })),
+        map(user => ({ ...(user as object), uid })),
         takeUntil(this.unsubscribe$),
-      );
+      ) as Observable<UserI>;
   };
 
   watchUserContacts = (user: UserI) => {
