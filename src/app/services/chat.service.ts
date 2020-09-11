@@ -9,17 +9,52 @@ import { ChatGroupI } from '../models/chat-group';
 export class ChatService {
   constructor(private afs: AngularFirestore, private fbSvc: FirebaseService) {}
 
-  createChat = async (participants: string[]) => {
+  createPairChat = async (uid1: string, uid2: string) => {
+    const existingChats = await this.getPairChat(uid1, uid2);
+    if (existingChats.length > 0) {
+      const existingChat = existingChats[0];
+      const { id } = existingChat;
+      return id;
+    }
+    const participantsMap = {
+      [uid1]: true,
+      [uid2]: true,
+    };
     const chatId = this.afs.createId();
     const chatGroup: ChatGroupI = {
-      participantIds: participants,
+      participantIds: participantsMap,
       createdAt: this.fbSvc.fsTimestamp(),
     };
-    await this.afs.collection('chats').doc(chatId).set(chatGroup);
+    await this.pairChatDoc(chatId).set(chatGroup);
     return chatId;
   };
 
-  chatGroupsRef = () => this.afs.collection<ChatGroupI>('chats');
-  chatGroupRef = (chatGroupId: string) =>
-    this.chatGroupsRef().doc<ChatGroupI>(chatGroupId);
+  getPairChat = async (uid1: string, uid2: string): Promise<ChatGroupI[]> => {
+    const chatsRef = this.pairChatColQuery(uid1, uid2);
+    const matchingChats = await chatsRef.get().toPromise();
+    const chatGroups = matchingChats.docs.map(doc => {
+      const data = doc.data();
+      const { id } = doc;
+      const chatGroup = { ...data, id } as ChatGroupI;
+      return chatGroup;
+    });
+    return chatGroups;
+  };
+
+  chatGroupsCol = () => this.afs.collection<ChatGroupI>('chats');
+  chatGroupDoc = (chatGroupId: string) =>
+    this.chatGroupsCol().doc<ChatGroupI>(chatGroupId);
+
+  pairChatsCol = () => this.afs.collection<ChatGroupI>('pairChatGroups');
+  pairChatDoc = (chatGroupId: string) =>
+    this.pairChatsCol().doc<ChatGroupI>(chatGroupId);
+
+  pairChatColQuery = (uid1: string, uid2: string) => {
+    const chatsRef = this.afs.collection<ChatGroupI>('pairChatGroups', ref =>
+      ref
+        .where(`participantIds.${uid1}`, '==', true)
+        .where(`participantIds.${uid2}`, '==', true),
+    );
+    return chatsRef;
+  };
 }
