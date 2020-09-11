@@ -38,9 +38,7 @@ export class ChatDetailComponent implements OnInit {
         const chatObservable$ = this.getChatObservable(chatId);
         chatObservable$.subscribe(chatGroup => {
           if (chatGroup && chatGroup.participantIds) {
-            const participantIds = Object.keys(chatGroup.participantIds).map(
-              uid => uid,
-            );
+            const participantIds = Object.keys(chatGroup.participantIds);
             this.watchChatUsers(participantIds);
           }
         });
