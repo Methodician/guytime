@@ -1,0 +1,26 @@
+<article
+  class="chat_box"
+  [ngClass]="{ owned_chat: chatMessage.sender === 'Andy' }"
+>
+  <img
+    *ngIf="chatMessage.sender !== 'Andy'"
+    class="avatar"
+    mat-card-avatar
+    [src]="chatMessage.avatar"
+    alt=""
+  />
+  <mat-card>
+    <mat-card-content>{{ chatMessage.text }}</mat-card-content>
+    <mat-card-footer>
+      <p class="date">{{ chatMessage.timestamp | date: 'short' }}</p>
+      <p class="sender">{{ chatMessage.sender }}</p>
+    </mat-card-footer>
+  </mat-card>
+  <img
+    *ngIf="chatMessage.sender === 'Andy'"
+    class="avatar"
+    mat-card-avatar
+    [src]="chatMessage.avatar"
+    alt=""
+  />
+</article>

@@ -1,32 +1,7 @@
 <main>
   <section class="chat_list" #chatList>
-    <article
-      class="chat_box"
-      [ngClass]="{ owned_chat: chat.sender === 'Andy' }"
-      *ngFor="let chat of chats"
-    >
-      <img
-        *ngIf="chat.sender !== 'Andy'"
-        class="avatar"
-        mat-card-avatar
-        [src]="chat.avatar"
-        alt=""
-      />
-      <mat-card>
-        <mat-card-content>{{ chat.text }}</mat-card-content>
-        <mat-card-footer>
-          <p class="date">{{ chat.timestamp | date: 'short' }}</p>
-          <p class="sender">{{ chat.sender }}</p>
-        </mat-card-footer>
-      </mat-card>
-      <img
-        *ngIf="chat.sender === 'Andy'"
-        class="avatar"
-        mat-card-avatar
-        [src]="chat.avatar"
-        alt=""
-      />
-    </article>
+    <gtm-chat-message *ngFor="let message of chats" [chatMessage]="message">
+    </gtm-chat-message>
   </section>
   <section class="chat_input_wrapper">
     <form action="submit">
