@@ -6,6 +6,10 @@ import { takeUntil, map } from 'rxjs/operators';
 import { ChatService } from '@services/chat.service';
 import { UserService } from '@app/services/user.service';
 import { UserI } from '@models/user';
+import { MessageI } from '@models/message';
+import { AuthService } from '@services/auth.service';
+import { FirebaseService } from '@app/services/firebase.service';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'gtm-chat-detail',
@@ -17,12 +21,17 @@ export class ChatDetailComponent implements OnInit {
   chatUsers$ = new BehaviorSubject<UserI[]>([]);
   msgInput = '';
   chats = [];
+  chatId = '';
+  authUid = '';
 
   constructor(
     private headerSvc: HeaderService,
     private route: ActivatedRoute,
     private chatSvc: ChatService,
     private userSvc: UserService,
+    private fbSvc: FirebaseService,
+    private authSvc: AuthService,
+    private afs: AngularFirestore,
   ) {}
 
   ngOnDestroy(): void {
@@ -34,8 +43,8 @@ export class ChatDetailComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       if (params['id']) {
-        const chatId = params['id'];
-        const chatObservable$ = this.getChatObservable(chatId);
+        this.chatId = params['id'];
+        const chatObservable$ = this.getChatObservable(this.chatId);
         chatObservable$.subscribe(chatGroup => {
           const participantIds: string[] = Object.keys(
             chatGroup.participantIds,
@@ -44,6 +53,13 @@ export class ChatDetailComponent implements OnInit {
         });
         setTimeout(() => this.updateHeader());
       }
+      const getAuthUid = this.authSvc.authInfo$.subscribe(async authInfo => {
+        if (authInfo.uid) {
+          await authInfo.uid;
+          this.authUid = authInfo.uid;
+          if (getAuthUid) getAuthUid.unsubscribe();
+        }
+      });
     });
 
     this.chats = [
@@ -111,7 +127,14 @@ export class ChatDetailComponent implements OnInit {
     });
   };
 
-  sendMessage = () => {
-    console.log(this.msgInput);
+  onSendMessage = () => {
+    const messageData: MessageI = {
+      id: this.afs.createId(),
+      chatGroupId: this.chatId,
+      senderId: this.authUid,
+      content: this.msgInput,
+      createdAt: this.fbSvc.fsTimestamp(),
+    };
+    this.chatSvc.sendMessage(messageData);
   };
 }

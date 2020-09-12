@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FirebaseService } from './firebase.service';
 import { ChatGroupI } from '../models/chat-group';
+import { MessageI } from '../models/message';
 
 @Injectable({
   providedIn: 'root',
@@ -56,5 +57,10 @@ export class ChatService {
         .where(`participantIds.${uid2}`, '==', true),
     );
     return chatsRef;
+  };
+
+  //type of message <MessageI>
+  sendMessage = (message: MessageI) => {
+    console.log(message);
   };
 }

@@ -7,7 +7,8 @@ import { MessageI } from '@models/message';
   styleUrls: ['./chat-message.component.scss'],
 })
 export class ChatMessageComponent implements OnInit {
-  @Input() chatMessage: MessageI;
+  @Input() chatMessage: any;
+  // @Input() chatMessage: MessageI; // later we'll switch it back to this
 
   constructor() {}
 
