@@ -21,10 +21,10 @@ export class ChatDetailComponent implements OnInit {
   chatUsers$ = new BehaviorSubject<UserI[]>([]);
   msgInput = '';
   chats = [];
-  // message$ = this.chatSvc.testMessages$;
   // I like to keep naming conventions consistent. Since we're referring to this elsewhere as "chatGroupId" we should do it here too.
   chatGroupId = '';
   authUid = '';
+  messages$ = this.chatSvc.testMessages$; //BehaviourSubj{..., value: {[id: ..., chatGroupId: ...]}}
 
   constructor(
     private headerSvc: HeaderService,
@@ -120,7 +120,6 @@ export class ChatDetailComponent implements OnInit {
     });
   };
 
-  currentValueOfUidFromSubscription;
   onSendMessage = () => {
     const { uid } = this.authSvc.authInfo$.value,
       { chatGroupId, msgInput, fbSvc, afs } = this;

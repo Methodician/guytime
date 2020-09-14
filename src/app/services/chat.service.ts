@@ -65,6 +65,8 @@ export class ChatService {
   //type of message <MessageI>
   sendMessage = (message: MessageI) => {
     this.testMessages$.next(this.testMessages$.getValue().concat([message]));
-    console.log(this.testMessages$);
+    console.log(this.testMessages$.value);
+    //this.testMessages$.value ---->
+    //BehaviourSubj{..., value: {[id: ..., chatGroupId: ...]}}
   };
 }
