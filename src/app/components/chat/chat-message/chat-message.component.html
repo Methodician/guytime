@@ -2,9 +2,9 @@
 <!-- We don't want any of this to show up until the user$ has a value anyway -->
 <div>{{ (user$ | async)?.fName }}</div>
 <article
-  *ngIf="user$"
+  *ngIf="user$ as sender"
   class="chat_box"
-  [ngClass]="{ owned_chat: user$.fName === 'Andy' }"
+  [ngClass]="{ owned_chat: sender.fName === 'Andy' }"
 >
   <!-- A lot of this testing code is now useless.
   You will have to figure out how to make it work :-)
@@ -15,7 +15,7 @@
     *ngIf="user$.fName !== 'Andy'"
     class="avatar"
     mat-card-avatar
-    [src]="chatMessage.avatar"
+    [src]="avatarUrl$.value"
     alt=""
   />
   <mat-card>
