@@ -21,7 +21,9 @@ export class ChatDetailComponent implements OnInit {
   chatUsers$ = new BehaviorSubject<UserI[]>([]);
   msgInput = '';
   chats = [];
-  chatId = '';
+  // message$ = this.chatSvc.testMessages$;
+  // I like to keep naming conventions consistent. Since we're referring to this elsewhere as "chatGroupId" we should do it here too.
+  chatGroupId = '';
   authUid = '';
 
   constructor(
@@ -43,23 +45,14 @@ export class ChatDetailComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       if (params['id']) {
-        this.chatId = params['id'];
-        const chatObservable$ = this.getChatObservable(this.chatId);
+        this.chatGroupId = params['id'];
+        const chatObservable$ = this.getChatObservable(this.chatGroupId);
         chatObservable$.subscribe(chatGroup => {
-          const participantIds: string[] = Object.keys(
-            chatGroup.participantIds,
-          );
+          const participantIds = Object.keys(chatGroup.participantIds);
           this.watchChatUsers(participantIds);
         });
         setTimeout(() => this.updateHeader());
       }
-      const getAuthUid = this.authSvc.authInfo$.subscribe(async authInfo => {
-        if (authInfo.uid) {
-          await authInfo.uid;
-          this.authUid = authInfo.uid;
-          if (getAuthUid) getAuthUid.unsubscribe();
-        }
-      });
     });
 
     this.chats = [
@@ -92,9 +85,9 @@ export class ChatDetailComponent implements OnInit {
     ];
   }
 
-  getChatObservable = (chatId: string) => {
+  getChatObservable = (chatGroupId: string) => {
     return this.chatSvc
-      .pairChatDoc(chatId)
+      .pairChatDoc(chatGroupId)
       .valueChanges()
       .pipe(takeUntil(this.unsubscribe$));
   };
@@ -127,14 +120,19 @@ export class ChatDetailComponent implements OnInit {
     });
   };
 
+  currentValueOfUidFromSubscription;
   onSendMessage = () => {
+    const { uid } = this.authSvc.authInfo$.value,
+      { chatGroupId, msgInput, fbSvc, afs } = this;
+
     const messageData: MessageI = {
-      id: this.afs.createId(),
-      chatGroupId: this.chatId,
-      senderId: this.authUid,
-      content: this.msgInput,
-      createdAt: this.fbSvc.fsTimestamp(),
+      id: afs.createId(),
+      chatGroupId,
+      senderId: uid,
+      content: msgInput,
+      createdAt: fbSvc.fsTimestamp(),
     };
+
     this.chatSvc.sendMessage(messageData);
   };
 }

@@ -3,11 +3,14 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { FirebaseService } from './firebase.service';
 import { ChatGroupI } from '../models/chat-group';
 import { MessageI } from '../models/message';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChatService {
+  testMessages$: BehaviorSubject<MessageI[]> = new BehaviorSubject([]);
+
   constructor(private afs: AngularFirestore, private fbSvc: FirebaseService) {}
 
   createPairChat = async (uid1: string, uid2: string) => {
@@ -61,6 +64,7 @@ export class ChatService {
 
   //type of message <MessageI>
   sendMessage = (message: MessageI) => {
-    console.log(message);
+    this.testMessages$.next(this.testMessages$.getValue().concat([message]));
+    console.log(this.testMessages$);
   };
 }
