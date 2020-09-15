@@ -1,35 +1,29 @@
-<!-- Do that *ngIf="somethign$ as myThing" on the article tag (get the user out of user$) -->
-<!-- We don't want any of this to show up until the user$ has a value anyway -->
-<div>{{ (user$ | async)?.fName }}</div>
-<article
-  *ngIf="user$ as sender"
+<main
+  *ngIf="user$ | async as sender"
   class="chat_box"
-  [ngClass]="{ owned_chat: sender.fName === 'Andy' }"
+  [ngClass]="{ owned_chat: sender.uid === loggedInUid }"
 >
-  <!-- A lot of this testing code is now useless.
-  You will have to figure out how to make it work :-)
-  you will be getting something off the user/user$ instead of the message now
-  Use the userService to get the avatarUrl. Store that in the TypeScript part
-  Just get the name from the user -->
   <img
-    *ngIf="user$.fName !== 'Andy'"
+    *ngIf="sender.uid !== loggedInUid"
     class="avatar"
     mat-card-avatar
     [src]="avatarUrl$.value"
     alt=""
   />
   <mat-card>
-    <mat-card-content>{{ chatMessage.text }}</mat-card-content>
+    <mat-card-content>{{ chatMessage.content }}</mat-card-content>
+
     <mat-card-footer>
-      <p class="date">{{ chatMessage.timestamp | date: 'short' }}</p>
-      <p class="sender">{{ user$.fName }}</p>
+      <p class="date">{{ chatMessage.createdAt.toDate() | date: 'short' }}</p>
+      <p class="sender">{{ sender.fName }}</p>
     </mat-card-footer>
   </mat-card>
+
   <img
-    *ngIf="user$.fName === 'Andy'"
+    *ngIf="sender.uid === loggedInUid"
     class="avatar"
     mat-card-avatar
-    [src]="chatMessage.avatar"
+    [src]="avatarUrl$.value"
     alt=""
   />
-</article>
+</main>

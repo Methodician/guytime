@@ -1,6 +1,5 @@
 <main>
   <section class="chat_list" #chatList>
-    {{ messages$.value.length }}
     <gtm-chat-message
       *ngFor="let message of messages$.value"
       [chatMessage]="message"
