@@ -1,26 +1,29 @@
-<article
+<main
+  *ngIf="user$ | async as sender"
   class="chat_box"
-  [ngClass]="{ owned_chat: chatMessage.sender === 'Andy' }"
+  [ngClass]="{ owned_chat: sender.uid === loggedInUid }"
 >
   <img
-    *ngIf="chatMessage.sender !== 'Andy'"
+    *ngIf="sender.uid !== loggedInUid"
     class="avatar"
     mat-card-avatar
-    [src]="chatMessage.avatar"
+    [src]="avatarUrl$.value"
     alt=""
   />
   <mat-card>
-    <mat-card-content>{{ chatMessage.text }}</mat-card-content>
+    <mat-card-content>{{ chatMessage.content }}</mat-card-content>
+
     <mat-card-footer>
-      <p class="date">{{ chatMessage.timestamp | date: 'short' }}</p>
-      <p class="sender">{{ chatMessage.sender }}</p>
+      <p class="date">{{ chatMessage.createdAt.toDate() | date: 'short' }}</p>
+      <p class="sender">{{ sender.fName }}</p>
     </mat-card-footer>
   </mat-card>
+
   <img
-    *ngIf="chatMessage.sender === 'Andy'"
+    *ngIf="sender.uid === loggedInUid"
     class="avatar"
     mat-card-avatar
-    [src]="chatMessage.avatar"
+    [src]="avatarUrl$.value"
     alt=""
   />
-</article>
+</main>

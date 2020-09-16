@@ -6,6 +6,11 @@ import { takeUntil, map } from 'rxjs/operators';
 import { ChatService } from '@services/chat.service';
 import { UserService } from '@app/services/user.service';
 import { UserI } from '@models/user';
+import { MessageI } from '@models/message';
+import { AuthService } from '@services/auth.service';
+import { FirebaseService } from '@app/services/firebase.service';
+// remove this import later
+import { firestore } from 'firebase';
 
 @Component({
   selector: 'gtm-chat-detail',
@@ -17,12 +22,17 @@ export class ChatDetailComponent implements OnInit {
   chatUsers$ = new BehaviorSubject<UserI[]>([]);
   msgInput = '';
   chats = [];
+  chatGroupId = '';
+  authUid = '';
+  messages$ = this.chatSvc.testMessages$;
 
   constructor(
     private headerSvc: HeaderService,
     private route: ActivatedRoute,
     private chatSvc: ChatService,
     private userSvc: UserService,
+    private fbSvc: FirebaseService,
+    private authSvc: AuthService,
   ) {}
 
   ngOnDestroy(): void {
@@ -34,51 +44,20 @@ export class ChatDetailComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       if (params['id']) {
-        const chatId = params['id'];
-        const chatObservable$ = this.getChatObservable(chatId);
+        this.chatGroupId = params['id'];
+        const chatObservable$ = this.getChatObservable(this.chatGroupId);
         chatObservable$.subscribe(chatGroup => {
-          const participantIds: string[] = Object.keys(
-            chatGroup.participantIds,
-          );
+          const participantIds = Object.keys(chatGroup.participantIds);
           this.watchChatUsers(participantIds);
         });
         setTimeout(() => this.updateHeader());
       }
     });
-
-    this.chats = [
-      {
-        sender: 'Andy',
-        avatar:
-          'https://thumbs-prod.si-cdn.com/qXrJJ-l_jMrQbARjnToD0fi-Tsg=/800x600/filters:no_upscale()/https://public-media.si-cdn.com/filer/d6/93/d6939718-4e41-44a8-a8f3-d13648d2bcd0/c3npbx.jpg',
-        text: `but that's nothing new. We have been chatting for like a month and we keep comming back so someone must be having fun. I mean look at me. I'm a puffer fish...`,
-        timestamp: new Date(),
-      },
-      {
-        sender: 'Jim',
-        avatar: 'https://material.angular.io/assets/img/examples/shiba1.jpg',
-        text: 'Totes but I dig it too. I mean we can chat all day',
-        timestamp: new Date(),
-      },
-      {
-        sender: 'Nathan',
-        avatar: 'https://material.angular.io/assets/img/examples/shiba1.jpg',
-        text: 'I like chatting with you guys',
-        timestamp: new Date(),
-      },
-      {
-        sender: 'Andy',
-        avatar:
-          'https://thumbs-prod.si-cdn.com/qXrJJ-l_jMrQbARjnToD0fi-Tsg=/800x600/filters:no_upscale()/https://public-media.si-cdn.com/filer/d6/93/d6939718-4e41-44a8-a8f3-d13648d2bcd0/c3npbx.jpg',
-        text: `but that's nothing new. We have been chatting for like a month and we keep comming back so someone must be having fun. I mean look at me. I'm a puffer fish...`,
-        timestamp: new Date(),
-      },
-    ];
   }
 
-  getChatObservable = (chatId: string) => {
+  getChatObservable = (chatGroupId: string) => {
     return this.chatSvc
-      .pairChatDoc(chatId)
+      .pairChatDoc(chatGroupId)
       .valueChanges()
       .pipe(takeUntil(this.unsubscribe$));
   };
@@ -111,7 +90,19 @@ export class ChatDetailComponent implements OnInit {
     });
   };
 
-  sendMessage = () => {
-    console.log(this.msgInput);
+  onSendMessage = () => {
+    const { uid } = this.authSvc.authInfo$.value,
+      { chatGroupId, msgInput } = this;
+
+    const messageData: MessageI = {
+      chatGroupId,
+      senderId: uid,
+      content: msgInput,
+      createdAt: firestore.Timestamp.fromDate(new Date()),
+      // revert back to this when using the database
+      // createdAt: fbSvc.fsTimestamp(),
+    };
+    this.chatSvc.sendMessage(messageData);
+    this.msgInput = '';
   };
 }

@@ -1,6 +1,9 @@
 <main>
   <section class="chat_list" #chatList>
-    <gtm-chat-message *ngFor="let message of chats" [chatMessage]="message">
+    <gtm-chat-message
+      *ngFor="let message of messages$.value"
+      [chatMessage]="message"
+    >
     </gtm-chat-message>
   </section>
   <section class="chat_input_wrapper">
@@ -18,7 +21,7 @@
       aria-label="Send Message"
       mat-icon-button
       class="send_button"
-      (click)="sendMessage()"
+      (click)="onSendMessage()"
     >
       <mat-icon>send</mat-icon>
     </button>

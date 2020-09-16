@@ -62,7 +62,6 @@ export const RelationshipStatusM = new Map<RelationshipStatusT, DisplayNameI>([
   ['UNSPECIFIED', { displayName: 'Unspecified' }],
 ]);
 
-
 export type ActivityTypeT =
   | 'OUTDOOR'
   | 'SPORTS'
@@ -79,7 +78,10 @@ export const ActivityTypeM = new Map<ActivityTypeT, ActivityTypeI>([
   ['ART_DESIGN', { displayName: 'Arts and Design', iconName: 'brush' }],
   ['READING', { displayName: 'Reading', iconName: 'menu_book' }],
   ['GAMING', { displayName: 'Gaming', iconName: 'videogame_asset' }],
-  ['COMMUNITY_SVC', { displayName: 'Community Service', iconName: 'emoji_people' }],
+  [
+    'COMMUNITY_SVC',
+    { displayName: 'Community Service', iconName: 'emoji_people' },
+  ],
 ]);
 
 export interface ActivityTypeI extends DisplayNameI {
