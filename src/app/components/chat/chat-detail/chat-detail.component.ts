@@ -9,7 +9,6 @@ import { UserI } from '@models/user';
 import { MessageI } from '@models/message';
 import { AuthService } from '@services/auth.service';
 import { FirebaseService } from '@app/services/firebase.service';
-import { AngularFirestore } from '@angular/fire/firestore';
 // remove this import later
 import { firestore } from 'firebase';
 
@@ -34,7 +33,6 @@ export class ChatDetailComponent implements OnInit {
     private userSvc: UserService,
     private fbSvc: FirebaseService,
     private authSvc: AuthService,
-    private afs: AngularFirestore,
   ) {}
 
   ngOnDestroy(): void {
@@ -94,10 +92,9 @@ export class ChatDetailComponent implements OnInit {
 
   onSendMessage = () => {
     const { uid } = this.authSvc.authInfo$.value,
-      { chatGroupId, msgInput, fbSvc, afs } = this;
+      { chatGroupId, msgInput } = this;
 
     const messageData: MessageI = {
-      id: afs.createId(),
       chatGroupId,
       senderId: uid,
       content: msgInput,
@@ -106,5 +103,6 @@ export class ChatDetailComponent implements OnInit {
       // createdAt: fbSvc.fsTimestamp(),
     };
     this.chatSvc.sendMessage(messageData);
+    this.msgInput = '';
   };
 }

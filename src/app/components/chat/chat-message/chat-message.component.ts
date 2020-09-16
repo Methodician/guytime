@@ -27,16 +27,19 @@ export class ChatMessageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authSvc.authInfo$.subscribe(info => (this.loggedInUid = info.uid));
+    const loggedInUid$ = this.authSvc.authInfo$;
+    const user$ = this.getUserObservable(this.chatMessage.senderId);
+    const avatarUrl$ = this.userSvc
+      .getAvatarUrl(this.chatMessage.senderId)
+      .pipe(takeUntil(this.unsubscribe$));
 
-    const userRef$ = this.getUserObservable(this.chatMessage.senderId);
-    userRef$.subscribe(user => {
-      this.user$.next(user);
-      const uid = this.user$.value.uid;
-      this.userSvc
-        .getAvatarUrl(uid)
-        .subscribe(url => this.avatarUrl$.next(url));
-    });
+    combineLatest([user$, avatarUrl$, loggedInUid$]).subscribe(
+      ([user, avatarUrl, loggedInUid]) => {
+        this.user$.next(user);
+        this.avatarUrl$.next(avatarUrl);
+        this.loggedInUid = loggedInUid.uid;
+      },
+    );
   }
 
   getUserObservable = (uid: string) =>
@@ -44,9 +47,7 @@ export class ChatMessageComponent implements OnInit {
       .userRef(uid)
       .valueChanges()
       .pipe(
-        map(
-          user => ({ ...(user as object), uid }),
-          takeUntil(this.unsubscribe$),
-        ),
+        map(user => ({ ...(user as object), uid })),
+        takeUntil(this.unsubscribe$),
       ) as Observable<UserI>;
 }

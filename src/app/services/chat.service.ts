@@ -63,6 +63,7 @@ export class ChatService {
   };
 
   sendMessage = (message: MessageI) => {
+    message.id = this.afs.createId();
     this.testMessages$.next(this.testMessages$.getValue().concat([message]));
   };
 }
