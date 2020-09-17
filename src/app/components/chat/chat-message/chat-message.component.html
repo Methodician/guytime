@@ -14,7 +14,9 @@
     <mat-card-content>{{ chatMessage.content }}</mat-card-content>
 
     <mat-card-footer>
-      <p class="date">{{ chatMessage.createdAt.toDate() | date: 'short' }}</p>
+      <p class="date" *ngIf="chatMessage.createdAt">
+        {{ chatMessage.createdAt.toDate() | timeElapsed }}
+      </p>
       <p class="sender">{{ sender.fName }}</p>
     </mat-card-footer>
   </mat-card>

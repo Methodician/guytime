@@ -1,7 +1,7 @@
 <main>
   <section class="chat_list" #chatList>
     <gtm-chat-message
-      *ngFor="let message of messages$.value"
+      *ngFor="let message of messages; trackBy: trackMessageBy"
       [chatMessage]="message"
     >
     </gtm-chat-message>
