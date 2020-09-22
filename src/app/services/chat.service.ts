@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireDatabase } from '@angular/fire/database';
 import { FirebaseService } from './firebase.service';
 import { ChatGroupI } from '../models/chat-group';
 import { MessageI } from '../models/message';
@@ -12,6 +13,12 @@ export class ChatService {
   testMessages$: BehaviorSubject<MessageI[]> = new BehaviorSubject([]);
 
   constructor(private afs: AngularFirestore, private fbSvc: FirebaseService) {}
+
+  createChatMessage = async (message: MessageI) => {
+    const messageDocRef = await this.chatMessagesCol().add(message);
+    const { id } = messageDocRef;
+    return id;
+  };
 
   createPairChat = async (uid1: string, uid2: string) => {
     const existingChats = await this.getPairChat(uid1, uid2);
@@ -62,8 +69,16 @@ export class ChatService {
     return chatsRef;
   };
 
-  sendMessage = (message: MessageI) => {
-    message.id = this.afs.createId();
-    this.testMessages$.next(this.testMessages$.getValue().concat([message]));
-  };
+  chatMessagesCol = () => this.afs.collection<MessageI>('chatMessages');
+  chatMessageDoc = (messageId: string) => this.chatMessagesCol().doc(messageId);
+
+  chatMessagesByGroupQuery = (chatGroupId: string) =>
+    this.afs.collection<MessageI>('chatMessages', ref =>
+      ref.where('chatGroupId', '==', chatGroupId).orderBy('createdAt', 'asc'),
+    );
+
+  chatMessagesBySenderQuery = (senderId: string) =>
+    this.afs.collection<MessageI>('chatMessages', ref =>
+      ref.where('senderId', '==', senderId),
+    );
 }

@@ -48,6 +48,7 @@ import { BrowseGuysListComponent } from '@components/profile/browse-guys-list/br
 import { OtherConnectionsListComponent } from '@components/profile/other-connections-list/other-connections-list.component';
 import { ChatDetailComponent } from '@components/chat/chat-detail/chat-detail.component';
 import { ChatMessageComponent } from './components/chat/chat-message/chat-message.component';
+import { TimeElapsedPipe } from './pipes/time-elapsed.pipe';
 
 @NgModule({
   declarations: [
@@ -72,6 +73,7 @@ import { ChatMessageComponent } from './components/chat/chat-message/chat-messag
     OtherConnectionsListComponent,
     ChatDetailComponent,
     ChatMessageComponent,
+    TimeElapsedPipe,
   ],
   imports: [
     BrowserModule,
@@ -100,4 +102,4 @@ import { ChatMessageComponent } from './components/chat/chat-message/chat-messag
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

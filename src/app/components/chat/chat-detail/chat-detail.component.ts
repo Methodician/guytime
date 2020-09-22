@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { HeaderService } from '@app/services/header.service';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, BehaviorSubject, combineLatest, Observable } from 'rxjs';
@@ -18,13 +18,14 @@ import { firestore } from 'firebase';
   styleUrls: ['./chat-detail.component.scss'],
 })
 export class ChatDetailComponent implements OnInit {
+  @ViewChild('chatList') private chatListEl: ElementRef;
   private unsubscribe$: Subject<void> = new Subject();
   chatUsers$ = new BehaviorSubject<UserI[]>([]);
   msgInput = '';
   chats = [];
   chatGroupId = '';
   authUid = '';
-  messages$ = this.chatSvc.testMessages$;
+  messages: MessageI[];
 
   constructor(
     private headerSvc: HeaderService,
@@ -45,15 +46,44 @@ export class ChatDetailComponent implements OnInit {
     this.route.params.subscribe(params => {
       if (params['id']) {
         this.chatGroupId = params['id'];
-        const chatObservable$ = this.getChatObservable(this.chatGroupId);
-        chatObservable$.subscribe(chatGroup => {
-          const participantIds = Object.keys(chatGroup.participantIds);
-          this.watchChatUsers(participantIds);
-        });
+        this.watchChatGroupAndUsers(this.chatGroupId);
+        this.watchChatMessages(this.chatGroupId);
         setTimeout(() => this.updateHeader());
       }
     });
   }
+
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+  scrollToBottom() {
+    try {
+      this.chatListEl.nativeElement.scrollTop = this.chatListEl.nativeElement.scrollHeight;
+    } catch (error) {}
+  }
+
+  watchChatMessages = (chatGroupId: string) => {
+    this.chatSvc
+      .chatMessagesByGroupQuery(chatGroupId)
+      .snapshotChanges()
+      .subscribe(msgChangeActions => {
+        const messages = msgChangeActions.map(msgChangeAction => {
+          const { payload } = msgChangeAction,
+            { doc } = payload,
+            { id } = doc;
+          const msg = doc.data();
+          return { ...msg, id };
+        });
+        this.messages = messages;
+      });
+  };
+
+  watchChatGroupAndUsers = (chatGroupId: string) => {
+    this.getChatObservable(chatGroupId).subscribe(chatGroup => {
+      const participantIds = Object.keys(chatGroup.participantIds);
+      this.watchChatUsers(participantIds);
+    });
+  };
 
   getChatObservable = (chatGroupId: string) => {
     return this.chatSvc
@@ -98,11 +128,13 @@ export class ChatDetailComponent implements OnInit {
       chatGroupId,
       senderId: uid,
       content: msgInput,
-      createdAt: firestore.Timestamp.fromDate(new Date()),
-      // revert back to this when using the database
-      // createdAt: fbSvc.fsTimestamp(),
+      createdAt: this.fbSvc.fsTimestamp(),
     };
-    this.chatSvc.sendMessage(messageData);
+    this.chatSvc.createChatMessage(messageData);
     this.msgInput = '';
+  };
+
+  trackMessageBy = (index: number, item: any): number => {
+    return item.id;
   };
 }
