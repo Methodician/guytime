@@ -21,11 +21,10 @@
     </mat-card-footer>
   </mat-card>
 
-  <img
+  <div
     *ngIf="sender.uid === loggedInUid"
-    class="avatar"
     mat-card-avatar
-    [src]="avatarUrl$.value"
-    alt=""
-  />
+    [style.background-image]="'url(' + avatarUrl$.value + ')'"
+    class="avatar"
+  ></div>
 </main>
