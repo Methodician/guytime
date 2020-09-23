@@ -7,7 +7,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "build:func": "cd functions && npm run build && cd .."
   },
   "private": true,
   "dependencies": {

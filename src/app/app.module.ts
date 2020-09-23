@@ -101,7 +101,11 @@ import { ChatGroupComponent } from './components/chat/chat-group/chat-group.comp
       registrationStrategy: 'registerImmediately',
     }),
   ],
-  providers: [],
+  providers: [
+    // {
+    //   provide: FirestoreSettingsToken,
+    // },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
