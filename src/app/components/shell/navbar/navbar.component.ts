@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
+import { AuthService } from '@app/services/auth.service';
+import { UserService } from '@app/services/user.service';
+import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'gtm-navbar',
@@ -8,8 +11,13 @@ import { Router, NavigationEnd } from '@angular/router';
 })
 export class NavbarComponent implements OnInit {
   currentSelection: string;
+  unreadMessagesCount: number;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authSvc: AuthService,
+    private userSvc: UserService,
+  ) {}
 
   ngOnInit(): void {
     this.router.events.subscribe($e => {
@@ -20,9 +28,22 @@ export class NavbarComponent implements OnInit {
         this.currentSelection = base;
       }
     });
+    this.watchUnreadMessages();
   }
 
   onNavSelected = $e => {
     this.router.navigate([`/${$e.value}`]);
+  };
+
+  watchUnreadMessages = () => {
+    this.authSvc.authInfo$
+      .pipe(
+        map(info => info.uid),
+        switchMap(uid => this.userSvc.unreadMessagesDoc(uid).valueChanges()),
+      )
+      .subscribe(unreadMessagesMap => {
+        const count = Object.keys(unreadMessagesMap).length;
+        this.unreadMessagesCount = count;
+      });
   };
 }

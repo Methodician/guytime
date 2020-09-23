@@ -123,6 +123,9 @@ export class UserService {
   allUsersRef = () => this.afs.collection<UserI>('users');
   userRef = (uid: string) => this.allUsersRef().doc<UserI>(uid);
 
+  unreadMessagesDoc = (uid: string) =>
+    this.userRef(uid).collection('meta').doc('unreadMessages');
+
   // HELPERS
   testUserValidity = (user: UserI) => {
     const isValid =
