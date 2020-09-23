@@ -4,6 +4,7 @@ import { FirebaseService } from './firebase.service';
 import { ChatGroupI } from '../models/chat-group';
 import { MessageI } from '../models/message';
 import { BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -52,18 +53,40 @@ export class ChatService {
     return chatGroups;
   };
 
+  watchChatsByUser$ = (uid: string) => {
+    console.log('looking or stuff by', uid);
+    const chatsCol = this.chatGroupsByUserQuery(uid);
+    return chatsCol.snapshotChanges().pipe(
+      map(changeActions => {
+        return changeActions.map(action => {
+          const { doc } = action.payload;
+          const { id } = doc;
+          const data = doc.data();
+          return { id, ...data };
+        });
+      }),
+    );
+  };
+
   chatGroupsCol = () => this.afs.collection<ChatGroupI>('chatGroups');
   chatGroupDoc = (chatGroupId: string) =>
     this.chatGroupsCol().doc<ChatGroupI>(chatGroupId);
 
   pairChatColQuery = (uid1: string, uid2: string) => {
-    const chatsRef = this.afs.collection<ChatGroupI>('chatGroups', ref =>
+    const chatsCol = this.afs.collection<ChatGroupI>('chatGroups', ref =>
       ref
         .where(`participantIds.${uid1}`, '==', true)
         .where(`participantIds.${uid2}`, '==', true)
         .where('isPairChat', '==', true),
     );
-    return chatsRef;
+    return chatsCol;
+  };
+
+  chatGroupsByUserQuery = (uid: string) => {
+    const chatsCol = this.afs.collection<ChatGroupI>('chatGroups', ref =>
+      ref.where(`participantIds.${uid}`, '==', true),
+    );
+    return chatsCol;
   };
 
   chatMessagesCol = () => this.afs.collection<MessageI>('chatMessages');

@@ -8,25 +8,13 @@ main {
     mat-list-item {
       margin-bottom: 6px;
       height: 60px;
+      width: 100%;
       mat-card {
         width: stretch;
         display: grid;
         grid-template-rows: 25px 20px;
         padding: 5px 8px;
         height: 45px;
-        b {
-          font-size: 1rem;
-        }
-        p {
-          font-size: 0.75rem;
-          margin: 0;
-        }
-        b,
-        p {
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
       }
     }
   }
