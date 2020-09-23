@@ -7,7 +7,9 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "build:func": "cd functions && npm run build && cd ..",
+    "emulate": "firebase emulators:start --import=./localdb --export-on-exit"
   },
   "private": true,
   "dependencies": {
@@ -16,7 +18,7 @@
     "@angular/common": "~10.0.14",
     "@angular/compiler": "~10.0.14",
     "@angular/core": "~10.0.14",
-    "@angular/fire": "^6.0.0-rc.2",
+    "@angular/fire": "^6.0.2",
     "@angular/forms": "~10.0.14",
     "@angular/material": "^9.2.2",
     "@angular/platform-browser": "~10.0.14",
@@ -29,8 +31,8 @@
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.1000.8",
-    "@angular/cli": "~10.0.8",
+    "@angular-devkit/build-angular": "~0.1001.2",
+    "@angular/cli": "~10.1.2",
     "@angular/compiler-cli": "~10.0.14",
     "@angular/language-service": "~10.0.14",
     "@types/node": "^12.11.1",

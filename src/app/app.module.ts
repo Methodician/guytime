@@ -8,7 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // ANGULAR FIRE
 import { AngularFireModule } from '@angular/fire';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFirestoreModule, SETTINGS } from '@angular/fire/firestore';
 // import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
 
 // ANGULAR MATERIAL
@@ -101,7 +101,15 @@ import { ChatGroupComponent } from './components/chat/chat-group/chat-group.comp
       registrationStrategy: 'registerImmediately',
     }),
   ],
-  providers: [],
+  providers: [
+    {
+      provide: SETTINGS,
+      useValue:
+        location.hostname === 'localhost'
+          ? { host: 'localhost:8080', ssl: false }
+          : undefined,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
