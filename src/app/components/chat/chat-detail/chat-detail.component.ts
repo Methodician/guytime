@@ -9,8 +9,6 @@ import { UserI } from '@models/user';
 import { MessageI } from '@models/message';
 import { AuthService } from '@services/auth.service';
 import { FirebaseService } from '@app/services/firebase.service';
-// remove this import later
-import { firestore } from 'firebase';
 
 @Component({
   selector: 'gtm-chat-detail',
@@ -87,7 +85,7 @@ export class ChatDetailComponent implements OnInit {
 
   getChatObservable = (chatGroupId: string) => {
     return this.chatSvc
-      .pairChatDoc(chatGroupId)
+      .chatGroupDoc(chatGroupId)
       .valueChanges()
       .pipe(takeUntil(this.unsubscribe$));
   };
