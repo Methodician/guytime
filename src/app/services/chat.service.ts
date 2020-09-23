@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFireDatabase } from '@angular/fire/database';
 import { FirebaseService } from './firebase.service';
 import { ChatGroupI } from '../models/chat-group';
 import { MessageI } from '../models/message';
 import { BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -35,8 +35,9 @@ export class ChatService {
     const chatGroup: ChatGroupI = {
       participantIds: participantsMap,
       createdAt: this.fbSvc.fsTimestamp(),
+      isPairChat: true,
     };
-    await this.pairChatDoc(chatId).set(chatGroup);
+    await this.chatGroupDoc(chatId).set(chatGroup);
     return chatId;
   };
 
@@ -52,21 +53,40 @@ export class ChatService {
     return chatGroups;
   };
 
-  chatGroupsCol = () => this.afs.collection<ChatGroupI>('chats');
+  watchChatsByUser$ = (uid: string) => {
+    console.log('looking or stuff by', uid);
+    const chatsCol = this.chatGroupsByUserQuery(uid);
+    return chatsCol.snapshotChanges().pipe(
+      map(changeActions => {
+        return changeActions.map(action => {
+          const { doc } = action.payload;
+          const { id } = doc;
+          const data = doc.data();
+          return { id, ...data };
+        });
+      }),
+    );
+  };
+
+  chatGroupsCol = () => this.afs.collection<ChatGroupI>('chatGroups');
   chatGroupDoc = (chatGroupId: string) =>
     this.chatGroupsCol().doc<ChatGroupI>(chatGroupId);
 
-  pairChatsCol = () => this.afs.collection<ChatGroupI>('pairChatGroups');
-  pairChatDoc = (chatGroupId: string) =>
-    this.pairChatsCol().doc<ChatGroupI>(chatGroupId);
-
   pairChatColQuery = (uid1: string, uid2: string) => {
-    const chatsRef = this.afs.collection<ChatGroupI>('pairChatGroups', ref =>
+    const chatsCol = this.afs.collection<ChatGroupI>('chatGroups', ref =>
       ref
         .where(`participantIds.${uid1}`, '==', true)
-        .where(`participantIds.${uid2}`, '==', true),
+        .where(`participantIds.${uid2}`, '==', true)
+        .where('isPairChat', '==', true),
     );
-    return chatsRef;
+    return chatsCol;
+  };
+
+  chatGroupsByUserQuery = (uid: string) => {
+    const chatsCol = this.afs.collection<ChatGroupI>('chatGroups', ref =>
+      ref.where(`participantIds.${uid}`, '==', true),
+    );
+    return chatsCol;
   };
 
   chatMessagesCol = () => this.afs.collection<MessageI>('chatMessages');

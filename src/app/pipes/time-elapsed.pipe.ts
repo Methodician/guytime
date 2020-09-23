@@ -22,7 +22,6 @@ export class TimeElapsedPipe implements PipeTransform {
     const msMinute = 60000;
     const ms10Minute = msMinute * 10;
 
-    console.log(msElapsed);
     return msElapsed >= ms10Year
       ? `${Math.floor(msElapsed / msYear)} years ago`
       : msElapsed >= msYear

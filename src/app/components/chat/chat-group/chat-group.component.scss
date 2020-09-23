@@ -1,0 +1,15 @@
+main {
+  b {
+    font-size: 1rem;
+  }
+  p {
+    font-size: 0.75rem;
+    margin: 0;
+  }
+  b,
+  p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
