@@ -5,6 +5,7 @@ import { AuthService } from '@services/auth.service';
 import { UserI } from '@models/user';
 import { Subject, BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
+import { ChatService } from '@app/services/chat.service';
 
 @Component({
   selector: 'gtm-chat-message',
@@ -19,7 +20,11 @@ export class ChatMessageComponent implements OnInit {
   avatarUrl$ = new BehaviorSubject<string>('assets/icons/square_icon.svg');
   loggedInUid: string;
 
-  constructor(private userSvc: UserService, private authSvc: AuthService) {}
+  constructor(
+    private userSvc: UserService,
+    private authSvc: AuthService,
+    private chatSvc: ChatService,
+  ) {}
 
   ngOnDestroy(): void {
     this.unsubscribe$.next();
@@ -40,6 +45,10 @@ export class ChatMessageComponent implements OnInit {
         this.avatarUrl$.next(avatarUrl);
         this.loggedInUid = authInfo.uid;
       });
+
+    if (!this.wasMessageSeen()) {
+      setTimeout(() => this.setAsSeen(), 2000);
+    }
   }
 
   getUserObservable = (uid: string) =>
@@ -50,4 +59,13 @@ export class ChatMessageComponent implements OnInit {
         map(user => ({ ...(user as object), uid })),
         takeUntil(this.unsubscribe$),
       ) as Observable<UserI>;
+
+  wasMessageSeen = () =>
+    !!this.chatMessage.seenBy &&
+    this.chatMessage.seenBy[this.authSvc.authInfo$.value.uid];
+
+  setAsSeen = () => {
+    const loggedInUid = this.authSvc.authInfo$.value.uid;
+    this.chatSvc.setMessageAsSeenBy(loggedInUid, this.chatMessage.id);
+  };
 }
