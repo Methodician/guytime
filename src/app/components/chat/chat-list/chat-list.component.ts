@@ -4,6 +4,7 @@ import { AuthService } from '@app/services/auth.service';
 import { ChatService } from '@app/services/chat.service';
 import { Observable } from 'rxjs';
 import { KeyMapI } from '@models/shared';
+import { debounce, debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'gtm-chat-list',
@@ -23,7 +24,7 @@ export class ChatListComponent implements OnInit {
   watchChatList = () => {
     const loggedInUid = this.authSvc.authInfo$.value.uid;
     this.chatList$ = this.chatSvc.watchChatsByUser$(loggedInUid);
-    this.chatList$.subscribe(list => {
+    this.chatList$.pipe(debounceTime(5000)).subscribe(list => {
       const newBadgeList: KeyMapI<number> = {};
       for (let item of list) {
         const unreadMessageList = item.unreadMessagesByUser[

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
 import { UserService } from '@app/services/user.service';
-import { map, switchMap } from 'rxjs/operators';
+import { debounceTime, map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'gtm-navbar',
@@ -41,6 +41,7 @@ export class NavbarComponent implements OnInit {
         map(info => info.uid),
         switchMap(uid => this.userSvc.unreadMessagesDoc(uid).valueChanges()),
       )
+      .pipe(debounceTime(5000))
       .subscribe(unreadMessagesMap => {
         const count = Object.keys(unreadMessagesMap).length;
         this.unreadMessagesCount = count;
