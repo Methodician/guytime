@@ -12,6 +12,7 @@ const adminFs = admin.firestore();
 export const onChatMessageCreated = fsFunc
   .document('chatMessages/{messageId}')
   .onCreate(async (snap, context) => {
+    console.log('MESSAGE CREATED');
     const { messageId } = <{ messageId: string }>context.params;
     const message = snap.data()!;
     const { chatGroupId, senderId } = message;
@@ -33,8 +34,8 @@ const addUnreadMessageToGroupAndUsers = async (
 
   const unreadMessagesUpdate: KeyMapI<boolean> = {};
   const promises = [];
-  for (let uid of participantIds) {
-    const keyPath = `unreadMessagesByUser.${uid}.${messageId}` as string;
+  for (const uid of participantIds) {
+    const keyPath = `unreadMessagesByUser.${uid}.${messageId}`;
     unreadMessagesUpdate[keyPath] = true;
     promises.push(addUnreadMessageToUser(uid, messageId));
   }
@@ -51,6 +52,55 @@ const addUnreadMessageToUser = (userId: string, messageId: string) =>
     .collection('meta')
     .doc('unreadMessages')
     .set({ [messageId]: true }, { merge: true });
+
+export const onChatMessageUpdated = fsFunc
+  .document('chatMessages/{messageId}')
+  .onUpdate(async (snap, context) => {
+    console.log('MESSAGE UPDATED');
+    const { messageId } = <{ messageId: string }>context.params;
+    const prevMessage = snap.before.data()!;
+    const newMessage = snap.after.data()!;
+    console.log({ messageId });
+    if (!isKeyMapEqual(prevMessage.seenBy, newMessage.seenBy)) {
+      updateSeenbyTracking(prevMessage.seenBy, newMessage.seenBy, messageId);
+    }
+
+    return;
+  });
+
+const updateSeenbyTracking = (
+  prevSeenBy: KeyMapI<boolean>,
+  newSeenBy: KeyMapI<boolean>,
+  msgId: string,
+) => {
+  console.log('UPDATE SEENBY', { prevSeenBy, newSeenBy, msgId });
+
+  // adminFs
+  //   .collection('users')
+  //   .doc(userId)
+  //   .collection('meta')
+  //   .doc('unreadMessages')
+  //   .set({ [messageId]: true }, { merge: true });
+};
+
+// HELPERS
+const isKeyMapEqual = (map1: any, map2: any) => {
+  if ((map1 && !map2) || (map2 && !map1)) return false;
+
+  const keys1 = Object.keys(map1);
+  const keys2 = Object.keys(map2);
+
+  if (keys1.length !== keys2.length) return false;
+
+  for (const key of keys1) {
+    const val1 = map1[key];
+    const val2 = map2[key];
+
+    if (val1 && val2 && val1 !== val2) return false;
+  }
+
+  return true;
+};
 
 // MODELS
 export interface KeyMapI<T> {

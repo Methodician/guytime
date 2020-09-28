@@ -6,5 +6,5 @@ export interface MessageI {
   senderId: string;
   content: string;
   createdAt: any;
-  seenBy?: KeyMapI<boolean>;
+  seenBy: KeyMapI<boolean>;
 }

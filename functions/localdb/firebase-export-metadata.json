@@ -1,5 +1,5 @@
 {
-  "version": "8.10.0",
+  "version": "8.11.0",
   "firestore": {
     "version": "1.11.7",
     "path": "firestore_export",
