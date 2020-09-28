@@ -10,7 +10,11 @@
       <mat-icon>account_circle</mat-icon>
     </mat-button-toggle>
     <mat-button-toggle value="chat" aria-label="Open chats">
-      <mat-icon [matBadge]="unreadMessagesCount">chat</mat-icon>
+      <mat-icon
+        [matBadge]="unreadMessagesCount"
+        [matBadgeHidden]="unreadMessagesCount == 0"
+        >chat</mat-icon
+      >
     </mat-button-toggle>
   </mat-button-toggle-group>
 </main>

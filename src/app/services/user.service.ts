@@ -49,8 +49,6 @@ export class UserService {
       .subscribe(usersSnap => {
         const userSnaps = usersSnap.docs;
         for (let userSnap of userSnaps) {
-          const uid = userSnap.id;
-          console.log('adding timestamp for', uid);
           userSnap.ref.update({ createdAt: timestamp });
         }
       });

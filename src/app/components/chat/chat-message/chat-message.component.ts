@@ -66,6 +66,8 @@ export class ChatMessageComponent implements OnInit {
 
   setAsSeen = () => {
     const loggedInUid = this.authSvc.authInfo$.value.uid;
-    this.chatSvc.setMessageAsSeenBy(loggedInUid, this.chatMessage.id);
+    const wasAuthor = loggedInUid === this.chatMessage.senderId;
+    if (!wasAuthor)
+      this.chatSvc.setMessageAsSeenBy(loggedInUid, this.chatMessage.id);
   };
 }

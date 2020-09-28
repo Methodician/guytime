@@ -60,9 +60,14 @@ export const onChatMessageUpdated = fsFunc
     const { messageId } = <{ messageId: string }>context.params;
     const prevMessage = snap.before.data()!;
     const newMessage = snap.after.data()!;
-    console.log({ messageId });
+    const { chatGroupId } = prevMessage;
     if (!isKeyMapEqual(prevMessage.seenBy, newMessage.seenBy)) {
-      updateSeenbyTracking(prevMessage.seenBy, newMessage.seenBy, messageId);
+      updateSeenbyTracking(
+        prevMessage.seenBy,
+        newMessage.seenBy,
+        messageId,
+        chatGroupId,
+      );
     }
 
     return;
@@ -72,15 +77,26 @@ const updateSeenbyTracking = (
   prevSeenBy: KeyMapI<boolean>,
   newSeenBy: KeyMapI<boolean>,
   msgId: string,
+  chatGroupId: string,
 ) => {
-  console.log('UPDATE SEENBY', { prevSeenBy, newSeenBy, msgId });
+  const userWhoJustSawItId = findUserWhoJustSawMsg(prevSeenBy, newSeenBy);
 
-  // adminFs
-  //   .collection('users')
-  //   .doc(userId)
-  //   .collection('meta')
-  //   .doc('unreadMessages')
-  //   .set({ [messageId]: true }, { merge: true });
+  if (!!userWhoJustSawItId) {
+    adminFs
+      .collection('users')
+      .doc(userWhoJustSawItId)
+      .collection('meta')
+      .doc('unreadMessages')
+      .update({ [msgId]: admin.firestore.FieldValue.delete() });
+
+    const unreadMessagesUpdate: KeyMapI<any> = {};
+    const keyPath = `unreadMessagesByUser.${userWhoJustSawItId}.${msgId}`;
+    unreadMessagesUpdate[keyPath] = admin.firestore.FieldValue.delete();
+    adminFs
+      .collection('chatGroups')
+      .doc(chatGroupId)
+      .update(unreadMessagesUpdate);
+  }
 };
 
 // HELPERS
@@ -100,6 +116,15 @@ const isKeyMapEqual = (map1: any, map2: any) => {
   }
 
   return true;
+};
+
+const findUserWhoJustSawMsg = (prevSeenby: any, newSeenby: any) => {
+  const newKeys = Object.keys(newSeenby);
+
+  for (let key of newKeys) {
+    if (!prevSeenby[key]) return key;
+  }
+  return null;
 };
 
 // MODELS

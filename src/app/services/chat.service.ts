@@ -40,6 +40,7 @@ export class ChatService {
     const chatId = this.afs.createId();
     const chatGroup: ChatGroupI = {
       participantIds: participantsMap,
+      unreadMessagesByUser: {},
       createdAt: this.fbSvc.fsTimestamp(),
       isPairChat: true,
     };
@@ -60,7 +61,6 @@ export class ChatService {
   };
 
   watchChatsByUser$ = (uid: string) => {
-    console.log('looking or stuff by', uid);
     const chatsCol = this.chatGroupsByUserQuery(uid);
     return chatsCol.snapshotChanges().pipe(
       map(changeActions => {
