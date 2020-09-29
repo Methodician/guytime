@@ -104,10 +104,9 @@ import { ChatGroupComponent } from './components/chat/chat-group/chat-group.comp
   providers: [
     {
       provide: SETTINGS,
-      useValue:
-        location.hostname === 'localhost'
-          ? { host: 'localhost:8080', ssl: false }
-          : undefined,
+      useValue: environment.shouldUseEmulator
+        ? { host: 'localhost:8080', ssl: false }
+        : undefined,
     },
   ],
   bootstrap: [AppComponent],

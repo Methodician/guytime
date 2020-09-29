@@ -2,6 +2,9 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+const shouldUseEmulator = location.hostname === 'localhost';
+// const shouldUseEmulator = false;
+
 export const environment = {
   production: false,
   firebase: {
@@ -14,6 +17,7 @@ export const environment = {
     appId: '1:57109098543:web:312ab5b3367b28081596da',
     measurementId: 'G-K2RSVL04LT',
   },
+  shouldUseEmulator,
   geocoding_api_key: 'AIzaSyBwb1h6Q74h3SDdI0XY1_9cPFAw7Sat31U',
 };
 
