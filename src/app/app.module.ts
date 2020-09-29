@@ -3,8 +3,10 @@ import { AppComponent } from './app.component';
 
 // ANGULAR
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 // ANGULAR FIRE
 import { AngularFireModule } from '@angular/fire';
@@ -26,16 +28,13 @@ import { MatSelectModule } from '@angular/material/select';
 
 // LOCAL IMPORTS
 import { environment } from '@env/environment';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from '@components/auth/login/login.component';
 import { NgGuideComponent } from '@components/ng-guide/ng-guide.component';
 import { ProfileListComponent } from '@components/profile/profile-list/profile-list.component';
 import { ProfileDetailComponent } from '@components/profile/profile-detail/profile-detail.component';
-import { ChatComponent } from '@components/chat/chat.component';
 import { RegisterComponent } from '@components/auth/register/register.component';
 import { NavbarComponent } from '@components/shell/navbar/navbar.component';
 import { ChatListComponent } from '@components/chat/chat-list/chat-list.component';
-import { ServiceWorkerModule } from '@angular/service-worker';
 import { HeaderComponent } from '@components/shell/header/header.component';
 import { ProfileEditComponent } from '@components/profile/profile-edit/profile-edit.component';
 import { ToggleIconComponent } from '@components/ui/toggle-icon/toggle-icon.component';
@@ -47,10 +46,12 @@ import { MeConnectionsListComponent } from '@components/profile/me-connections-l
 import { BrowseGuysListComponent } from '@components/profile/browse-guys-list/browse-guys-list.component';
 import { OtherConnectionsListComponent } from '@components/profile/other-connections-list/other-connections-list.component';
 import { ChatDetailComponent } from '@components/chat/chat-detail/chat-detail.component';
-import { ChatMessageComponent } from './components/chat/chat-message/chat-message.component';
-import { TimeElapsedPipe } from './pipes/time-elapsed.pipe';
-import { ChatGroupComponent } from './components/chat/chat-group/chat-group.component';
+import { ChatMessageComponent } from '@components/chat/chat-message/chat-message.component';
+import { ChatGroupComponent } from '@components/chat/chat-group/chat-group.component';
+import { ChatPeopleComponent } from './components/chat/chat-people/chat-people.component';
 
+// pipes
+import { TimeElapsedPipe } from './pipes/time-elapsed.pipe';
 @NgModule({
   declarations: [
     AppComponent,
@@ -58,7 +59,6 @@ import { ChatGroupComponent } from './components/chat/chat-group/chat-group.comp
     NgGuideComponent,
     ProfileListComponent,
     ProfileDetailComponent,
-    ChatComponent,
     RegisterComponent,
     NavbarComponent,
     ChatListComponent,
@@ -76,6 +76,7 @@ import { ChatGroupComponent } from './components/chat/chat-group/chat-group.comp
     ChatMessageComponent,
     TimeElapsedPipe,
     ChatGroupComponent,
+    ChatPeopleComponent,
   ],
   imports: [
     BrowserModule,

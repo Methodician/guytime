@@ -130,6 +130,6 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
       uid2 = this.user$.value.uid;
 
     const chatId = await this.chatSvc.createPairChat(uid1, uid2);
-    this.router.navigateByUrl(`/chat-detail/${chatId}`);
+    this.router.navigateByUrl(`/chat/${chatId}`);
   };
 }

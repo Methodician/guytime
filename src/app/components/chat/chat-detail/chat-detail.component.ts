@@ -116,6 +116,13 @@ export class ChatDetailComponent implements OnInit {
       const namesList = firstNames.join(', ');
       this.headerSvc.setHeaderText(namesList);
     });
+
+    this.headerSvc.setHeaderOption('seePeople', {
+      iconName: 'people',
+      optionText: 'See and add participants',
+      isDisabled: false,
+      onClick: () => console.log('clicked'),
+    });
   };
 
   onSendMessage = () => {

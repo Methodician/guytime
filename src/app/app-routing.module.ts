@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from '@components/auth/login/login.component';
 import { NgGuideComponent } from '@components/ng-guide/ng-guide.component';
 import { AuthGuard } from '@guards/auth.guard';
-import { ChatComponent } from '@components/chat/chat.component';
 import { RegisterComponent } from '@components/auth/register/register.component';
 import { ChatListComponent } from '@components/chat/chat-list/chat-list.component';
 import { ChatDetailComponent } from '@components/chat/chat-detail/chat-detail.component';
@@ -54,7 +53,7 @@ const routes: Routes = [
   { path: 'chat', component: ChatListComponent, canActivate: [AuthGuard] },
   {
     path: 'chat/:id',
-    component: ChatComponent,
+    component: ChatDetailComponent,
     canActivate: [AuthGuard],
   },
   {
@@ -72,4 +71,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
