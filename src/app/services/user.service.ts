@@ -49,8 +49,6 @@ export class UserService {
       .subscribe(usersSnap => {
         const userSnaps = usersSnap.docs;
         for (let userSnap of userSnaps) {
-          const uid = userSnap.id;
-          console.log('adding timestamp for', uid);
           userSnap.ref.update({ createdAt: timestamp });
         }
       });
@@ -122,6 +120,9 @@ export class UserService {
     this.afs.collection<UserI>('users', ref => ref.where('fName', '>', ''));
   allUsersRef = () => this.afs.collection<UserI>('users');
   userRef = (uid: string) => this.allUsersRef().doc<UserI>(uid);
+
+  unreadMessagesDoc = (uid: string) =>
+    this.userRef(uid).collection('meta').doc('unreadMessages');
 
   // HELPERS
   testUserValidity = (user: UserI) => {

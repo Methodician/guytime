@@ -47,3 +47,5 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+firestore-debug.log
+firebase-debug.log

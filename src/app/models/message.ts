@@ -1,9 +1,10 @@
-//import { firestore } from 'firebase';
+import { KeyMapI } from './shared';
+
 export interface MessageI {
   id?: string;
   chatGroupId: string;
   senderId: string;
   content: string;
   createdAt: any;
-  // createdAt: firestore.FieldValue | firestore.Timestamp;
+  seenBy: KeyMapI<boolean>;
 }

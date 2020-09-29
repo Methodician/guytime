@@ -126,6 +126,7 @@ export class ChatDetailComponent implements OnInit {
       chatGroupId,
       senderId: uid,
       content: msgInput,
+      seenBy: {},
       createdAt: this.fbSvc.fsTimestamp(),
     };
     this.chatSvc.createChatMessage(messageData);

@@ -1,6 +1,5 @@
 <main
   *ngIf="user$ | async as sender"
-  class="chat_box"
   [ngClass]="{ owned_chat: sender.uid === loggedInUid }"
 >
   <img
@@ -10,7 +9,7 @@
     [src]="avatarUrl$.value"
     alt=""
   />
-  <mat-card>
+  <mat-card [ngClass]="{ unread: !wasMessageSeen() }">
     <mat-card-content>{{ chatMessage.content }}</mat-card-content>
 
     <mat-card-footer>
