@@ -1,5 +1,5 @@
-<main>
-  <mat-card [routerLink]="'/guys/' + user.uid">
+<main *ngIf="user">
+  <mat-card (click)="onCardClicked($event)">
     <div
       mat-card-avatar
       [style.background-image]="'url(' + (avatarUrl$ | async) + ')'"
@@ -8,9 +8,8 @@
     ></div>
     <b class="name">{{ user.fName }}</b>
     <b class="age grid_cell_centered">{{ user.age }}</b>
-    <div></div>
-    <gtm-activities-span
-      [selectedActivities]="user.activityTypes"
-    ></gtm-activities-span>
+    <section class="content_wrapper grid_cell_centered">
+      <ng-content></ng-content>
+    </section>
   </mat-card>
 </main>

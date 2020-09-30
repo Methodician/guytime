@@ -135,8 +135,8 @@ export class UserService {
       !!user.relationshipStatus &&
       !!user.activityTypes &&
       !!user.bio &&
-      user.bio !== '' &&
-      !!user.connectionIds;
+      user.bio !== '';
+    // !!user.connectionIds;
 
     return isValid;
   };

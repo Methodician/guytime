@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ChatGroupI } from '@app/models/chat-group';
 import { UserI } from '@app/models/user';
 import { ChatService } from '@app/services/chat.service';
@@ -25,6 +25,7 @@ export class ChatPeopleComponent implements OnInit {
     private chatSvc: ChatService,
     private userSvc: UserService,
     private route: ActivatedRoute,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -84,4 +85,7 @@ export class ChatPeopleComponent implements OnInit {
       this.headerSvc.setDefaultXUrl(`/chat/${id}`);
     });
   };
+
+  onAddPersonClicked = () =>
+    this.router.navigateByUrl(`chat/${this.chatId$.value}/add`);
 }

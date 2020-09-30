@@ -1,10 +1,11 @@
 <main>
   <mat-list>
     <mat-list-item *ngFor="let user of users">
-      <gtm-profile-preview-card
-        [user]="user"
-        style="width: 100%;"
-      ></gtm-profile-preview-card>
+      <gtm-profile-preview-card [user]="user" style="width: 100%">
+        <gtm-activities-span
+          [selectedActivities]="user.activityTypes"
+        ></gtm-activities-span>
+      </gtm-profile-preview-card>
     </mat-list-item>
   </mat-list>
 </main>

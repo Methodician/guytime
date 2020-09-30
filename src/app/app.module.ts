@@ -52,6 +52,7 @@ import { ChatPeopleComponent } from './components/chat/chat-people/chat-people.c
 
 // pipes
 import { TimeElapsedPipe } from './pipes/time-elapsed.pipe';
+import { AddPeopleComponent } from './components/chat/add-people/add-people.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -77,6 +78,7 @@ import { TimeElapsedPipe } from './pipes/time-elapsed.pipe';
     TimeElapsedPipe,
     ChatGroupComponent,
     ChatPeopleComponent,
+    AddPeopleComponent,
   ],
   imports: [
     BrowserModule,

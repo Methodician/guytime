@@ -1,3 +1,8 @@
 <main>
   <gtm-profile-list [users]="chatUsers$ | async"></gtm-profile-list>
+  <section class="add-person-wrapper">
+    <button mat-button color="primary" (click)="onAddPersonClicked()">
+      Add from contacts
+    </button>
+  </section>
 </main>

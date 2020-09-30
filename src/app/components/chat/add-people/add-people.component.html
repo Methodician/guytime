@@ -1,0 +1,19 @@
+<main>
+  <mat-list>
+    <mat-list-item *ngFor="let user of users$ | async">
+      <gtm-profile-preview-card
+        [shouldLink]="false"
+        [user]="user"
+        style="width: 100%"
+      >
+        <button mat-button color="primary">Add Him</button>
+      </gtm-profile-preview-card>
+    </mat-list-item>
+  </mat-list>
+  <section *ngIf="wasUserReturned && !doesUserHaveContacts">
+    <p>
+      You can only add chat members from contacts. It's easy to
+      <a routerLink="/guys">browse guys out there</a>.
+    </p>
+  </section>
+</main>

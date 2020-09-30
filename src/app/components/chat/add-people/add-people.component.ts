@@ -1,31 +1,34 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
 import { UserI } from '@app/models/user';
+
 import { UserService } from '@app/services/user.service';
+import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { HeaderService } from '@app/services/header.service';
 
 @Component({
-  selector: 'gtm-me-connections-list',
-  templateUrl: './me-connections-list.component.html',
-  styleUrls: ['./me-connections-list.component.scss'],
+  selector: 'gtm-add-people',
+  templateUrl: './add-people.component.html',
+  styleUrls: ['./add-people.component.scss'],
 })
-export class MeConnectionsListComponent implements OnInit {
+export class AddPeopleComponent implements OnInit {
   private unsubscribe$: Subject<void> = new Subject();
 
   users$: BehaviorSubject<UserI[]> = new BehaviorSubject([]);
   doesUserHaveContacts = false;
   wasUserReturned = false;
 
-  constructor(private userSvc: UserService, private headerSvc: HeaderService) {}
+  constructor(private userSvc: UserService) {}
+
+  ngOnInit(): void {
+    this.initializeContactList();
+  }
 
   ngOnDestroy() {
-    this.headerSvc.resetHeader();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
-  ngOnInit(): void {
+  initializeContactList = () => {
     this.userSvc.loggedInUser$
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(user => {
@@ -53,12 +56,5 @@ export class MeConnectionsListComponent implements OnInit {
             .subscribe(contacts => this.users$.next(contacts));
         }
       });
-
-    setTimeout(() => this.updateHeader());
-  }
-
-  updateHeader = () => {
-    this.headerSvc.setDefaultXUrl('/me');
-    this.headerSvc.setHeaderText('My connections');
   };
 }
