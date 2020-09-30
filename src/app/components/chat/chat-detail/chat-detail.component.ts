@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { HeaderService } from '@app/services/header.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
 import { ChatService } from '@services/chat.service';
@@ -28,6 +28,7 @@ export class ChatDetailComponent implements OnInit {
   constructor(
     private headerSvc: HeaderService,
     private route: ActivatedRoute,
+    private router: Router,
     private chatSvc: ChatService,
     private userSvc: UserService,
     private fbSvc: FirebaseService,
@@ -121,9 +122,12 @@ export class ChatDetailComponent implements OnInit {
       iconName: 'people',
       optionText: 'See and add participants',
       isDisabled: false,
-      onClick: () => console.log('clicked'),
+      onClick: this.onPeopleClicked,
     });
   };
+
+  onPeopleClicked = () =>
+    this.router.navigateByUrl(`chat/${this.chatGroupId}/people`);
 
   onSendMessage = () => {
     const { uid } = this.authSvc.authInfo$.value,

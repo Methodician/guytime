@@ -13,6 +13,7 @@ import { MeDetailComponent } from '@components/profile/me-detail/me-detail.compo
 import { BrowseGuysListComponent } from './components/profile/browse-guys-list/browse-guys-list.component';
 import { MeConnectionsListComponent } from './components/profile/me-connections-list/me-connections-list.component';
 import { OtherConnectionsListComponent } from './components/profile/other-connections-list/other-connections-list.component';
+import { ChatPeopleComponent } from './components/chat/chat-people/chat-people.component';
 
 const routes: Routes = [
   // Should ultimately go to home (browse/filter profiles) which will redirect to login if you're not logged in
@@ -57,8 +58,8 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'chat-detail/:id',
-    component: ChatDetailComponent,
+    path: 'chat/:id/people',
+    component: ChatPeopleComponent,
     canActivate: [AuthGuard],
   },
   {
