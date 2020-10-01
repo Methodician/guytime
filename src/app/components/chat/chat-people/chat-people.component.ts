@@ -86,6 +86,6 @@ export class ChatPeopleComponent implements OnInit {
     });
   };
 
-  onAddPersonClicked = () =>
+  onAddPeopleClicked = () =>
     this.router.navigateByUrl(`chat/${this.chatId$.value}/add`);
 }
