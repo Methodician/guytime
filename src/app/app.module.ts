@@ -25,6 +25,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 // LOCAL IMPORTS
 import { environment } from '@env/environment';
@@ -99,6 +100,7 @@ import { AddPeopleComponent } from './components/chat/add-people/add-people.comp
     MatMenuModule,
     MatListModule,
     MatSelectModule,
+    MatCheckboxModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       registrationStrategy: 'registerImmediately',

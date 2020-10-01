@@ -11,7 +11,8 @@
       "changefreq",
       "guytime",
       "navspace",
-      "slugify"
+      "slugify",
+      "uids"
     ],
     "html.format.wrapAttributes": "force-expand-multiline",
     "editor.defaultFormatter": "esbenp.prettier-vscode",

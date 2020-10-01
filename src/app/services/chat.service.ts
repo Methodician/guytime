@@ -10,8 +10,6 @@ import { map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class ChatService {
-  testMessages$: BehaviorSubject<MessageI[]> = new BehaviorSubject([]);
-
   constructor(private afs: AngularFirestore, private fbSvc: FirebaseService) {}
 
   setMessageAsSeenBy = async (uid: string, messageId: string) => {
@@ -58,6 +56,24 @@ export class ChatService {
       return chatGroup;
     });
     return chatGroups;
+  };
+
+  createGroupChat = async (uids: string[]) => {
+    if (!uids || uids.length < 3)
+      throw new Error(
+        'You can only create group chats with an array of 3 or more userIds. To create a pair chat, call createPairChat.',
+      );
+    const participantsMap = uids.reduce((obj, item) => {
+      return { ...obj, [item]: true };
+    }, {});
+
+    const chatGroup: ChatGroupI = {
+      participantIds: participantsMap,
+      unreadMessagesByUser: {},
+      createdAt: this.fbSvc.fsTimestamp(),
+      isPairChat: false,
+    };
+    console.log(chatGroup);
   };
 
   watchChatsByUser$ = (uid: string) => {

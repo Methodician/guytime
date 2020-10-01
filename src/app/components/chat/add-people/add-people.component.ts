@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { UserI } from '@app/models/user';
+import { ChatService } from '@app/services/chat.service';
 
 import { UserService } from '@app/services/user.service';
 import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { map, tap, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'gtm-add-people',
@@ -13,11 +14,13 @@ import { map, takeUntil } from 'rxjs/operators';
 export class AddPeopleComponent implements OnInit {
   private unsubscribe$: Subject<void> = new Subject();
 
+  checked = false;
+  selectedUsers = {};
   users$: BehaviorSubject<UserI[]> = new BehaviorSubject([]);
   doesUserHaveContacts = false;
   wasUserReturned = false;
 
-  constructor(private userSvc: UserService) {}
+  constructor(private chatSvc: ChatService, private userSvc: UserService) {}
 
   ngOnInit(): void {
     this.initializeContactList();
@@ -28,12 +31,29 @@ export class AddPeopleComponent implements OnInit {
     this.unsubscribe$.complete();
   }
 
+  // TESTING
+  logIt = () =>
+    console.log(
+      Object.entries(this.selectedUsers)
+        .filter(([_, isSelected]) => !!isSelected)
+        .map(([uid, _]) => uid),
+    );
+  // end testing
+
+  onCreateGroupClicked = () => {
+    const uids = Object.entries(this.selectedUsers)
+      .filter(([_, isSelected]) => !!isSelected)
+      .map(([uid, _]) => uid);
+    this.chatSvc.createGroupChat(uids);
+  };
+
   initializeContactList = () => {
     this.userSvc.loggedInUser$
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(user => {
         if (user && user.uid) {
           this.wasUserReturned = true;
+          this.selectedUsers[user.uid] = true;
         }
         if (user && user.contacts && Object.keys(user.contacts).length > 0) {
           this.doesUserHaveContacts = true;
@@ -43,6 +63,10 @@ export class AddPeopleComponent implements OnInit {
               .userRef(id)
               .snapshotChanges()
               .pipe(
+                tap(userSnap => {
+                  const uid = userSnap.payload.id;
+                  this.selectedUsers[uid] = false;
+                }),
                 map(userSnap => {
                   const uid = userSnap.payload.id;
                   const user = userSnap.payload.data();

@@ -26,7 +26,6 @@ export class ProfilePreviewCardComponent implements OnInit {
   }
 
   onCardClicked = $e => {
-    $e.preventDefault();
     if (this.shouldLink) this.router.navigateByUrl(`/guys/${this.user.uid}`);
   };
 }
