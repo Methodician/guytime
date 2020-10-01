@@ -29,7 +29,6 @@ export class ChatPeopleComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.chatGroup$.subscribe(console.log);
     this.route.params.subscribe(params => {
       if (params['id']) {
         const chatId = params['id'];

@@ -3,7 +3,6 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { FirebaseService } from './firebase.service';
 import { ChatGroupI } from '../models/chat-group';
 import { MessageI } from '../models/message';
-import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -35,15 +34,14 @@ export class ChatService {
       [uid1]: true,
       [uid2]: true,
     };
-    const chatId = this.afs.createId();
     const chatGroup: ChatGroupI = {
       participantIds: participantsMap,
       unreadMessagesByUser: {},
       createdAt: this.fbSvc.fsTimestamp(),
       isPairChat: true,
     };
-    await this.chatGroupDoc(chatId).set(chatGroup);
-    return chatId;
+    const { id } = await this.chatGroupsCol().add(chatGroup);
+    return id;
   };
 
   getPairChat = async (uid1: string, uid2: string): Promise<ChatGroupI[]> => {
@@ -73,7 +71,8 @@ export class ChatService {
       createdAt: this.fbSvc.fsTimestamp(),
       isPairChat: false,
     };
-    console.log(chatGroup);
+    const { id } = await this.chatGroupsCol().add(chatGroup);
+    return id;
   };
 
   watchChatsByUser$ = (uid: string) => {
