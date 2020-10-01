@@ -1,0 +1,15 @@
+@import 'app/styles/vars.scss';
+
+main {
+  position: absolute;
+  width: 100vw;
+  bottom: calc(#{$footer_height} + 10px);
+  text-align: center;
+  color: white;
+  background: radial-gradient(
+    rgb(56, 56, 56),
+    rgba(31, 31, 31, 0.9),
+    rgba(0, 0, 0, 0)
+  );
+  z-index: 1000;
+}

@@ -50,6 +50,7 @@ import { ChatDetailComponent } from '@components/chat/chat-detail/chat-detail.co
 import { ChatMessageComponent } from '@components/chat/chat-message/chat-message.component';
 import { ChatGroupComponent } from '@components/chat/chat-group/chat-group.component';
 import { ChatPeopleComponent } from './components/chat/chat-people/chat-people.component';
+import { BottomGhostBannerComponent } from './components/ui/bottom-ghost-banner/bottom-ghost-banner.component';
 
 // pipes
 import { TimeElapsedPipe } from './pipes/time-elapsed.pipe';
@@ -80,6 +81,7 @@ import { AddPeopleComponent } from './components/chat/add-people/add-people.comp
     ChatGroupComponent,
     ChatPeopleComponent,
     AddPeopleComponent,
+    BottomGhostBannerComponent,
   ],
   imports: [
     BrowserModule,

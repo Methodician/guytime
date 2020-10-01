@@ -11,8 +11,6 @@
         >
       </gtm-profile-preview-card>
     </mat-list-item>
-    <button mat-button (click)="logIt()">Log it</button>
-    <button mat-button (click)="onCreateGroupClicked()">Create Group</button>
     <mat-list-item>
       <p>
         You can only add chat members from contacts. It's easy to
@@ -20,4 +18,8 @@
       </p>
     </mat-list-item>
   </mat-list>
+  <gtm-bottom-ghost-banner>
+    <button mat-button (click)="logIt()">Log it</button>
+    <button mat-button (click)="onCreateGroupClicked()">Create Group</button>
+  </gtm-bottom-ghost-banner>
 </main>

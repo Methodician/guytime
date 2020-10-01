@@ -69,10 +69,4 @@ main {
       }
     }
   }
-  .save_button_wrapper {
-    width: 100vw;
-    position: absolute;
-    bottom: calc(#{$footer_height} + 10px);
-    text-align: center;
-  }
 }
