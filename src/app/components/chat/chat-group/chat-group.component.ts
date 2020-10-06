@@ -28,7 +28,7 @@ export class ChatGroupComponent implements OnInit {
   }
 
   watchChatUsers = () => {
-    const userIds = Object.keys(this.group.participantIds);
+    const userIds = Object.keys(this.group.participantsMap);
     const filteredIds = userIds.filter(
       id => id !== this.authSvc.authInfo$.value.uid,
     );

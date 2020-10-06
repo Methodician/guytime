@@ -27,8 +27,8 @@ const addUnreadMessageToGroupAndUsers = async (
   const chatGroupRef = adminFs.collection('chatGroups').doc(chatGroupId);
   const existingGroupSnap = await chatGroupRef.get();
   const existingGroup = existingGroupSnap.data()!;
-  const participantMap = existingGroup.participantIds;
-  const participantIds = Object.keys(participantMap).filter(
+  const { participantsMap } = existingGroup;
+  const participantIds = Object.keys(participantsMap).filter(
     id => id !== senderId,
   );
 

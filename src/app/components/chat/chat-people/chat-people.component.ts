@@ -63,7 +63,7 @@ export class ChatPeopleComponent implements OnInit {
         switchMap(group => {
           if (!group) return of(null);
 
-          const userIds = Object.keys(group.participantIds);
+          const userIds = Object.keys(group.participantsMap);
           const userObservables = userIds.map(uid =>
             this.userSvc
               .userRef(uid)

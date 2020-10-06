@@ -55,6 +55,7 @@ export class ChatDetailComponent implements OnInit {
   ngAfterViewChecked() {
     this.scrollToBottom();
   }
+
   scrollToBottom() {
     try {
       this.chatListEl.nativeElement.scrollTop = this.chatListEl.nativeElement.scrollHeight;
@@ -79,7 +80,7 @@ export class ChatDetailComponent implements OnInit {
 
   watchChatGroupAndUsers = (chatGroupId: string) => {
     this.getChatObservable(chatGroupId).subscribe(chatGroup => {
-      const participantIds = Object.keys(chatGroup.participantIds);
+      const participantIds = Object.keys(chatGroup.participantsMap);
       this.watchChatUsers(participantIds);
     });
   };
@@ -124,6 +125,8 @@ export class ChatDetailComponent implements OnInit {
       isDisabled: false,
       onClick: this.onPeopleClicked,
     });
+
+    this.headerSvc.setDefaultXUrl('/chat');
   };
 
   onPeopleClicked = () =>

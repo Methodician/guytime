@@ -17,7 +17,7 @@ import { map, tap, takeUntil } from 'rxjs/operators';
 export class AddPeopleComponent implements OnInit {
   private unsubscribe$: Subject<void> = new Subject();
 
-  chatGroup: ChatGroupI;
+  chatGroup$: BehaviorSubject<ChatGroupI> = new BehaviorSubject(null);
   selectedUsers = {};
   users$: BehaviorSubject<UserI[]> = new BehaviorSubject([]);
   doesUserHaveContacts = false;
@@ -39,7 +39,7 @@ export class AddPeopleComponent implements OnInit {
         .chatGroupDoc(id)
         .valueChanges()
         .subscribe(group => {
-          this.chatGroup = { id, ...group };
+          this.chatGroup$.next({ id, ...group });
           setTimeout(() => this.updateHeader());
         });
     });
@@ -52,9 +52,17 @@ export class AddPeopleComponent implements OnInit {
     this.unsubscribe$.complete();
   }
 
-  // TESTING
-  logIt = () => console.log(this.chatGroup);
-  // end testing
+  watchChatGroup = () => {
+    this.chatGroup$.subscribe(group => {
+      console.log(group);
+      if (!group) return;
+      const { participantsMap } = group;
+      const participantIds = Object.keys(participantsMap);
+      for (let uid of participantIds) {
+        this.selectedUsers[uid] = true;
+      }
+    });
+  };
 
   onCreateGroupClicked = () => {
     const uids = Object.entries(this.selectedUsers)
@@ -73,6 +81,8 @@ export class AddPeopleComponent implements OnInit {
     const groupId = await this.chatSvc.createGroupChat(uids);
     return this.router.navigateByUrl(`/chat/${groupId}`);
   };
+
+  onExpandGroupClicked = () => this.expandChatGroup();
 
   expandChatGroup = () => alert('gotta make this possible too');
 
@@ -106,13 +116,20 @@ export class AddPeopleComponent implements OnInit {
           const contactsObservable = combineLatest(contactObservables);
           contactsObservable
             .pipe(takeUntil(this.unsubscribe$))
-            .subscribe(contacts => this.users$.next(contacts));
+            .subscribe(contacts => {
+              this.users$.next(contacts);
+              this.watchChatGroup();
+            });
         }
       });
   };
 
   updateHeader = () => {
     this.headerSvc.setHeaderText('Create a Group');
-    this.headerSvc.setDefaultXUrl(`/chat/${this.chatGroup.id}`);
+    this.chatGroup$.subscribe(group => {
+      if (!group) return;
+
+      this.headerSvc.setDefaultXUrl(`/chat/${group.id}`);
+    });
   };
 }

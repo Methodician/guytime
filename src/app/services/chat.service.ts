@@ -35,7 +35,7 @@ export class ChatService {
       [uid2]: true,
     };
     const chatGroup: ChatGroupI = {
-      participantIds: participantsMap,
+      participantsMap,
       unreadMessagesByUser: {},
       createdAt: this.fbSvc.fsTimestamp(),
       isPairChat: true,
@@ -66,7 +66,7 @@ export class ChatService {
     }, {});
 
     const chatGroup: ChatGroupI = {
-      participantIds: participantsMap,
+      participantsMap,
       unreadMessagesByUser: {},
       createdAt: this.fbSvc.fsTimestamp(),
       isPairChat: false,
@@ -96,8 +96,8 @@ export class ChatService {
   pairChatColQuery = (uid1: string, uid2: string) => {
     const chatsCol = this.afs.collection<ChatGroupI>('chatGroups', ref =>
       ref
-        .where(`participantIds.${uid1}`, '==', true)
-        .where(`participantIds.${uid2}`, '==', true)
+        .where(`participantsMap.${uid1}`, '==', true)
+        .where(`participantsMap.${uid2}`, '==', true)
         .where('isPairChat', '==', true),
     );
     return chatsCol;
@@ -105,7 +105,7 @@ export class ChatService {
 
   chatGroupsByUserQuery = (uid: string) => {
     const chatsCol = this.afs.collection<ChatGroupI>('chatGroups', ref =>
-      ref.where(`participantIds.${uid}`, '==', true),
+      ref.where(`participantsMap.${uid}`, '==', true),
     );
     return chatsCol;
   };
