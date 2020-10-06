@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from '@components/auth/login/login.component';
 import { NgGuideComponent } from '@components/ng-guide/ng-guide.component';
 import { AuthGuard } from '@guards/auth.guard';
-import { ChatComponent } from '@components/chat/chat.component';
 import { RegisterComponent } from '@components/auth/register/register.component';
 import { ChatListComponent } from '@components/chat/chat-list/chat-list.component';
 import { ChatDetailComponent } from '@components/chat/chat-detail/chat-detail.component';
@@ -14,6 +13,8 @@ import { MeDetailComponent } from '@components/profile/me-detail/me-detail.compo
 import { BrowseGuysListComponent } from './components/profile/browse-guys-list/browse-guys-list.component';
 import { MeConnectionsListComponent } from './components/profile/me-connections-list/me-connections-list.component';
 import { OtherConnectionsListComponent } from './components/profile/other-connections-list/other-connections-list.component';
+import { ChatPeopleComponent } from './components/chat/chat-people/chat-people.component';
+import { AddPeopleComponent } from './components/chat/add-people/add-people.component';
 
 const routes: Routes = [
   // Should ultimately go to home (browse/filter profiles) which will redirect to login if you're not logged in
@@ -54,12 +55,17 @@ const routes: Routes = [
   { path: 'chat', component: ChatListComponent, canActivate: [AuthGuard] },
   {
     path: 'chat/:id',
-    component: ChatComponent,
+    component: ChatDetailComponent,
     canActivate: [AuthGuard],
   },
   {
-    path: 'chat-detail/:id',
-    component: ChatDetailComponent,
+    path: 'chat/:id/people',
+    component: ChatPeopleComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'chat/:id/add',
+    component: AddPeopleComponent,
     canActivate: [AuthGuard],
   },
   {
@@ -72,4 +78,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

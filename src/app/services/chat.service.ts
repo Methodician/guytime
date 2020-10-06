@@ -3,15 +3,12 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { FirebaseService } from './firebase.service';
 import { ChatGroupI } from '../models/chat-group';
 import { MessageI } from '../models/message';
-import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChatService {
-  testMessages$: BehaviorSubject<MessageI[]> = new BehaviorSubject([]);
-
   constructor(private afs: AngularFirestore, private fbSvc: FirebaseService) {}
 
   setMessageAsSeenBy = async (uid: string, messageId: string) => {
@@ -37,15 +34,14 @@ export class ChatService {
       [uid1]: true,
       [uid2]: true,
     };
-    const chatId = this.afs.createId();
     const chatGroup: ChatGroupI = {
-      participantIds: participantsMap,
+      participantsMap,
       unreadMessagesByUser: {},
       createdAt: this.fbSvc.fsTimestamp(),
       isPairChat: true,
     };
-    await this.chatGroupDoc(chatId).set(chatGroup);
-    return chatId;
+    const { id } = await this.chatGroupsCol().add(chatGroup);
+    return id;
   };
 
   getPairChat = async (uid1: string, uid2: string): Promise<ChatGroupI[]> => {
@@ -58,6 +54,25 @@ export class ChatService {
       return chatGroup;
     });
     return chatGroups;
+  };
+
+  createGroupChat = async (uids: string[]) => {
+    if (!uids || uids.length < 3)
+      throw new Error(
+        'You can only create group chats with an array of 3 or more userIds. To create a pair chat, call createPairChat.',
+      );
+    const participantsMap = uids.reduce((obj, item) => {
+      return { ...obj, [item]: true };
+    }, {});
+
+    const chatGroup: ChatGroupI = {
+      participantsMap,
+      unreadMessagesByUser: {},
+      createdAt: this.fbSvc.fsTimestamp(),
+      isPairChat: false,
+    };
+    const { id } = await this.chatGroupsCol().add(chatGroup);
+    return id;
   };
 
   watchChatsByUser$ = (uid: string) => {
@@ -81,8 +96,8 @@ export class ChatService {
   pairChatColQuery = (uid1: string, uid2: string) => {
     const chatsCol = this.afs.collection<ChatGroupI>('chatGroups', ref =>
       ref
-        .where(`participantIds.${uid1}`, '==', true)
-        .where(`participantIds.${uid2}`, '==', true)
+        .where(`participantsMap.${uid1}`, '==', true)
+        .where(`participantsMap.${uid2}`, '==', true)
         .where('isPairChat', '==', true),
     );
     return chatsCol;
@@ -90,7 +105,7 @@ export class ChatService {
 
   chatGroupsByUserQuery = (uid: string) => {
     const chatsCol = this.afs.collection<ChatGroupI>('chatGroups', ref =>
-      ref.where(`participantIds.${uid}`, '==', true),
+      ref.where(`participantsMap.${uid}`, '==', true),
     );
     return chatsCol;
   };

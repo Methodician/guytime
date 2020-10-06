@@ -41,20 +41,6 @@ export class UserService {
     });
   }
 
-  // vvv TEMP DEV CODE
-  seedTimestamps = () => {
-    const timestamp = this.fbSvc.fsTimestamp();
-    this.allUsersRef()
-      .get()
-      .subscribe(usersSnap => {
-        const userSnaps = usersSnap.docs;
-        for (let userSnap of userSnaps) {
-          userSnap.ref.update({ createdAt: timestamp });
-        }
-      });
-  };
-  // ^^^ end temp dev code
-
   createUser = (user: UserI) => {
     const uid = this.authSvc.authInfo$.value.uid;
     if (uid) {
@@ -135,8 +121,8 @@ export class UserService {
       !!user.relationshipStatus &&
       !!user.activityTypes &&
       !!user.bio &&
-      user.bio !== '' &&
-      !!user.connectionIds;
+      user.bio !== '';
+    // !!user.connectionIds;
 
     return isValid;
   };

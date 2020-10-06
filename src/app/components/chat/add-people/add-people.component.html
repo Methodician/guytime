@@ -1,0 +1,25 @@
+<main>
+  <mat-list>
+    <mat-list-item *ngFor="let user of users$ | async">
+      <gtm-profile-preview-card
+        [shouldLink]="false"
+        [user]="user"
+        style="width: 100%"
+      >
+        <mat-checkbox [(ngModel)]="selectedUsers[user.uid]"
+          >Add him</mat-checkbox
+        >
+      </gtm-profile-preview-card>
+    </mat-list-item>
+    <mat-list-item>
+      <p>
+        You can only add chat members from contacts. It's easy to
+        <a routerLink="/guys">browse guys out there</a> and add them.
+      </p>
+    </mat-list-item>
+  </mat-list>
+  <gtm-bottom-ghost-banner>
+    <button mat-button (click)="onExpandGroupClicked()">Expand Group</button>
+    <button mat-button (click)="onCreateGroupClicked()">Create Group</button>
+  </gtm-bottom-ghost-banner>
+</main>

@@ -2,7 +2,7 @@
   <mat-list>
     <mat-list-item *ngFor="let chat of chatList$ | async">
       <mat-card
-        [routerLink]="['/chat-detail', chat.id]"
+        [routerLink]="['/chat', chat.id]"
         [matBadge]="badgeList[chat.id]"
         [matBadgeHidden]="badgeList[chat.id] == 0"
         matBadgePosition="before"

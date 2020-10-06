@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { HeaderService } from '@app/services/header.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
 import { ChatService } from '@services/chat.service';
@@ -28,6 +28,7 @@ export class ChatDetailComponent implements OnInit {
   constructor(
     private headerSvc: HeaderService,
     private route: ActivatedRoute,
+    private router: Router,
     private chatSvc: ChatService,
     private userSvc: UserService,
     private fbSvc: FirebaseService,
@@ -54,6 +55,7 @@ export class ChatDetailComponent implements OnInit {
   ngAfterViewChecked() {
     this.scrollToBottom();
   }
+
   scrollToBottom() {
     try {
       this.chatListEl.nativeElement.scrollTop = this.chatListEl.nativeElement.scrollHeight;
@@ -78,7 +80,7 @@ export class ChatDetailComponent implements OnInit {
 
   watchChatGroupAndUsers = (chatGroupId: string) => {
     this.getChatObservable(chatGroupId).subscribe(chatGroup => {
-      const participantIds = Object.keys(chatGroup.participantIds);
+      const participantIds = Object.keys(chatGroup.participantsMap);
       this.watchChatUsers(participantIds);
     });
   };
@@ -116,7 +118,19 @@ export class ChatDetailComponent implements OnInit {
       const namesList = firstNames.join(', ');
       this.headerSvc.setHeaderText(namesList);
     });
+
+    this.headerSvc.setHeaderOption('seePeople', {
+      iconName: 'people',
+      optionText: 'See and add participants',
+      isDisabled: false,
+      onClick: this.onPeopleClicked,
+    });
+
+    this.headerSvc.setDefaultXUrl('/chat');
   };
+
+  onPeopleClicked = () =>
+    this.router.navigateByUrl(`chat/${this.chatGroupId}/people`);
 
   onSendMessage = () => {
     const { uid } = this.authSvc.authInfo$.value,

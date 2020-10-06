@@ -4,7 +4,6 @@ import { UserI } from '@app/models/user';
 import { UserService } from '@app/services/user.service';
 import { map, takeUntil } from 'rxjs/operators';
 import { HeaderService } from '@app/services/header.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'gtm-me-connections-list',
@@ -17,6 +16,7 @@ export class MeConnectionsListComponent implements OnInit {
   users$: BehaviorSubject<UserI[]> = new BehaviorSubject([]);
   doesUserHaveContacts = false;
   wasUserReturned = false;
+
   constructor(private userSvc: UserService, private headerSvc: HeaderService) {}
 
   ngOnDestroy() {
@@ -32,7 +32,7 @@ export class MeConnectionsListComponent implements OnInit {
         if (user && user.uid) {
           this.wasUserReturned = true;
         }
-        if (user && user.contacts) {
+        if (user && user.contacts && Object.keys(user.contacts).length > 0) {
           this.doesUserHaveContacts = true;
           const contactIds = Object.keys(user.contacts).map(contact => contact);
           const contactObservables = contactIds.map(id =>
