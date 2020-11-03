@@ -4,6 +4,7 @@
     "lint": "tslint --project tsconfig.json",
     "build": "tsc",
     "watch": "tsc --watch",
+    "emulate": "firebase emulators:start --import=./localdb --export-on-exit",
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
@@ -15,8 +16,8 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "firebase-admin": "^8.10.0",
-    "firebase-functions": "^3.6.1"
+    "firebase-admin": "^9.3.0",
+    "firebase-functions": "^3.11.0"
   },
   "devDependencies": {
     "tslint": "^5.12.0",

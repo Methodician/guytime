@@ -9,7 +9,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build:func": "cd functions && npm run build && cd ..",
-    "emulate": "firebase emulators:start --import=./localdb --export-on-exit"
+    "watch:functions": "npm run watch --prefix functions",
+    "emulate": "npm run emulate --prefix functions"
   },
   "private": true,
   "dependencies": {
