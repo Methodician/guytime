@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as fb from 'firebase/app';
+import firebase from 'firebase/app';
 import 'firebase/firestore';
 
 @Injectable({
@@ -8,5 +8,5 @@ import 'firebase/firestore';
 export class FirebaseService {
   constructor() {}
 
-  fsTimestamp = () => fb.firestore.FieldValue.serverTimestamp();
+  fsTimestamp = () => firebase.firestore.FieldValue.serverTimestamp();
 }
