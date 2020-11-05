@@ -64,7 +64,7 @@ export class HeaderService {
           this.currentUrl = targetUrl;
           this.wasBackJustClicked = false;
 
-          this.updateShouldShowX();
+          this.updateShouldShowBack();
         }
       });
   };
@@ -98,17 +98,17 @@ export class HeaderService {
     this.headerOptions$.next(this.headerOptions);
   };
 
-  updateShouldShowX = () => {
+  updateShouldShowBack = () => {
     const { defaultUrl, shouldShowBack } = this;
     if (!defaultUrl && shouldShowBack) {
       throw new Error(
-        'X can not be displayed without a default URL in the HeaderService. Set a defaultUrl first',
+        'Back can not be displayed without a default URL in the HeaderService. Set a defaultUrl first',
       );
     }
     this.shouldShowBack$.next(shouldShowBack);
   };
 
-  onXClicked = () => {
+  onBackClicked = () => {
     this.wasBackJustClicked = true;
     if (this.previousUrls.length > 0) {
       const lastUrl = this.previousUrls.pop();
@@ -117,7 +117,7 @@ export class HeaderService {
       this.router.navigateByUrl(this.defaultUrl);
     } else {
       throw new Error(
-        'X can not be displayed without a default URL in the HeaderService',
+        'Back can not be displayed without a default URL in the HeaderService',
       );
     }
   };
@@ -128,7 +128,7 @@ export class HeaderService {
     this.clearHeaderOptions();
     this.setHeaderText('Guy Time');
     this.shouldShowBack = false;
-    this.updateShouldShowX();
+    this.updateShouldShowBack();
     this.defaultUrl = null;
   };
 }

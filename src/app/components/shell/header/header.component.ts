@@ -38,8 +38,8 @@ export class HeaderComponent implements OnInit {
     this.unsubscribe$.complete();
   }
 
-  onXClicked = () => {
-    this.headerSvc.onXClicked();
+  onBackClicked = () => {
+    this.headerSvc.onBackClicked();
   };
 
   installPwa = () => this.promptEvent.prompt();
