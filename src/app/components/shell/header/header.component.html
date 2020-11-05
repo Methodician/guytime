@@ -30,7 +30,7 @@
   </div>
   <b class="page_title">{{ headerText$ | async }}</b>
   <button
-    *ngIf="shouldShowX$ | async"
+    *ngIf="shouldShowBack$ | async"
     (click)="onXClicked()"
     class="back_button"
     mat-icon-button

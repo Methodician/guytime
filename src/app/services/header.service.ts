@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, ActivationEnd, UrlSegment } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 @Injectable({
@@ -12,11 +12,13 @@ export class HeaderService {
   );
   headerOptions: HeaderOptionMapT = new Map();
 
-  shouldShowX$ = new BehaviorSubject(false);
+  shouldShowBack$ = new BehaviorSubject(false);
+  shouldShowBack = false;
+  defaultBackUrl: string;
 
   headerText$ = new BehaviorSubject('Guy Time');
 
-  wasXJustClicked = false;
+  wasBackJustClicked = false;
   previousUrls = [];
   currentUrl = null;
   defaultUrl = null;
@@ -27,14 +29,43 @@ export class HeaderService {
 
   watchNavigation = () => {
     this.router.events
-      .pipe(filter(($e: any) => $e instanceof NavigationEnd))
+      .pipe(filter(($e: any) => $e instanceof ActivationEnd))
       .subscribe($e => {
-        if (!this.wasXJustClicked) {
-          this.currentUrl && this.previousUrls.push(this.currentUrl);
-          this.previousUrls.length > 10 && this.previousUrls.shift();
-          this.currentUrl = $e.url;
+        if ($e instanceof ActivationEnd) {
+          // Checking instance type here for future expandability plus safe typing
+          const { snapshot } = $e;
+          const { url, data } = snapshot;
+          const { shouldShowBack } = data;
+
+          this.shouldShowBack = shouldShowBack;
+
+          const urlSegmentArrayToUrl = (segmentArray: UrlSegment[]) =>
+            `/${segmentArray.map(segment => segment.path).join('/')}`;
+
+          const targetUrl = urlSegmentArrayToUrl(url);
+          url.pop();
+          const defaultBackUrl = urlSegmentArrayToUrl(url);
+          this.defaultBackUrl = defaultBackUrl;
+          this.defaultUrl = defaultBackUrl;
+
+          if (!this.wasBackJustClicked) {
+            if (!!this.currentUrl) {
+              this.previousUrls.push(this.currentUrl);
+            }
+            if (this.previousUrls.length > 25) {
+              this.previousUrls.shift();
+            }
+          }
+
+          if (!shouldShowBack && this.previousUrls.length > 0) {
+            this.previousUrls = [];
+          }
+
+          this.currentUrl = targetUrl;
+          this.wasBackJustClicked = false;
+
+          this.updateShouldShowX();
         }
-        this.wasXJustClicked = false;
       });
   };
 
@@ -67,22 +98,18 @@ export class HeaderService {
     this.headerOptions$.next(this.headerOptions);
   };
 
-  setDefaultXUrl = (url: string) => {
-    this.defaultUrl = url;
-    this.setShouldShowX(true);
-  };
-
-  setShouldShowX = (shouldShowX: boolean) => {
-    if (!this.defaultUrl && shouldShowX) {
+  updateShouldShowX = () => {
+    const { defaultUrl, shouldShowBack } = this;
+    if (!defaultUrl && shouldShowBack) {
       throw new Error(
         'X can not be displayed without a default URL in the HeaderService. Set a defaultUrl first',
       );
     }
-    this.shouldShowX$.next(shouldShowX);
+    this.shouldShowBack$.next(shouldShowBack);
   };
 
   onXClicked = () => {
-    this.wasXJustClicked = true;
+    this.wasBackJustClicked = true;
     if (this.previousUrls.length > 0) {
       const lastUrl = this.previousUrls.pop();
       this.router.navigateByUrl(lastUrl);
@@ -100,7 +127,8 @@ export class HeaderService {
   resetHeader = () => {
     this.clearHeaderOptions();
     this.setHeaderText('Guy Time');
-    this.setShouldShowX(false);
+    this.shouldShowBack = false;
+    this.updateShouldShowX();
     this.defaultUrl = null;
   };
 }

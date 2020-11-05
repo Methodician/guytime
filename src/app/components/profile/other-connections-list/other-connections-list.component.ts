@@ -23,7 +23,6 @@ export class OtherConnectionsListComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private userSvc: UserService,
     private headerSvc: HeaderService,
-    private router: Router,
   ) {}
 
   ngOnDestroy(): void {
@@ -39,9 +38,7 @@ export class OtherConnectionsListComponent implements OnInit, OnDestroy {
         this.getUserObservable(uid).subscribe(user => {
           this.user$.next(user);
           this.watchUserContacts(user);
-          setTimeout(() => {
-            this.updateHeader();
-          });
+          this.updateHeader();
         });
       }
     });
@@ -75,10 +72,13 @@ export class OtherConnectionsListComponent implements OnInit, OnDestroy {
   };
 
   updateHeader = () => {
-    this.user$.subscribe(user => {
+    setTimeout(() => this.delayedHeaderOperations());
+  };
+
+  delayedHeaderOperations = () => {
+    this.user$.pipe(takeUntil(this.unsubscribe$)).subscribe(user => {
       if (user && user.fName)
         this.headerSvc.setHeaderText(`${user.fName}'s contacts`);
-      this.headerSvc.setDefaultXUrl(`/guys/${user.uid}`);
     });
   };
 }

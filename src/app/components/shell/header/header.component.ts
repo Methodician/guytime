@@ -14,7 +14,7 @@ export class HeaderComponent implements OnInit {
 
   options$: BehaviorSubject<HeaderOptionMapT> = new BehaviorSubject(new Map());
   headerText$: BehaviorSubject<string> = new BehaviorSubject('Guy Time');
-  shouldShowX$ = new BehaviorSubject(false);
+  shouldShowBack$ = new BehaviorSubject(false);
 
   promptEvent;
 
@@ -29,7 +29,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.options$ = this.headerSvc.headerOptions$;
     this.headerText$ = this.headerSvc.headerText$;
-    this.shouldShowX$ = this.headerSvc.shouldShowX$;
+    this.shouldShowBack$ = this.headerSvc.shouldShowBack$;
   }
 
   ngOnDestroy(): void {

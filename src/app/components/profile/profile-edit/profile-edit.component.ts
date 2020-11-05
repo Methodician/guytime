@@ -33,12 +33,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     private headerSvc: HeaderService,
   ) {}
 
-  ngOnDestroy(): void {
-    this.headerSvc.resetHeader();
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-  }
-
   ngOnInit(): void {
     this.form = this.fb.group({
       fName: ['', Validators.required],
@@ -50,12 +44,21 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     });
     this.watchLoggedInUser();
     this.avatarUrl$ = this.userSvc.getLoggedInAvatarUrl();
-    setTimeout(() => this.updateHeader());
+    this.updateHeader();
+  }
+
+  ngOnDestroy(): void {
+    this.headerSvc.resetHeader();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   updateHeader = () => {
+    setTimeout(() => this.delayedHeaderOperations());
+  };
+
+  delayedHeaderOperations = () => {
     this.headerSvc.setHeaderText('Update Your Info');
-    this.headerSvc.setDefaultXUrl('/me');
   };
 
   watchLoggedInUser = () => {

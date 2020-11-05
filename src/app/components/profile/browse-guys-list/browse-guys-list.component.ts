@@ -43,10 +43,17 @@ export class BrowseGuysListComponent implements OnInit, OnDestroy {
         this.users$.next(otherUsers);
       });
 
-    setTimeout(() => this.updateHeader());
+    this.updateHeader();
   }
 
   updateHeader = () => {
+    setTimeout(() => this.delayedHeaderOperations());
+  };
+
+  delayedHeaderOperations = () => {
+    // Anything that immediately affects header must be pushed to next execution
+    this.headerSvc.setHeaderText('Guys Out There');
+
     this.headerSvc.setHeaderOption('findByLocation', {
       iconName: 'place',
       optionText: 'Find by location',
@@ -60,8 +67,6 @@ export class BrowseGuysListComponent implements OnInit, OnDestroy {
       isDisabled: true,
       onClick: this.logClicked,
     });
-
-    this.headerSvc.setHeaderText('Guys Out There');
   };
 
   logClicked = () => console.log('clicked');

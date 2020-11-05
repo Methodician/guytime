@@ -19,12 +19,6 @@ export class MeConnectionsListComponent implements OnInit {
 
   constructor(private userSvc: UserService, private headerSvc: HeaderService) {}
 
-  ngOnDestroy() {
-    this.headerSvc.resetHeader();
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-  }
-
   ngOnInit(): void {
     this.userSvc.loggedInUser$
       .pipe(takeUntil(this.unsubscribe$))
@@ -54,11 +48,20 @@ export class MeConnectionsListComponent implements OnInit {
         }
       });
 
-    setTimeout(() => this.updateHeader());
+    this.updateHeader();
+  }
+
+  ngOnDestroy() {
+    this.headerSvc.resetHeader();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   updateHeader = () => {
-    this.headerSvc.setDefaultXUrl('/me');
+    setTimeout(() => this.delayedHeaderOperations());
+  };
+
+  delayedHeaderOperations = () => {
     this.headerSvc.setHeaderText('My connections');
   };
 }

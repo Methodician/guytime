@@ -47,7 +47,7 @@ export class ChatDetailComponent implements OnInit {
         this.chatGroupId = params['id'];
         this.watchChatGroupAndUsers(this.chatGroupId);
         this.watchChatMessages(this.chatGroupId);
-        setTimeout(() => this.updateHeader());
+        this.updateHeader();
       }
     });
   }
@@ -113,7 +113,11 @@ export class ChatDetailComponent implements OnInit {
       ) as Observable<UserI>;
 
   updateHeader = () => {
-    this.chatUsers$.subscribe(users => {
+    setTimeout(() => this.delayedHeaderOperations());
+  };
+
+  delayedHeaderOperations = () => {
+    this.chatUsers$.pipe(takeUntil(this.unsubscribe$)).subscribe(users => {
       const firstNames = users.map(user => user.fName);
       const namesList = firstNames.join(', ');
       this.headerSvc.setHeaderText(namesList);
@@ -125,8 +129,6 @@ export class ChatDetailComponent implements OnInit {
       isDisabled: false,
       onClick: this.onPeopleClicked,
     });
-
-    this.headerSvc.setDefaultXUrl('/chat');
   };
 
   onPeopleClicked = () =>
