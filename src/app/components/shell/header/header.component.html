@@ -30,12 +30,12 @@
   </div>
   <b class="page_title">{{ headerText$ | async }}</b>
   <button
-    *ngIf="shouldShowX$ | async"
-    (click)="onXClicked()"
+    *ngIf="shouldShowBack$ | async"
+    (click)="onBackClicked()"
     class="back_button"
     mat-icon-button
     aria-label="Back Button"
   >
-    <mat-icon>close</mat-icon>
+    <mat-icon>arrow_back</mat-icon>
   </button>
 </main>

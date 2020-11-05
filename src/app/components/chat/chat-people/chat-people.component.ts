@@ -77,14 +77,13 @@ export class ChatPeopleComponent implements OnInit {
   };
 
   updateHeader = () => {
-    this.headerSvc.setHeaderText('People in the Chat');
-    this.chatId$.subscribe(id => {
-      if (!id) return;
+    setTimeout(() => this.delayedHeaderOperations());
+  };
 
-      this.headerSvc.setDefaultXUrl(`/chat/${id}`);
-    });
+  delayedHeaderOperations = () => {
+    this.headerSvc.setHeaderText('People in the Chat');
   };
 
   onAddPeopleClicked = () =>
-    this.router.navigateByUrl(`chat/${this.chatId$.value}/add`);
+    this.router.navigateByUrl(`chat/${this.chatId$.value}/people/add`);
 }

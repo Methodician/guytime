@@ -40,7 +40,7 @@ export class AddPeopleComponent implements OnInit {
         .valueChanges()
         .subscribe(group => {
           this.chatGroup$.next({ id, ...group });
-          setTimeout(() => this.updateHeader());
+          this.updateHeader();
         });
     });
     this.initializeContactList();
@@ -125,11 +125,10 @@ export class AddPeopleComponent implements OnInit {
   };
 
   updateHeader = () => {
-    this.headerSvc.setHeaderText('Create a Group');
-    this.chatGroup$.subscribe(group => {
-      if (!group) return;
+    setTimeout(() => this.delayedHederOperations());
+  };
 
-      this.headerSvc.setDefaultXUrl(`/chat/${group.id}`);
-    });
+  delayedHederOperations = () => {
+    this.headerSvc.setHeaderText('Create a Group');
   };
 }
