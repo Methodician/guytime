@@ -14,7 +14,7 @@ export const onChatMessageCreated = fsFunc
   .onCreate(async (snap, context) => {
     console.log('MESSAGE CREATED');
     const { messageId } = <{ messageId: string }>context.params;
-    const message = snap.data()!;
+    const message = snap.data();
     const { chatGroupId, senderId } = message;
     return addUnreadMessageToGroupAndUsers(chatGroupId, senderId, messageId);
   });
@@ -58,8 +58,8 @@ export const onChatMessageUpdated = fsFunc
   .onUpdate(async (snap, context) => {
     console.log('MESSAGE UPDATED');
     const { messageId } = <{ messageId: string }>context.params;
-    const prevMessage = snap.before.data()!;
-    const newMessage = snap.after.data()!;
+    const prevMessage = snap.before.data();
+    const newMessage = snap.after.data();
     const { chatGroupId } = prevMessage;
     if (!isKeyMapEqual(prevMessage.seenBy, newMessage.seenBy)) {
       return updateSeenbyTracking(

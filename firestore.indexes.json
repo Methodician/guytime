@@ -3,10 +3,43 @@
     {
       "collectionGroup": "chatGroupId",
       "queryScope": "COLLECTION",
-      "collectionId": "chatMessages",
       "fields": [
-        { "fieldPath": "chatGroupId", "mode": "ASCENDING" },
-        { "fieldPath": "createdAt", "mode": "ASCENDING" }
+        {
+          "fieldPath": "chatGroupId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "chatMessages",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "chatGroupId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "chatMessages",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "chatGroupId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
       ]
     }
   ],
