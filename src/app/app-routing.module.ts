@@ -36,7 +36,7 @@ const routes: Routes = [
   {
     path: 'me/connections',
     component: MeConnectionsListComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, HasValidProfileGuard],
     data: { shouldShowBack: true },
   },
   {
@@ -54,32 +54,32 @@ const routes: Routes = [
   {
     path: 'guys/:id/connections',
     component: OtherConnectionsListComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, HasValidProfileGuard],
     data: { shouldShowBack: true },
   },
 
   {
     path: 'chat',
     component: ChatListComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, HasValidProfileGuard],
     data: { shouldShowBack: false },
   },
   {
     path: 'chat/:id',
     component: ChatDetailComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, HasValidProfileGuard],
     data: { shouldShowBack: true },
   },
   {
     path: 'chat/:id/people',
     component: ChatPeopleComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, HasValidProfileGuard],
     data: { shouldShowBack: true },
   },
   {
     path: 'chat/:id/people/add',
     component: AddPeopleComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, HasValidProfileGuard],
     data: { shouldShowBack: true },
   },
   {
