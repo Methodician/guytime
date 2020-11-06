@@ -16,7 +16,7 @@ export class AuthService {
   isLoggedIn$: Observable<boolean>;
 
   constructor(private router: Router, private afAuth: AngularFireAuth) {
-    this.isLoggedIn$ = this.afAuth.user.pipe(map(user => user && !!user.uid));
+    this.isLoggedIn$ = this.afAuth.user.pipe(map(user => !!user && !!user.uid));
 
     this.afAuth.user.subscribe(user => {
       if (user) {
@@ -49,21 +49,27 @@ export class AuthService {
   };
 
   signIn = async (email: string, password: string) => {
+    const wasSignInErrorUnhandled = error =>
+      !!error &&
+      !!error.code &&
+      error.code !== 'auth/wrong-password' &&
+      error.code !== 'auth/user-not-found';
+
     try {
       const credential = await this.afAuth.signInWithEmailAndPassword(
         email,
         password,
       );
-      this.router.navigate(['/me']);
       return credential;
     } catch (error) {
-      alert(error);
-      return null;
+      if (wasSignInErrorUnhandled(error)) console.error(error);
+
+      return error;
     }
   };
 
   logout = () => {
     this.afAuth.signOut();
-    this.router.navigate(['/login']);
+    this.router.navigateByUrl('/login');
   };
 }

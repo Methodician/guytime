@@ -7,8 +7,11 @@
       <mat-card-content>
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <h3>Sign-In</h3>
-          <mat-error *ngIf="!isLoggedIn"
-            >The email and password did not match our records</mat-error
+          <mat-error *ngIf="wasWrongPasswordEntered()"
+            >You entered the wrong password.</mat-error
+          >
+          <mat-error *ngIf="wasWrongEmailEntered()"
+            >There is no account associated with that email.</mat-error
           >
 
           <mat-form-field class="full-width-input">
@@ -19,9 +22,7 @@
               formControlName="email"
               required
             />
-            <mat-error>
-              Please provide a valid email address
-            </mat-error>
+            <mat-error> Please provide a valid email address </mat-error>
           </mat-form-field>
           <mat-form-field class="full-width-input">
             <input
@@ -31,9 +32,7 @@
               formControlName="password"
               required
             />
-            <mat-error>
-              Please provide a valid password
-            </mat-error>
+            <mat-error> Please provide a valid password </mat-error>
           </mat-form-field>
           <button mat-raised-button color="primary">Login</button>
         </form>

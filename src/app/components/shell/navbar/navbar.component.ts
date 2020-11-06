@@ -43,6 +43,8 @@ export class NavbarComponent implements OnInit {
       )
       .pipe(debounceTime(5000))
       .subscribe(unreadMessagesMap => {
+        if (!unreadMessagesMap) return;
+
         const count = Object.keys(unreadMessagesMap).length;
         this.unreadMessagesCount = count;
       });
