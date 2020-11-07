@@ -1,9 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '@services/auth.service';
+
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
+import { AuthService } from '@services/auth.service';
 
 @Component({
   selector: 'gtm-login',
@@ -15,7 +17,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   isLoggedIn = false;
   form: FormGroup;
 
-  constructor(private fb: FormBuilder, private authSvc: AuthService) {
+  loginError = null;
+
+  constructor(
+    private fb: FormBuilder,
+    private authSvc: AuthService,
+    private router: Router,
+  ) {
     this.authSvc.authInfo$
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(info => (this.isLoggedIn = info.isLoggedIn()));
@@ -31,12 +39,31 @@ export class LoginComponent implements OnInit, OnDestroy {
       email: ['', Validators.email],
       password: ['', Validators.required],
     });
+
+    this.authSvc.isLoggedIn$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(isLoggedIn => isLoggedIn && this.router.navigateByUrl('/me'));
   }
 
-  onSubmit() {
+  onSubmit = async () => {
     const email = this.form.get('email').value;
     const password = this.form.get('password').value;
 
-    this.authSvc.signIn(email, password);
-  }
+    const result = await this.authSvc.signIn(email, password);
+
+    const isResultError = !!result.code && !!result.message;
+    if (isResultError) {
+      this.loginError = result;
+    }
+  };
+
+  wasWrongPasswordEntered = () =>
+    !!this.loginError &&
+    !!this.loginError.code &&
+    this.loginError.code === 'auth/wrong-password';
+
+  wasWrongEmailEntered = () =>
+    !!this.loginError &&
+    !!this.loginError.code &&
+    this.loginError.code === 'auth/user-not-found';
 }

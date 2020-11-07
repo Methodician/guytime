@@ -6,11 +6,10 @@ import {
   UrlTree,
   Router,
 } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { AuthService } from '@services/auth.service';
 import { UserService } from '@services/user.service';
-import { switchMap } from 'rxjs/operators';
-import { UserI } from '@models/user';
+import { map, switchMap, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -29,15 +28,33 @@ export class HasValidProfileGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    return this.authSvc.authInfo$.pipe(
-      switchMap(async info => {
-        if (!info.uid) return false;
-        const userSnap = await this.userSvc.userRef(info.uid).get().toPromise();
-        const user = userSnap.data() as UserI;
-        const isUserValid = !!user && this.userSvc.testUserValidity(user);
-        if (!isUserValid) this.router.navigate(['/me/edit']);
-        return isUserValid;
-      }),
+    const actionIfInvalid = () => {
+      alert(
+        'There is some required info missing from your profile. We need to update profile edit to show you which info is necessary to proceed... It is beta so give us some slack. In the mean time just try to make your profile as complete as you can...',
+      );
+      this.router.navigateByUrl('/me/edit');
+    };
+    return this.authSvc.isLoggedIn$.pipe(
+      switchMap(isLoggedIn =>
+        !isLoggedIn
+          ? of(false)
+          : this.authSvc.authInfo$.pipe(
+              map(info => info.uid),
+              switchMap(
+                uid =>
+                  !!uid &&
+                  this.userSvc
+                    .userRef(uid)
+                    .valueChanges()
+                    .pipe(
+                      map(
+                        user => !!user && this.userSvc.testUserValidity(user),
+                      ),
+                    ),
+              ),
+              tap(isValid => !isValid && actionIfInvalid()),
+            ),
+      ),
     );
   }
 }
