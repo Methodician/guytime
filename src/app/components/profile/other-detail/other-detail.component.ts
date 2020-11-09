@@ -49,42 +49,40 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
   }
 
   updateHeader = () => {
-    setTimeout(() => {
-      this.delayedHeaderOperations();
-    });
-  };
+    setTimeout(() => delayedHeaderOperations());
 
-  delayedHeaderOperations = () => {
-    this.watchForConnection();
-    this.user$.pipe(takeUntil(this.unsubscribe$)).subscribe(user => {
-      if (user && user.fName)
-        this.headerSvc.setHeaderText(`About ${user.fName}`);
-    });
+    const delayedHeaderOperations = () => {
+      this.watchForConnection();
+      this.user$.pipe(takeUntil(this.unsubscribe$)).subscribe(user => {
+        if (user && user.fName)
+          this.headerSvc.setHeaderText(`About ${user.fName}`);
+      });
 
-    this.headerSvc.setHeaderOption('seeConnections', {
-      iconName: 'people',
-      optionText: 'See their contacts',
-      isDisabled: false,
-      onClick: this.onSeeConnectionsClicked,
-    });
-    this.headerSvc.setHeaderOption('addConnection', {
-      iconName: 'person_add',
-      optionText: 'Add them to contacts',
-      isDisabled: false,
-      onClick: this.onConnectClicked,
-    });
-    this.headerSvc.setHeaderOption('sendMessage', {
-      iconName: 'message',
-      optionText: 'Chat with them',
-      isDisabled: false,
-      onClick: this.onChatClicked,
-    });
-    this.headerSvc.setHeaderOption('removeContact', {
-      iconName: 'person_minus',
-      optionText: 'Remove contact',
-      isDisabled: false,
-      onClick: this.onDisconnectClicked,
-    });
+      this.headerSvc.setHeaderOption('seeConnections', {
+        iconName: 'people',
+        optionText: 'See their contacts',
+        isDisabled: false,
+        onClick: this.onSeeConnectionsClicked,
+      });
+      this.headerSvc.setHeaderOption('addConnection', {
+        iconName: 'person_add',
+        optionText: 'Add them to contacts',
+        isDisabled: false,
+        onClick: this.onConnectClicked,
+      });
+      this.headerSvc.setHeaderOption('sendMessage', {
+        iconName: 'message',
+        optionText: 'Chat with them',
+        isDisabled: false,
+        onClick: this.onChatClicked,
+      });
+      this.headerSvc.setHeaderOption('removeContact', {
+        iconName: 'person_minus',
+        optionText: 'Remove contact',
+        isDisabled: false,
+        onClick: this.onDisconnectClicked,
+      });
+    };
   };
 
   watchForConnection = () => {

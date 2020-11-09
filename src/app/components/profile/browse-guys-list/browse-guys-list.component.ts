@@ -47,26 +47,26 @@ export class BrowseGuysListComponent implements OnInit, OnDestroy {
   }
 
   updateHeader = () => {
-    setTimeout(() => this.delayedHeaderOperations());
-  };
+    setTimeout(() => delayedHeaderOperations());
 
-  delayedHeaderOperations = () => {
-    // Anything that immediately affects header must be pushed to next execution
-    this.headerSvc.setHeaderText('Guys Out There');
+    const delayedHeaderOperations = () => {
+      // Anything that immediately affects header must be pushed to next execution
+      this.headerSvc.setHeaderText('Guys Out There');
 
-    this.headerSvc.setHeaderOption('findByLocation', {
-      iconName: 'place',
-      optionText: 'Find by location',
-      isDisabled: false,
-      onClick: this.logClicked,
-    });
+      this.headerSvc.setHeaderOption('findByLocation', {
+        iconName: 'place',
+        optionText: 'Find by location',
+        isDisabled: false,
+        onClick: this.logClicked,
+      });
 
-    this.headerSvc.setHeaderOption('clearAllFilters', {
-      iconName: 'clear_all',
-      optionText: 'Clear all filters',
-      isDisabled: true,
-      onClick: this.logClicked,
-    });
+      this.headerSvc.setHeaderOption('clearAllFilters', {
+        iconName: 'clear_all',
+        optionText: 'Clear all filters',
+        isDisabled: true,
+        onClick: this.logClicked,
+      });
+    };
   };
 
   logClicked = () => console.log('clicked');

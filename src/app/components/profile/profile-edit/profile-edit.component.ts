@@ -54,11 +54,11 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   }
 
   updateHeader = () => {
-    setTimeout(() => this.delayedHeaderOperations());
-  };
+    setTimeout(() => delayedHeaderOperations());
 
-  delayedHeaderOperations = () => {
-    this.headerSvc.setHeaderText('Update Your Info');
+    const delayedHeaderOperations = () => {
+      this.headerSvc.setHeaderText('Update Your Info');
+    };
   };
 
   watchLoggedInUser = () => {

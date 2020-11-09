@@ -58,10 +58,10 @@ export class MeConnectionsListComponent implements OnInit {
   }
 
   updateHeader = () => {
-    setTimeout(() => this.delayedHeaderOperations());
-  };
+    setTimeout(() => delayedHeaderOperations());
 
-  delayedHeaderOperations = () => {
-    this.headerSvc.setHeaderText('My connections');
+    const delayedHeaderOperations = () => {
+      this.headerSvc.setHeaderText('My connections');
+    };
   };
 }

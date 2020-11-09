@@ -125,10 +125,10 @@ export class AddPeopleComponent implements OnInit {
   };
 
   updateHeader = () => {
-    setTimeout(() => this.delayedHederOperations());
-  };
+    setTimeout(() => delayedHederOperations());
 
-  delayedHederOperations = () => {
-    this.headerSvc.setHeaderText('Create a Group');
+    const delayedHederOperations = () => {
+      this.headerSvc.setHeaderText('Create a Group');
+    };
   };
 }

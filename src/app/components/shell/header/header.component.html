@@ -1,4 +1,16 @@
 <main *ngIf="(options$ | async) && (headerText$ | async)">
+  <div *ngIf="!shouldShowBack$.value" id="btn-placeholder"></div>
+  <button
+    *ngIf="shouldShowBack$.value"
+    (click)="onBackClicked()"
+    class="back_button"
+    mat-icon-button
+    aria-label="Back Button"
+  >
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <b class="page_title">{{ headerText$ | async }}</b>
+
   <div class="menu">
     <button
       class="menu_button"
@@ -8,14 +20,17 @@
     >
       <mat-icon>more_vert</mat-icon>
     </button>
-    <mat-menu #menu="matMenu">
+    <mat-menu class="header_menu" #menu="matMenu">
       <button
+        class="header_menu_button"
         *ngFor="let option of options$ | async | keyvalue"
         mat-menu-item
         [disabled]="option.value.isDisabled"
         (click)="option.value.onClick()"
       >
-        <mat-icon>{{ option.value.iconName }}</mat-icon>
+        <mat-icon class="header_menu_icon">{{
+          option.value.iconName
+        }}</mat-icon>
         <span>{{ option.value.optionText }}</span>
       </button>
       <mat-divider></mat-divider>
@@ -28,14 +43,4 @@
       </button>
     </mat-menu>
   </div>
-  <b class="page_title">{{ headerText$ | async }}</b>
-  <button
-    *ngIf="shouldShowBack$ | async"
-    (click)="onBackClicked()"
-    class="back_button"
-    mat-icon-button
-    aria-label="Back Button"
-  >
-    <mat-icon>arrow_back</mat-icon>
-  </button>
 </main>
