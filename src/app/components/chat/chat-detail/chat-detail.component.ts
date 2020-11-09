@@ -113,22 +113,22 @@ export class ChatDetailComponent implements OnInit {
       ) as Observable<UserI>;
 
   updateHeader = () => {
-    setTimeout(() => this.delayedHeaderOperations());
-  };
+    setTimeout(() => delayedHeaderOperations());
 
-  delayedHeaderOperations = () => {
-    this.chatUsers$.pipe(takeUntil(this.unsubscribe$)).subscribe(users => {
-      const firstNames = users.map(user => user.fName);
-      const namesList = firstNames.join(', ');
-      this.headerSvc.setHeaderText(namesList);
-    });
+    const delayedHeaderOperations = () => {
+      this.chatUsers$.pipe(takeUntil(this.unsubscribe$)).subscribe(users => {
+        const firstNames = users.map(user => user.fName);
+        const namesList = firstNames.join(', ');
+        this.headerSvc.setHeaderText(namesList);
+      });
 
-    this.headerSvc.setHeaderOption('seePeople', {
-      iconName: 'people',
-      optionText: 'See and add participants',
-      isDisabled: false,
-      onClick: this.onPeopleClicked,
-    });
+      this.headerSvc.setHeaderOption('seePeople', {
+        iconName: 'people',
+        optionText: 'See and add participants',
+        isDisabled: false,
+        onClick: this.onPeopleClicked,
+      });
+    };
   };
 
   onPeopleClicked = () =>

@@ -1,7 +1,6 @@
 @import 'app/styles/vars.scss';
 
 main {
-  grid-area: menu;
   display: grid;
   grid-template-columns: 30px auto 30px;
   background-color: lightgray;
@@ -13,7 +12,7 @@ main {
     justify-self: center;
     align-self: center;
   }
-  .back_button {
+  .menu_button {
     padding-right: 10px;
   }
 }

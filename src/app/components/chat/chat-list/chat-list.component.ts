@@ -5,6 +5,7 @@ import { ChatService } from '@app/services/chat.service';
 import { Observable } from 'rxjs';
 import { KeyMapI } from '@models/shared';
 import { debounceTime } from 'rxjs/operators';
+import { HeaderService } from '@app/services/header.service';
 
 @Component({
   selector: 'gtm-chat-list',
@@ -15,11 +16,24 @@ export class ChatListComponent implements OnInit {
   chatList$: Observable<ChatGroupI[]>;
   badgeList: KeyMapI<number> = {};
 
-  constructor(private chatSvc: ChatService, private authSvc: AuthService) {}
+  constructor(
+    private chatSvc: ChatService,
+    private authSvc: AuthService,
+    private headerSvc: HeaderService,
+  ) {}
 
   ngOnInit(): void {
     this.watchChatList();
+    this.updateHeader();
   }
+
+  updateHeader = () => {
+    setTimeout(() => delayedHeaderOperations());
+
+    const delayedHeaderOperations = () => {
+      this.headerSvc.setHeaderText('Your Open Chats');
+    };
+  };
 
   watchChatList = () => {
     const loggedInUid = this.authSvc.authInfo$.value.uid;

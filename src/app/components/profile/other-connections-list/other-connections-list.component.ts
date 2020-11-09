@@ -72,13 +72,13 @@ export class OtherConnectionsListComponent implements OnInit, OnDestroy {
   };
 
   updateHeader = () => {
-    setTimeout(() => this.delayedHeaderOperations());
-  };
+    setTimeout(() => delayedHeaderOperations());
 
-  delayedHeaderOperations = () => {
-    this.user$.pipe(takeUntil(this.unsubscribe$)).subscribe(user => {
-      if (user && user.fName)
-        this.headerSvc.setHeaderText(`${user.fName}'s contacts`);
-    });
+    const delayedHeaderOperations = () => {
+      this.user$.pipe(takeUntil(this.unsubscribe$)).subscribe(user => {
+        if (user && user.fName)
+          this.headerSvc.setHeaderText(`${user.fName}'s contacts`);
+      });
+    };
   };
 }

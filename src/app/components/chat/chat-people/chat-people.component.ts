@@ -77,11 +77,11 @@ export class ChatPeopleComponent implements OnInit {
   };
 
   updateHeader = () => {
-    setTimeout(() => this.delayedHeaderOperations());
-  };
+    setTimeout(() => delayedHeaderOperations());
 
-  delayedHeaderOperations = () => {
-    this.headerSvc.setHeaderText('People in the Chat');
+    const delayedHeaderOperations = () => {
+      this.headerSvc.setHeaderText('People in the Chat');
+    };
   };
 
   onAddPeopleClicked = () =>
