@@ -1,4 +1,10 @@
 <main>
-  <b>{{ userNames }}</b>
-  <p>David: Let's chill</p>
+  <b class="user_names">{{ userNames }}</b>
+  <p class="latest_message" *ngIf="!!group && !!group.latestMessage">
+    <b>{{ group.latestMessage.fName }} {{ group.latestMessage.lName }}:</b>
+    {{ group.latestMessage.content }}
+  </p>
+  <p class="latest_message" *ngIf="!!group && !group.latestMessage">
+    No messages yet in this group
+  </p>
 </main>
