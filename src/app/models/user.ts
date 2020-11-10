@@ -43,8 +43,15 @@ export interface UserI {
   bio: string;
   activityTypes: ActivityTypeT[];
   connectionIds: string[];
+  uploadedProfileImageNames?: ProfileImageNameMap;
   contacts?: any;
   createdAt?: any;
+}
+
+export interface ProfileImageNameMap {
+  fullSize?: string;
+  '90x90'?: string;
+  '45x45'?: string;
 }
 
 export type RelationshipStatusT =

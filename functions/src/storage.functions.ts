@@ -4,9 +4,13 @@ import * as os from 'os';
 // import * as fs from 'fs';
 import * as cpp from 'child-process-promise';
 
+import * as admin from 'firebase-admin';
+
 import { Storage } from '@google-cloud/storage';
+import { KeyMapI } from '.';
 
 const gcs = new Storage();
+const adminFs = admin.firestore();
 
 // Often got memory limit exceeded (arbitrary for same photo sometimes and sometimes not)
 const generousRuntimeOptions: functions.RuntimeOptions = {
@@ -20,15 +24,20 @@ export const onFileUpload = functions
   .onFinalize(object => {
     const { contentType, name } = object;
 
-    const createProfileImageThumbnail = async () => {
-      const { bucket, metadata } = object;
+    if (!name) {
+      console.error(
+        'Seems like there is no file path (aka name) but AFAIK this should never log... Returning without executing.',
+      );
 
-      if (!name) {
-        console.error(
-          'Seems like there is no file path (aka name) but AFAIK this should never log... Returning without executing.',
-        );
-        return;
-      }
+      return;
+    }
+
+    const parsedName = path.parse(name);
+    const { base, ext, name: uid } = parsedName;
+    const promises = [];
+
+    const createProfileImageThumbnails = async () => {
+      const { bucket, metadata } = object;
 
       if (!metadata) {
         console.error(
@@ -37,42 +46,61 @@ export const onFileUpload = functions
         return;
       }
 
-      const parsedName = path.parse(name);
-      // const splitDir = parsedName.dir.split('/');
-      const uid = parsedName.base;
-
       const gcsBucket = gcs.bucket(bucket);
-      const tempFilePath = path.join(os.tmpdir(), `profileImage_${uid}`);
+      const tempFilePath = path.join(os.tmpdir(), `profileImage_${base}`);
 
       // Download once for all operations.
       await gcsBucket.file(name).download({ destination: tempFilePath });
 
-      const create90x90Thumbnail = async () => {
+      const createSpecifiedThumbnail = async (size: '45x45' | '90x90') => {
         await cpp.spawn('convert', [
           tempFilePath,
           '-thumbnail',
-          '90x90>',
+          `${size}>`,
           tempFilePath,
         ]);
 
         const newMetadata = { ...metadata, contentType };
-        const thumbFilePath = path.join('profileThumbnails', uid, '90x90');
+        const thumbFilePath = path.join('profileImages', size, base);
 
-        return gcsBucket.upload(tempFilePath, {
-          destination: thumbFilePath,
-          metadata: newMetadata,
-        });
+        try {
+          await gcsBucket.upload(tempFilePath, {
+            destination: thumbFilePath,
+            metadata: newMetadata,
+          });
+          await recordUploadedImageName(size);
+        } catch (error) {
+          console.error(`couldn't upload profile image of size ${size}`);
+        }
+
+        return;
       };
 
-      return create90x90Thumbnail();
+      console.log({ name, base, ext, metadata, contentType });
+      await createSpecifiedThumbnail('90x90');
+      await createSpecifiedThumbnail('45x45');
+
+      return;
+    };
+
+    const recordUploadedImageName = async (
+      size: 'fullSize' | '90x90' | '45x45',
+    ) => {
+      const userInfoRef = adminFs.collection('users').doc(uid);
+      const userInfoUpdate: KeyMapI<string> = {};
+      userInfoUpdate[`uploadedProfileImageNames.${size}`] = base;
+      await userInfoRef.update(userInfoUpdate);
+      return;
     };
 
     if (contentType?.startsWith('image/')) {
       // An image was uploaded.
-      if (name?.startsWith('profileImages')) {
+      if (name?.startsWith('profileImages/fullSize')) {
         // It was a profile image
-        return createProfileImageThumbnail();
+        promises.push(recordUploadedImageName('fullSize'));
+        promises.push(createProfileImageThumbnails());
       }
     }
-    return;
+
+    return Promise.all(promises);
   });

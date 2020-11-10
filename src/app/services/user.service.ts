@@ -59,16 +59,33 @@ export class UserService {
   };
 
   uploadProfileImage = (image: File) => {
+    const { name, type } = image;
+    const isImage = type.startsWith('image/');
     const uid = this.authSvc.authInfo$.value.uid;
-    if (uid) {
-      try {
-        const storageRef = this.afStorage.ref(`profileImages/${uid}`);
-        const task = storageRef.put(image);
-        return { task, ref: storageRef };
-      } catch (error) {
-        console.error(error);
-      }
+    const fileExtension = name.slice(((name.lastIndexOf('.') - 1) >>> 0) + 2);
+
+    if (!isImage) {
+      throw new Error(
+        'User attempted to upload something other than an image for their profile image',
+      );
     }
+    if (!uid) {
+      throw new Error(
+        'It seems that nobody is logged in but a profile image is being uploaded. This simply cannot be!',
+      );
+    }
+
+    try {
+      const storageRef = this.afStorage.ref(
+        `profileImages/fullSize/${uid}.${fileExtension}`,
+      );
+      const task = storageRef.put(image);
+
+      return { task, ref: storageRef };
+    } catch (error) {
+      console.error(error);
+    }
+
     return;
   };
 
@@ -77,19 +94,21 @@ export class UserService {
       [`contacts.${contactId}`]: true,
     });
 
-  getLoggedInAvatarUrl = () => {
+  getLoggedInAvatarUrl = (name: string, size?: ThumbnailOptionsT) => {
     const url$ = new BehaviorSubject<string>('assets/icons/square_icon.svg');
     this.authSvc.authInfo$.subscribe(info => {
-      this.getAvatarUrl(info.uid).subscribe(url => url$.next(url));
+      this.getAvatarUrl(info.uid, size).subscribe(url => url$.next(url));
     });
     return url$;
   };
 
-  getAvatarUrl = (uid: string) => {
+  getAvatarUrl = (fileName: string, size?: ThumbnailOptionsT) => {
+    const pathSize = size || 'fullSize';
     const url$ = new BehaviorSubject<string>('assets/icons/square_icon.svg');
-    if (uid) {
+    const imagePath = `profileImages/${pathSize}/${fileName}`;
+    if (fileName) {
       this.afStorage
-        .ref(`profileImages/${uid}`)
+        .ref(imagePath)
         .getDownloadURL()
         .subscribe(
           url => url$.next(url),
@@ -127,6 +146,8 @@ export class UserService {
     return isValid;
   };
 }
+
+export type ThumbnailOptionsT = 'fullSize' | '90x90' | '45x45';
 
 const categorizedInterests = {
   Recreation: {

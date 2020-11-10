@@ -4,7 +4,7 @@ import { UserI } from '@app/models/user';
 import { UserService } from '@app/services/user.service';
 import { Router } from '@angular/router';
 import { HeaderService } from '@app/services/header.service';
-import { takeUntil } from 'rxjs/operators';
+import { switchMap, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'gtm-me-detail',
@@ -24,16 +24,30 @@ export class MeDetailComponent implements OnInit, OnDestroy {
     private headerSvc: HeaderService,
   ) {}
 
+  ngOnInit(): void {
+    this.user$ = this.userSvc.loggedInUser$;
+    this.user$
+      .pipe(
+        switchMap(user =>
+          user &&
+          user.uploadedProfileImageNames &&
+          user.uploadedProfileImageNames['90x90']
+            ? this.userSvc.getAvatarUrl(
+                user.uploadedProfileImageNames['90x90'],
+                '90x90',
+              )
+            : this.avatarUrl$,
+        ),
+      )
+      .subscribe(avatarUrl => this.avatarUrl$.next(avatarUrl));
+
+    setTimeout(() => this.updateHeader());
+  }
+
   ngOnDestroy(): void {
     this.headerSvc.resetHeader();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
-  }
-
-  ngOnInit(): void {
-    this.user$ = this.userSvc.loggedInUser$;
-    this.avatarUrl$ = this.userSvc.getLoggedInAvatarUrl();
-    setTimeout(() => this.updateHeader());
   }
 
   updateHeader = () => {
