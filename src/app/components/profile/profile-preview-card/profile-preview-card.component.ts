@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UserI } from '@models/user';
-import { Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { UserService } from '@services/user.service';
 import { Router } from '@angular/router';
 
@@ -13,7 +13,7 @@ export class ProfilePreviewCardComponent implements OnInit {
   @Input() user: UserI;
   @Input() shouldLink = true;
 
-  avatarUrl$: Observable<string>;
+  avatarUrl$ = new BehaviorSubject<string>('assets/icons/square_icon.svg');
 
   constructor(private userSvc: UserService, private router: Router) {}
 
@@ -22,7 +22,15 @@ export class ProfilePreviewCardComponent implements OnInit {
       throw new Error(
         'Profile preview card must receive an input that is an instance of UserI with a valid uid',
       );
-    this.avatarUrl$ = this.userSvc.getAvatarUrl(this.user.uid);
+    if (
+      this.user.uploadedProfileImageNames &&
+      this.user.uploadedProfileImageNames['45x45']
+    ) {
+      this.avatarUrl$ = this.userSvc.getAvatarUrl(
+        this.user.uploadedProfileImageNames['45x45'],
+        '45x45',
+      );
+    }
   }
 
   onCardClicked = $e => {
