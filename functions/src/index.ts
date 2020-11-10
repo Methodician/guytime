@@ -4,8 +4,6 @@ import * as admin from 'firebase-admin';
 admin.initializeApp();
 export const FIRESTORE_EMULATOR_HOST = 'localhost:8080';
 
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
 const fsFunc = functions.firestore;
 const adminFs = admin.firestore();
 
