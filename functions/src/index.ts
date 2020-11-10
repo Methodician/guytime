@@ -25,20 +25,20 @@ export const onChatMessageCreated = fsFunc
         id => id !== senderId,
       );
 
-      const addUnreadMessageToUser = (userId: string, messageId: string) =>
-        adminFs
-          .collection('users')
-          .doc(userId)
-          .collection('meta')
-          .doc('unreadMessages')
-          .set({ [messageId]: true }, { merge: true });
-
       const unreadMessagesUpdate: KeyMapI<boolean> = {};
       const promises = [];
       for (const uid of participantIds) {
+        const addUnreadMessageToUser = () =>
+          adminFs
+            .collection('users')
+            .doc(uid)
+            .collection('meta')
+            .doc('unreadMessages')
+            .set({ [messageId]: true }, { merge: true });
+
         const keyPath = `unreadMessagesByUser.${uid}.${messageId}`;
         unreadMessagesUpdate[keyPath] = true;
-        promises.push(addUnreadMessageToUser(uid, messageId));
+        promises.push(addUnreadMessageToUser());
       }
 
       promises.push(chatGroupRef.update(unreadMessagesUpdate));
@@ -81,16 +81,16 @@ export const onChatMessageUpdated = fsFunc
       msgId: string,
       chatGroupId: string,
     ) => {
-      const findUserWhoJustSawMsg = (prevSeenby: any, newSeenby: any) => {
-        const newKeys = Object.keys(newSeenby);
+      const findUserWhoJustSawMsg = () => {
+        const newKeys = Object.keys(newSeenBy);
 
         for (const key of newKeys) {
-          if (!prevSeenby[key]) return key;
+          if (!prevSeenBy[key]) return key;
         }
         return null;
       };
 
-      const userWhoJustSawItId = findUserWhoJustSawMsg(prevSeenBy, newSeenBy);
+      const userWhoJustSawItId = findUserWhoJustSawMsg();
 
       if (!!userWhoJustSawItId) {
         const userUpdate = adminFs
