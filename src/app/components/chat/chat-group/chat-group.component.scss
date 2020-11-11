@@ -9,6 +9,7 @@ main {
   }
   b,
   p {
+    width: calc(100vw - 45px);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

@@ -1,6 +1,7 @@
 @import 'app/styles/vars.scss';
 
 main {
+  overflow: hidden;
   display: grid;
   grid-template-rows: $header_height 0px $body_height $footer_height;
   grid-template-areas:
