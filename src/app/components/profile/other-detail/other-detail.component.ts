@@ -26,12 +26,6 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
     private chatSvc: ChatService,
   ) {}
 
-  ngOnDestroy(): void {
-    this.headerSvc.resetHeader();
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-  }
-
   ngOnInit(): void {
     this.updateHeader();
     this.route.params.subscribe(params => {
@@ -40,12 +34,28 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
         this.userSvc
           .userRef(uid)
           .valueChanges()
-          .subscribe(user => this.user$.next({ ...user, uid }));
-        this.userSvc
-          .getAvatarUrl(uid)
-          .subscribe(url => this.avatarUrl$.next(url));
+          .subscribe(user => {
+            if (user) {
+              this.user$.next({ ...user, uid });
+              if (
+                user.uploadedProfileImageMap &&
+                user.uploadedProfileImageMap['90x90']
+              ) {
+                this.avatarUrl$ = this.userSvc.getAvatarUrl(
+                  user.uploadedProfileImageMap['90x90'].fileName,
+                  '90x90',
+                );
+              }
+            }
+          });
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.headerSvc.resetHeader();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   updateHeader = () => {
