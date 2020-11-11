@@ -23,11 +23,11 @@ export class ProfilePreviewCardComponent implements OnInit {
         'Profile preview card must receive an input that is an instance of UserI with a valid uid',
       );
     if (
-      this.user.uploadedProfileImageNames &&
-      this.user.uploadedProfileImageNames['45x45']
+      this.user.uploadedProfileImageMap &&
+      this.user.uploadedProfileImageMap['45x45']
     ) {
       this.avatarUrl$ = this.userSvc.getAvatarUrl(
-        this.user.uploadedProfileImageNames['45x45'],
+        this.user.uploadedProfileImageMap['45x45'].fileName,
         '45x45',
       );
     }

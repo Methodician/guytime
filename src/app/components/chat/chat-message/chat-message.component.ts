@@ -36,11 +36,14 @@ export class ChatMessageComponent implements OnInit {
         this.user$.next(user);
         if (
           user &&
-          user.uploadedProfileImageNames &&
-          user.uploadedProfileImageNames['45x45']
+          user.uploadedProfileImageMap &&
+          user.uploadedProfileImageMap['45x45']
         ) {
           this.userSvc
-            .getAvatarUrl(user.uploadedProfileImageNames['45x45'], '45x45')
+            .getAvatarUrl(
+              user.uploadedProfileImageMap['45x45'].fileName,
+              '45x45',
+            )
             .subscribe(avatarUrl => this.avatarUrl$.next(avatarUrl));
         }
       });

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, of, Subject } from 'rxjs';
 import { UserI } from '@app/models/user';
 import { UserService } from '@app/services/user.service';
 import { Router } from '@angular/router';
@@ -30,13 +30,13 @@ export class MeDetailComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap(user =>
           user &&
-          user.uploadedProfileImageNames &&
-          user.uploadedProfileImageNames['90x90']
+          user.uploadedProfileImageMap &&
+          user.uploadedProfileImageMap['90x90']
             ? this.userSvc.getAvatarUrl(
-                user.uploadedProfileImageNames['90x90'],
+                user.uploadedProfileImageMap['90x90'].fileName,
                 '90x90',
               )
-            : this.avatarUrl$,
+            : of(this.avatarUrl$.value),
         ),
       )
       .subscribe(avatarUrl => this.avatarUrl$.next(avatarUrl));

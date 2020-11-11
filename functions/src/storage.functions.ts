@@ -87,8 +87,16 @@ export const onFileUpload = functions
       size: 'fullSize' | '90x90' | '45x45',
     ) => {
       const userInfoRef = adminFs.collection('users').doc(uid);
-      const userInfoUpdate: KeyMapI<string> = {};
-      userInfoUpdate[`uploadedProfileImageNames.${size}`] = base;
+
+      const generateRandomHex = (length: number) =>
+        [...Array(length)]
+          .map(() => Math.floor(Math.random() * 16).toString(16))
+          .join('');
+      const userInfoUpdate: KeyMapI<ProfileImageTrackerI> = {};
+      userInfoUpdate[`uploadedProfileImageMap.${size}`] = {
+        fileName: base,
+        imageUpdateRando: generateRandomHex(6),
+      };
       await userInfoRef.update(userInfoUpdate);
       return;
     };
@@ -104,3 +112,13 @@ export const onFileUpload = functions
 
     return Promise.all(promises);
   });
+export interface ProfileImageNameMapI {
+  fullSize?: ProfileImageTrackerI;
+  '90x90'?: ProfileImageTrackerI;
+  '45x45'?: ProfileImageTrackerI;
+}
+
+export interface ProfileImageTrackerI {
+  fileName: string;
+  imageUpdateRando: string;
+}

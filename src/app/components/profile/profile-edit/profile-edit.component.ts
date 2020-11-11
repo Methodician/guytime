@@ -66,11 +66,11 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
       .subscribe(user => {
         if (
           user &&
-          user.uploadedProfileImageNames &&
-          user.uploadedProfileImageNames['90x90']
+          user.uploadedProfileImageMap &&
+          user.uploadedProfileImageMap['90x90']
         ) {
           this.avatarUrl$ = this.userSvc.getAvatarUrl(
-            user.uploadedProfileImageNames['90x90'],
+            user.uploadedProfileImageMap['90x90'].fileName,
             '90x90',
           );
         }
