@@ -43,7 +43,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
       bio: ['', Validators.required],
     });
     this.watchLoggedInUser();
-    this.avatarUrl$ = this.userSvc.getLoggedInAvatarUrl();
     this.updateHeader();
   }
 
@@ -65,6 +64,16 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     this.userSvc.loggedInUser$
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(user => {
+        if (
+          user &&
+          user.uploadedProfileImageMap &&
+          user.uploadedProfileImageMap['90x90']
+        ) {
+          this.avatarUrl$ = this.userSvc.getAvatarUrl(
+            user.uploadedProfileImageMap['90x90'].fileName,
+            '90x90',
+          );
+        }
         this.form.patchValue(user);
       });
   };
@@ -105,7 +114,22 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
       alert('Please make sure all required fields are filled before saving');
       return;
     }
-    const profileImageSub = this.saveProfileImage()
+
+    const saveProfileImage = () => {
+      const isComplete$ = new BehaviorSubject(false);
+      if (!this.avatarFile) {
+        isComplete$.next(true);
+      } else {
+        const { task } = this.userSvc.uploadProfileImage(this.avatarFile);
+        // ToDo: add progress dialog
+        task.then(() => {
+          isComplete$.next(true);
+        });
+      }
+      return isComplete$;
+    };
+
+    const profileImageSub = saveProfileImage()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(async isComplete => {
         if (!isComplete) return;
@@ -121,20 +145,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
           return;
         }
       });
-  };
-
-  saveProfileImage = () => {
-    const isComplete$ = new BehaviorSubject(false);
-    if (!this.avatarFile) {
-      isComplete$.next(true);
-    } else {
-      const { task } = this.userSvc.uploadProfileImage(this.avatarFile);
-      // ToDo: add progress dialog
-      task.then(() => {
-        isComplete$.next(true);
-      });
-    }
-    return isComplete$;
   };
 
   logClicked = () => console.log('clicked');

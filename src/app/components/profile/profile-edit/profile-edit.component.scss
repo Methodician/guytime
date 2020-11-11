@@ -16,7 +16,9 @@ main {
         .avatar {
           width: 90px;
           height: 90px;
-          background-size: cover;
+          background-size: contain;
+          background-repeat: no-repeat;
+          background-position: center;
         }
         .avatar_button {
           width: 90px;

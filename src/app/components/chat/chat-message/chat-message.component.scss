@@ -8,7 +8,9 @@ main {
   .avatar {
     justify-self: center;
     align-self: top;
-    background-size: cover;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
   }
 
   .mat-card {

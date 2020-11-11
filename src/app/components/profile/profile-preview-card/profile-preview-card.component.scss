@@ -18,7 +18,9 @@ main {
     .avatar {
       width: 45px;
       height: 45px;
-      background-size: cover;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
       grid-area: avatar;
     }
     .name {

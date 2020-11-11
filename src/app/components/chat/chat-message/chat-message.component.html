@@ -2,13 +2,14 @@
   *ngIf="user$ | async as sender"
   [ngClass]="{ owned_chat: sender.uid === loggedInUid }"
 >
-  <img
+  <div
     *ngIf="sender.uid !== loggedInUid"
-    class="avatar"
     mat-card-avatar
-    [src]="avatarUrl$.value"
-    alt=""
-  />
+    alt="Sender Profile Image"
+    class="avatar"
+    [style.background-image]="'url(' + (avatarUrl$ | async) + ')'"
+  ></div>
+
   <mat-card [ngClass]="{ unread: !wasMessageSeen() }">
     <mat-card-content>{{ chatMessage.content }}</mat-card-content>
 
@@ -23,7 +24,8 @@
   <div
     *ngIf="sender.uid === loggedInUid"
     mat-card-avatar
-    [style.background-image]="'url(' + avatarUrl$.value + ')'"
+    alt="Your profile image"
     class="avatar"
+    [style.background-image]="'url(' + (avatarUrl$ | async) + ')'"
   ></div>
 </main>
