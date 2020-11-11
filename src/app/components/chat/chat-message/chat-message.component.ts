@@ -26,29 +26,33 @@ export class ChatMessageComponent implements OnInit {
     private chatSvc: ChatService,
   ) {}
 
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-  }
-
   ngOnInit(): void {
-    const authInfo$ = this.authSvc.authInfo$;
-    const user$ = this.getUserObservable(this.chatMessage.senderId);
-    const avatarUrl$ = this.userSvc
-      .getAvatarUrl(this.chatMessage.senderId)
-      .pipe(takeUntil(this.unsubscribe$));
-
-    combineLatest([user$, avatarUrl$, authInfo$])
+    this.authSvc.authInfo$
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(([user, avatarUrl, authInfo]) => {
+      .subscribe(info => (this.loggedInUid = info.uid));
+    this.getUserObservable(this.chatMessage.senderId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(user => {
         this.user$.next(user);
-        this.avatarUrl$.next(avatarUrl);
-        this.loggedInUid = authInfo.uid;
+        if (
+          user &&
+          user.uploadedProfileImageNames &&
+          user.uploadedProfileImageNames['45x45']
+        ) {
+          this.userSvc
+            .getAvatarUrl(user.uploadedProfileImageNames['45x45'], '45x45')
+            .subscribe(avatarUrl => this.avatarUrl$.next(avatarUrl));
+        }
       });
 
     if (!this.wasMessageSeen()) {
-      setTimeout(() => this.setAsSeen(), 2000);
+      setTimeout(() => this.setAsSeen(), 5000);
     }
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   getUserObservable = (uid: string) =>
