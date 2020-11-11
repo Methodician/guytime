@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as path from 'path';
 import * as os from 'os';
-// import * as fs from 'fs';
+import * as fs from 'fs';
 import * as cpp from 'child-process-promise';
 
 import * as admin from 'firebase-admin';
@@ -33,7 +33,7 @@ export const onFileUpload = functions
     }
 
     const parsedName = path.parse(name);
-    const { base, ext, name: uid } = parsedName;
+    const { base, name: uid } = parsedName;
     const promises = [];
 
     const createProfileImageThumbnails = async () => {
@@ -76,9 +76,11 @@ export const onFileUpload = functions
         return;
       };
 
-      console.log({ name, base, ext, metadata, contentType });
       await createSpecifiedThumbnail('90x90');
       await createSpecifiedThumbnail('45x45');
+
+      // Delete local files to free up space
+      fs.unlinkSync(tempFilePath);
 
       return;
     };
