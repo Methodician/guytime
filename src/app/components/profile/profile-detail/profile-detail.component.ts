@@ -1,5 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { UserI, RelationshipStatusM } from '@app/models/user';
+import {
+  UserI,
+  RelationshipStatusM,
+  ProfileImageSizeT,
+} from '@app/models/user';
 
 @Component({
   selector: 'gtm-profile-detail',
@@ -10,6 +14,19 @@ export class ProfileDetailComponent {
   @Input() avatarUrl = 'assets/icons/square_icon.svg';
   @Input() userInfo: UserI;
 
+  avatarSize: ProfileImageSizeT = '90x90';
+
   relationshipStatusMap = RelationshipStatusM;
-  constructor() {}
+
+  ngOnInit() {
+    if (!this.userInfo) {
+      throw new Error(
+        "Don't initialize a profile-detail component without the userInfo being loaded already.",
+      );
+    }
+  }
+
+  avatarFileName = () =>
+    this.userInfo.uploadedProfileImageMap &&
+    this.userInfo.uploadedProfileImageMap[this.avatarSize].fileName;
 }

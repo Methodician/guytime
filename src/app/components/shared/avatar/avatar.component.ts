@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ProfileImageSizeT } from '@app/models/user';
 import { UserService } from '@app/services/user.service';
 import { BehaviorSubject } from 'rxjs';
 
@@ -8,18 +9,21 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./avatar.component.scss'],
 })
 export class AvatarComponent implements OnInit {
-  uid = 'DevfsZ8x1hYxNKS418vdXLrZqbv2.jpg';
+  @Input() fileName: string;
+  @Input() imageSize: ProfileImageSizeT;
+
   avatarUrl$ = new BehaviorSubject('assets/icons/square_icon.svg');
 
   constructor(private userSvc: UserService) {}
 
   ngOnInit(): void {
-    this.setUrl();
+    if (this.fileName) {
+      this.setUrl();
+    }
   }
 
   setUrl = () => {
-    this.userSvc.getAvatarUrl(this.uid, '90x90').subscribe(url => {
-      console.log(url);
+    this.userSvc.getAvatarUrl(this.fileName, this.imageSize).subscribe(url => {
       url && this.avatarUrl$.next(url);
     });
   };

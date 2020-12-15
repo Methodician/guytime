@@ -12,14 +12,6 @@ main {
       display: grid;
       grid-template-columns: 100px auto;
 
-      .avatar {
-        width: 90px;
-        height: 90px;
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-      }
-
       .summary {
         .stats {
           display: grid;
