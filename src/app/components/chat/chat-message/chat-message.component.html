@@ -1,16 +1,15 @@
 <main
-  *ngIf="user$ | async as sender"
+  *ngIf="user$ | async as sender; else loading"
   [ngClass]="{ owned_chat: sender.uid === loggedInUid }"
 >
-  <div
-    *ngIf="sender.uid !== loggedInUid"
-    mat-card-avatar
-    alt="Sender Profile Image"
-    class="avatar"
-    [style.background-image]="'url(' + (avatarUrl$ | async) + ')'"
-  ></div>
+  <div class="avatar-wrapper">
+    <gtm-avatar
+      [fileName]="avatarFileName()"
+      [imageSize]="avatarSize"
+    ></gtm-avatar>
+  </div>
 
-  <mat-card [ngClass]="{ unread: !wasMessageSeen() }">
+  <mat-card [ngClass]="{ unread: !wasMessageSeen() }" class="message-body">
     <mat-card-content>{{ chatMessage.content }}</mat-card-content>
 
     <mat-card-footer>
@@ -20,12 +19,5 @@
       <p class="sender">{{ sender.fName }}</p>
     </mat-card-footer>
   </mat-card>
-
-  <div
-    *ngIf="sender.uid === loggedInUid"
-    mat-card-avatar
-    alt="Your profile image"
-    class="avatar"
-    [style.background-image]="'url(' + (avatarUrl$ | async) + ')'"
-  ></div>
 </main>
+<ng-template #loading>Loading ...</ng-template>

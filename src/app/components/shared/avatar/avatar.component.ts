@@ -27,4 +27,17 @@ export class AvatarComponent implements OnInit {
       url && this.avatarUrl$.next(url);
     });
   };
+
+  imageSizePx = () => {
+    switch (this.imageSize) {
+      case '90x90':
+        return '90px';
+      case '45x45':
+        return '45px';
+      case 'fullSize':
+        return '90px';
+      default:
+        return '90px';
+    }
+  };
 }

@@ -19,6 +19,8 @@ export class ProfileDetailComponent {
   relationshipStatusMap = RelationshipStatusM;
 
   ngOnInit() {
+    console.log(this.userInfo);
+
     if (!this.userInfo) {
       throw new Error(
         "Don't initialize a profile-detail component without the userInfo being loaded already.",

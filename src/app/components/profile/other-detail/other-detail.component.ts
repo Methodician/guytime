@@ -37,15 +37,6 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
           .subscribe(user => {
             if (user) {
               this.user$.next({ ...user, uid });
-              if (
-                user.uploadedProfileImageMap &&
-                user.uploadedProfileImageMap['90x90']
-              ) {
-                this.avatarUrl$ = this.userSvc.getAvatarUrl(
-                  user.uploadedProfileImageMap['90x90'].fileName,
-                  '90x90',
-                );
-              }
             }
           });
       }

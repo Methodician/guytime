@@ -14,7 +14,6 @@ import { switchMap, takeUntil } from 'rxjs/operators';
 export class MeDetailComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<void> = new Subject();
   user$ = new BehaviorSubject<UserI>(null);
-  avatarUrl$ = new BehaviorSubject<string>('assets/icons/square_icon.svg');
 
   promptEvent;
 
@@ -26,20 +25,6 @@ export class MeDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.user$ = this.userSvc.loggedInUser$;
-    this.user$
-      .pipe(
-        switchMap(user =>
-          user &&
-          user.uploadedProfileImageMap &&
-          user.uploadedProfileImageMap['90x90']
-            ? this.userSvc.getAvatarUrl(
-                user.uploadedProfileImageMap['90x90'].fileName,
-                '90x90',
-              )
-            : of(this.avatarUrl$.value),
-        ),
-      )
-      .subscribe(avatarUrl => this.avatarUrl$.next(avatarUrl));
 
     setTimeout(() => this.updateHeader());
   }

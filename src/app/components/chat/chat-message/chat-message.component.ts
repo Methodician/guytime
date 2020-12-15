@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { MessageI } from '@models/message';
 import { UserService } from '@services/user.service';
 import { AuthService } from '@services/auth.service';
-import { UserI } from '@models/user';
+import { ProfileImageSizeT, UserI } from '@models/user';
 import { Subject, BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
 import { ChatService } from '@app/services/chat.service';
@@ -19,6 +19,8 @@ export class ChatMessageComponent implements OnInit {
   user$ = new BehaviorSubject<UserI>(null);
   avatarUrl$ = new BehaviorSubject<string>('assets/icons/square_icon.svg');
   loggedInUid: string;
+
+  avatarSize: ProfileImageSizeT = '45x45';
 
   constructor(
     private userSvc: UserService,
@@ -77,4 +79,9 @@ export class ChatMessageComponent implements OnInit {
     if (!wasAuthor)
       this.chatSvc.setMessageAsSeenBy(loggedInUid, this.chatMessage.id);
   };
+
+  avatarFileName = () =>
+    this.user$.value &&
+    this.user$.value.uploadedProfileImageMap &&
+    this.user$.value.uploadedProfileImageMap[this.avatarSize].fileName;
 }

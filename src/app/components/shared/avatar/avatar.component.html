@@ -1,1 +1,5 @@
-<main [style.background-image]="'url(' + (avatarUrl$ | async) + ')'"></main>
+<main
+  [style.background-image]="'url(' + (avatarUrl$ | async) + ')'"
+  [style.width]="imageSizePx()"
+  [style.height]="imageSizePx()"
+></main>
