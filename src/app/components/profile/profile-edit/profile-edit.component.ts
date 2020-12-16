@@ -82,6 +82,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   };
 
   onSelectAvatar = ($e: HtmlInputEventI) => {
+    if ($e.target.files.length === 0) return;
+
     const reader = new FileReader();
     reader.onload = () => {
       this.avatarUrl$.next(reader.result);
