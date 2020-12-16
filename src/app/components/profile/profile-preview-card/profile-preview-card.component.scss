@@ -15,14 +15,6 @@ main {
       justify-self: center;
       align-self: center;
     }
-    .avatar {
-      width: 45px;
-      height: 45px;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      grid-area: avatar;
-    }
     .name {
       grid-area: name;
       margin: 0;

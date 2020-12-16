@@ -1,11 +1,9 @@
 <main *ngIf="user">
   <mat-card (click)="onCardClicked($event)">
-    <div
-      mat-card-avatar
-      [style.background-image]="'url(' + (avatarUrl$ | async) + ')'"
-      alt="Profile Image"
-      class="avatar grid_cell_centered"
-    ></div>
+    <gtm-avatar
+      [imageSize]="avatarSize"
+      [fileName]="avatarFileName()"
+    ></gtm-avatar>
     <b class="name">{{ user.fName }}</b>
     <b class="age grid_cell_centered">{{ user.age }}</b>
     <section class="content_wrapper grid_cell_centered">
