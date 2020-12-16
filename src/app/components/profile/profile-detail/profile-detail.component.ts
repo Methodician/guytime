@@ -11,7 +11,6 @@ import {
   styleUrls: ['./profile-detail.component.scss'],
 })
 export class ProfileDetailComponent {
-  @Input() avatarUrl = 'assets/icons/square_icon.svg';
   @Input() userInfo: UserI;
 
   avatarSize: ProfileImageSizeT = '90x90';
