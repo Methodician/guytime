@@ -16,8 +16,6 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<void> = new Subject();
   user$ = new BehaviorSubject<UserI>(null);
 
-  avatarUrl$ = new BehaviorSubject<string>('assets/icons/square_icon.svg');
-
   constructor(
     private userSvc: UserService,
     private route: ActivatedRoute,

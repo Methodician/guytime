@@ -17,7 +17,6 @@ export class ChatMessageComponent implements OnInit {
   @Input() chatMessage: MessageI;
 
   user$ = new BehaviorSubject<UserI>(null);
-  avatarUrl$ = new BehaviorSubject<string>('assets/icons/square_icon.svg');
   loggedInUid: string;
 
   avatarSize: ProfileImageSizeT = '45x45';
@@ -36,18 +35,6 @@ export class ChatMessageComponent implements OnInit {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(user => {
         this.user$.next(user);
-        if (
-          user &&
-          user.uploadedProfileImageMap &&
-          user.uploadedProfileImageMap['45x45']
-        ) {
-          this.userSvc
-            .getAvatarUrl(
-              user.uploadedProfileImageMap['45x45'].fileName,
-              '45x45',
-            )
-            .subscribe(avatarUrl => this.avatarUrl$.next(avatarUrl));
-        }
       });
 
     if (!this.wasMessageSeen()) {
