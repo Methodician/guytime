@@ -2,12 +2,13 @@
   <form *ngIf="form" [formGroup]="form" class="body">
     <article class="basics">
       <section class="avatar_input_group">
-        <div
-          mat-card-avatar
-          [style.background-image]="'url(' + (avatarUrl$ | async) + ')'"
-          alt="Profile Image"
-          class="avatar"
-        ></div>
+        <div *ngIf="!!avatarFileName" class="avatarWrapper">
+          <gtm-avatar
+            [fileName]="avatarFileName"
+            [imageSize]="avatarSize"
+            [avatarFileUrl]="avatarUrl$ | async"
+          ></gtm-avatar>
+        </div>
         <input
           #avatarInput
           hidden="true"
