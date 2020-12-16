@@ -1,10 +1,4 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ProfileImageSizeT } from '@app/models/user';
 import { UserService } from '@app/services/user.service';
 import { BehaviorSubject } from 'rxjs';
@@ -19,6 +13,8 @@ export class AvatarComponent implements OnChanges {
   @Input() fileName: string;
   /** Used along with fileName to get a URL for a user's avatar */
   @Input() imageSize: ProfileImageSizeT;
+  /** When this changes it should trigger an image update */
+  @Input() imageHash: string;
 
   /** When supplied, this will be used directly instead of getting the URL from APIs */
   @Input() avatarFileUrl: string;
@@ -28,17 +24,28 @@ export class AvatarComponent implements OnChanges {
   constructor(private userSvc: UserService) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(changes);
     if (!!changes.avatarFileUrl && !!changes.avatarFileUrl.currentValue) {
       this.avatarUrl$.next(this.avatarFileUrl);
-    } else if (!!changes.fileName && !!changes.fileName.currentValue) {
+    } else if (
+      (!!changes.fileName && !!changes.fileName.currentValue) ||
+      (!!changes.imageHash &&
+        changes.imageHash.previousValue !== changes.imageHash.currentValue)
+    ) {
       this.setUrl();
     }
   }
 
   setUrl = () => {
     this.userSvc.getAvatarUrl(this.fileName, this.imageSize).subscribe(url => {
-      url && this.avatarUrl$.next(url);
+      if (!url) return;
+
+      if (url === 'assets/icons/square_icon.svg') {
+        this.avatarUrl$.next(url);
+        return;
+      }
+
+      this.avatarUrl$.next(`${url}&hash=${this.imageHash}`);
+      return;
     });
   };
 
