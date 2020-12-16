@@ -70,5 +70,6 @@ export class ChatMessageComponent implements OnInit {
   avatarFileName = () =>
     this.user$.value &&
     this.user$.value.uploadedProfileImageMap &&
+    this.user$.value.uploadedProfileImageMap[this.avatarSize] &&
     this.user$.value.uploadedProfileImageMap[this.avatarSize].fileName;
 }

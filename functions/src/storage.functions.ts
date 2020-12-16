@@ -68,7 +68,7 @@ export const onFileUpload = functions
 
       const createSpecifiedThumbnail = async (size: 45 | 90) => {
         const avatarSize = `${size}x${size}`;
-        const paddedSize = size * (16 / 9);
+        const paddedSize = size * 2.2;
         const cppSize = `${paddedSize}x${paddedSize}`;
 
         await cpp.spawn('convert', [

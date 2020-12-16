@@ -95,7 +95,6 @@ export class UserService {
     });
 
   getAvatarUrl = (fileName: string, size?: ThumbnailOptionsT) => {
-    console.log('getAvatarUrl', { fileName, size });
     const pathSize = size || 'fullSize';
     const url$ = new BehaviorSubject<string>('assets/icons/square_icon.svg');
     const imagePath = `profileImages/${pathSize}/${fileName}`;
