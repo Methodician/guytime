@@ -37,16 +37,9 @@ export const onFileUpload = functions
     const promises = [];
 
     const processUploadedProfileImage = async () => {
-      const { bucket, metadata } = object;
+      const { bucket } = object;
 
-      const newMetadata = { ...metadata, contentType } as any;
-
-      if (!metadata) {
-        console.error(
-          'Seems like there is no file metadata but AFAIK this should never log... Returning without executing.',
-        );
-        return;
-      }
+      const metameta = !!object.metadata ? object.metadata : {};
 
       const gcsBucket = gcs.bucket(bucket);
       const tempFilePath = path.join(os.tmpdir(), `profileImage_${base}`);
@@ -55,8 +48,8 @@ export const onFileUpload = functions
       await gcsBucket.file(name).download({ destination: tempFilePath });
 
       const rotateUploadedImage = async () => {
-        if (metadata.autoOrient && metadata.autoOrient === 'done') {
-          return null;
+        if (metameta && metameta.autoOrient && metameta.autoOrient === 'done') {
+          return;
         }
 
         await cpp.spawn('convert', [
@@ -64,19 +57,19 @@ export const onFileUpload = functions
           '-auto-orient',
           tempFilePath,
         ]);
-        newMetadata.autoOrient = 'done';
+        const newMetadata = { contentType, metadata: { autoOrient: 'done' } };
         await gcsBucket.upload(tempFilePath, {
           destination: name,
           metadata: newMetadata,
         });
 
-        return null;
+        return;
       };
 
       const createSpecifiedThumbnail = async (size: 45 | 90) => {
+        const avatarSize = `${size}x${size}`;
         const paddedSize = size * (16 / 9);
         const cppSize = `${paddedSize}x${paddedSize}`;
-        const avatarSize = `${size}x${size}`;
 
         await cpp.spawn('convert', [
           tempFilePath,
@@ -90,7 +83,6 @@ export const onFileUpload = functions
         try {
           await gcsBucket.upload(tempFilePath, {
             destination: thumbFilePath,
-            metadata: newMetadata,
           });
           await recordUploadedImageName(avatarSize as any); // ToDo: type this better
         } catch (error) {
@@ -102,7 +94,7 @@ export const onFileUpload = functions
 
       await rotateUploadedImage();
       await createSpecifiedThumbnail(90);
-      await createSpecifiedThumbnail(90);
+      await createSpecifiedThumbnail(45);
 
       // Delete local files to free up space
       fs.unlinkSync(tempFilePath);
