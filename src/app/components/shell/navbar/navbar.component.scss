@@ -3,12 +3,24 @@ main {
   position: fixed;
   bottom: 0;
   width: 100%;
+
   mat-button-toggle-group {
     height: $footer_height;
     display: flex;
     justify-content: space-evenly;
+
     mat-button-toggle {
       width: 33.3333%;
+    }
+
+    .mat-icon {
+      height: 2em;
+      width: 3em;
+      color: $bc-dusty_blue;
+    }
+
+    .browse-icon {
+      height: 3em;
     }
   }
 }
