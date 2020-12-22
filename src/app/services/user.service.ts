@@ -94,14 +94,6 @@ export class UserService {
       [`contacts.${contactId}`]: true,
     });
 
-  getLoggedInAvatarUrl = (name: string, size?: ThumbnailOptionsT) => {
-    const url$ = new BehaviorSubject<string>('assets/icons/square_icon.svg');
-    this.authSvc.authInfo$.subscribe(info => {
-      this.getAvatarUrl(info.uid, size).subscribe(url => url$.next(url));
-    });
-    return url$;
-  };
-
   getAvatarUrl = (fileName: string, size?: ThumbnailOptionsT) => {
     const pathSize = size || 'fullSize';
     const url$ = new BehaviorSubject<string>('assets/icons/square_icon.svg');

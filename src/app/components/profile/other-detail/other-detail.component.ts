@@ -16,8 +16,6 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<void> = new Subject();
   user$ = new BehaviorSubject<UserI>(null);
 
-  avatarUrl$ = new BehaviorSubject<string>('assets/icons/square_icon.svg');
-
   constructor(
     private userSvc: UserService,
     private route: ActivatedRoute,
@@ -25,12 +23,6 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
     private headerSvc: HeaderService,
     private chatSvc: ChatService,
   ) {}
-
-  ngOnDestroy(): void {
-    this.headerSvc.resetHeader();
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-  }
 
   ngOnInit(): void {
     this.updateHeader();
@@ -40,12 +32,19 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
         this.userSvc
           .userRef(uid)
           .valueChanges()
-          .subscribe(user => this.user$.next({ ...user, uid }));
-        this.userSvc
-          .getAvatarUrl(uid)
-          .subscribe(url => this.avatarUrl$.next(url));
+          .subscribe(user => {
+            if (user) {
+              this.user$.next({ ...user, uid });
+            }
+          });
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.headerSvc.resetHeader();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   updateHeader = () => {

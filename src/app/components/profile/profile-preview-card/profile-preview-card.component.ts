@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { UserI } from '@models/user';
-import { BehaviorSubject } from 'rxjs';
+import { ProfileImageSizeT, UserI } from '@models/user';
 import { UserService } from '@services/user.service';
 import { Router } from '@angular/router';
 
@@ -13,7 +12,7 @@ export class ProfilePreviewCardComponent implements OnInit {
   @Input() user: UserI;
   @Input() shouldLink = true;
 
-  avatarUrl$ = new BehaviorSubject<string>('assets/icons/square_icon.svg');
+  avatarSize: ProfileImageSizeT = '45x45';
 
   constructor(private userSvc: UserService, private router: Router) {}
 
@@ -22,18 +21,15 @@ export class ProfilePreviewCardComponent implements OnInit {
       throw new Error(
         'Profile preview card must receive an input that is an instance of UserI with a valid uid',
       );
-    if (
-      this.user.uploadedProfileImageMap &&
-      this.user.uploadedProfileImageMap['45x45']
-    ) {
-      this.avatarUrl$ = this.userSvc.getAvatarUrl(
-        this.user.uploadedProfileImageMap['45x45'].fileName,
-        '45x45',
-      );
-    }
   }
 
   onCardClicked = $e => {
     if (this.shouldLink) this.router.navigateByUrl(`/guys/${this.user.uid}`);
   };
+
+  avatarFileName = () =>
+    this.user &&
+    this.user.uploadedProfileImageMap &&
+    this.user.uploadedProfileImageMap[this.avatarSize] &&
+    this.user.uploadedProfileImageMap[this.avatarSize].fileName;
 }

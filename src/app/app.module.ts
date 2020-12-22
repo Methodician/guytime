@@ -51,10 +51,11 @@ import { ChatMessageComponent } from '@components/chat/chat-message/chat-message
 import { ChatGroupComponent } from '@components/chat/chat-group/chat-group.component';
 import { ChatPeopleComponent } from './components/chat/chat-people/chat-people.component';
 import { BottomGhostBannerComponent } from './components/ui/bottom-ghost-banner/bottom-ghost-banner.component';
+import { AddPeopleComponent } from './components/chat/add-people/add-people.component';
+import { AvatarComponent } from './components/shared/avatar/avatar.component';
 
 // pipes
 import { TimeElapsedPipe } from './pipes/time-elapsed.pipe';
-import { AddPeopleComponent } from './components/chat/add-people/add-people.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -82,6 +83,7 @@ import { AddPeopleComponent } from './components/chat/add-people/add-people.comp
     ChatPeopleComponent,
     AddPeopleComponent,
     BottomGhostBannerComponent,
+    AvatarComponent,
   ],
   imports: [
     BrowserModule,

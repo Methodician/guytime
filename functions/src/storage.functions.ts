@@ -36,15 +36,10 @@ export const onFileUpload = functions
     const { base, name: uid } = parsedName;
     const promises = [];
 
-    const createProfileImageThumbnails = async () => {
-      const { bucket, metadata } = object;
+    const processUploadedProfileImage = async () => {
+      const { bucket } = object;
 
-      if (!metadata) {
-        console.error(
-          'Seems like there is no file metadata but AFAIK this should never log... Returning without executing.',
-        );
-        return;
-      }
+      const metameta = !!object.metadata ? object.metadata : {};
 
       const gcsBucket = gcs.bucket(bucket);
       const tempFilePath = path.join(os.tmpdir(), `profileImage_${base}`);
@@ -52,32 +47,54 @@ export const onFileUpload = functions
       // Download once for all operations.
       await gcsBucket.file(name).download({ destination: tempFilePath });
 
-      const createSpecifiedThumbnail = async (size: '45x45' | '90x90') => {
+      const rotateUploadedImage = async () => {
+        if (metameta && metameta.autoOrient && metameta.autoOrient === 'done') {
+          return;
+        }
+
+        await cpp.spawn('convert', [
+          tempFilePath,
+          '-auto-orient',
+          tempFilePath,
+        ]);
+        const newMetadata = { contentType, metadata: { autoOrient: 'done' } };
+        await gcsBucket.upload(tempFilePath, {
+          destination: name,
+          metadata: newMetadata,
+        });
+
+        return;
+      };
+
+      const createSpecifiedThumbnail = async (size: 45 | 90) => {
+        const avatarSize = `${size}x${size}`;
+        const paddedSize = size * 2.2;
+        const cppSize = `${paddedSize}x${paddedSize}`;
+
         await cpp.spawn('convert', [
           tempFilePath,
           '-thumbnail',
-          `${size}>`,
+          `${cppSize}>`,
           tempFilePath,
         ]);
 
-        const newMetadata = { ...metadata, contentType };
-        const thumbFilePath = path.join('profileImages', size, base);
+        const thumbFilePath = path.join('profileImages', avatarSize, base);
 
         try {
           await gcsBucket.upload(tempFilePath, {
             destination: thumbFilePath,
-            metadata: newMetadata,
           });
-          await recordUploadedImageName(size);
+          await recordUploadedImageName(avatarSize as any); // ToDo: type this better
         } catch (error) {
-          console.error(`couldn't upload profile image of size ${size}`);
+          console.error(`couldn't upload profile image of size ${avatarSize}`);
         }
 
         return;
       };
 
-      await createSpecifiedThumbnail('90x90');
-      await createSpecifiedThumbnail('45x45');
+      await rotateUploadedImage();
+      await createSpecifiedThumbnail(90);
+      await createSpecifiedThumbnail(45);
 
       // Delete local files to free up space
       fs.unlinkSync(tempFilePath);
@@ -108,7 +125,7 @@ export const onFileUpload = functions
       if (name?.startsWith('profileImages/fullSize')) {
         // It was a profile image
         promises.push(recordUploadedImageName('fullSize'));
-        promises.push(createProfileImageThumbnails());
+        promises.push(processUploadedProfileImage());
       }
     }
 

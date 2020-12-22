@@ -1,7 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AngularFireUploadTask } from '@angular/fire/storage';
-import { RelationshipStatusM, ActivityTypeM, UserI } from '@models/user';
+import {
+  RelationshipStatusM,
+  ActivityTypeM,
+  UserI,
+  ProfileImageSizeT,
+} from '@models/user';
 import { HtmlInputEventI } from '@models/shared';
 import { UserService } from '@services/user.service';
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -20,11 +25,12 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   activityTypeMap = ActivityTypeM;
 
   form: FormGroup;
+
+  avatarSize: ProfileImageSizeT = '90x90';
+  avatarFileName: string;
   avatarFile: File;
   imageUploadTask: AngularFireUploadTask;
-  avatarUrl$: BehaviorSubject<string | ArrayBuffer> = new BehaviorSubject(
-    'assets/icons/square_icon.svg',
-  );
+  avatarUrl$: BehaviorSubject<string | ArrayBuffer> = new BehaviorSubject(null);
 
   constructor(
     private fb: FormBuilder,
@@ -67,18 +73,17 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
         if (
           user &&
           user.uploadedProfileImageMap &&
-          user.uploadedProfileImageMap['90x90']
+          user.uploadedProfileImageMap[this.avatarSize]
         ) {
-          this.avatarUrl$ = this.userSvc.getAvatarUrl(
-            user.uploadedProfileImageMap['90x90'].fileName,
-            '90x90',
-          );
+          this.avatarFileName = user.uploadedProfileImageMap['90x90'].fileName;
         }
         this.form.patchValue(user);
       });
   };
 
   onSelectAvatar = ($e: HtmlInputEventI) => {
+    if ($e.target.files.length === 0) return;
+
     const reader = new FileReader();
     reader.onload = () => {
       this.avatarUrl$.next(reader.result);

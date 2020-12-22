@@ -3,14 +3,12 @@
 main {
   display: grid;
   grid-template-columns: 60px auto;
+  grid-template-areas: 'left right';
   margin: 8px;
 
-  .avatar {
+  .avatar-wrapper {
     justify-self: center;
     align-self: top;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
   }
 
   .mat-card {
@@ -39,5 +37,13 @@ main {
   grid-template-columns: auto 60px;
   mat-card {
     background-color: rgb(214, 244, 253);
+  }
+
+  .avatar-wrapper {
+    grid-area: right;
+  }
+
+  .message-body {
+    grid-area: left;
   }
 }

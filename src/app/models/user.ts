@@ -59,6 +59,8 @@ export interface ProfileImageTrackerI {
   imageUpdateRando: string;
 }
 
+export type ProfileImageSizeT = 'fullSize' | '90x90' | '45x45';
+
 export type RelationshipStatusT =
   | 'SINGLE'
   | 'MARRIED'

@@ -13,13 +13,6 @@ main {
       grid-template-columns: 100px calc(100vw - 140px);
 
       .avatar_input_group {
-        .avatar {
-          width: 90px;
-          height: 90px;
-          background-size: contain;
-          background-repeat: no-repeat;
-          background-position: center;
-        }
         .avatar_button {
           width: 90px;
           padding: 0;

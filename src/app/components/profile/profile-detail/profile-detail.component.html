@@ -1,12 +1,11 @@
 <main>
   <section class="body" *ngIf="userInfo">
     <article class="header">
-      <div
-        mat-card-avatar
-        [style.background-image]="'url(' + avatarUrl + ')'"
-        alt="Profile Image"
-        class="avatar"
-      ></div>
+      <gtm-avatar
+        [fileName]="avatarFileName()"
+        [imageHash]="avatarFileHash()"
+        [imageSize]="avatarSize"
+      ></gtm-avatar>
 
       <section class="summary">
         <div class="stats">

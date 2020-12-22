@@ -1,6 +1,6 @@
-<main>
-  <gtm-profile-detail
-    [userInfo]="user$ | async"
-    [avatarUrl]="avatarUrl$ | async"
-  ></gtm-profile-detail>
+<main *ngIf="user$ | async as user; else loading">
+  <gtm-profile-detail [userInfo]="user"></gtm-profile-detail>
 </main>
+<ng-template #loading>
+  <div>Loading ...</div>
+</ng-template>
