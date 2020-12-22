@@ -3,7 +3,8 @@
 main {
   display: grid;
   grid-template-columns: 30px auto 30px;
-  background-color: lightgray;
+  // background-color: #06ada55b;
+  border: 3px solid #185c5ac9;
   position: fixed;
   width: 100vw;
   z-index: 10000;

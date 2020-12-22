@@ -9,7 +9,7 @@ main {
     width: 100%;
     position: fixed;
     bottom: 50px;
-    background-color: lightblue;
+    // background-color: lightblue;
     height: 50px;
     z-index: 1000;
     .chat_input {
@@ -19,6 +19,9 @@ main {
       border: none;
       margin: 0 5px;
       width: stretch;
+      border: 2.5px solid #3b455e;
+      // TODO: Try this with box shadow
+      font-size: large;
     }
     .chat_input_has_text {
       height: 100px;

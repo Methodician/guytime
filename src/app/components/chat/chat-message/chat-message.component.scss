@@ -36,7 +36,10 @@ main {
 .owned_chat {
   grid-template-columns: auto 60px;
   mat-card {
-    background-color: rgb(214, 244, 253);
+    // background-color: rgb(214, 244, 253);
+    // TODO: make this more like the branded turqoise
+    color: white;
+    background-color: #185c5a;
   }
 
   .avatar-wrapper {
