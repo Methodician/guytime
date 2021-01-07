@@ -1,0 +1,11 @@
+@import 'app/styles/vars.scss';
+
+main {
+  background-image: linear-gradient(140deg, $bc_deep_teal, $bc_dusty_blue);
+  height: 100vh;
+
+  .logo {
+    height: 38vh;
+    filter: white(100%);
+  }
+}

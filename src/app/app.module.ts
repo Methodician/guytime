@@ -31,6 +31,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 // LOCAL IMPORTS
 import { environment } from '@env/environment';
 import { LoginComponent } from '@components/auth/login/login.component';
+import { LandingComponent } from './components/landing/landing.component';
 import { NgGuideComponent } from '@components/ng-guide/ng-guide.component';
 import { ProfileListComponent } from '@components/profile/profile-list/profile-list.component';
 import { ProfileDetailComponent } from '@components/profile/profile-detail/profile-detail.component';
@@ -85,6 +86,7 @@ import { TimeElapsedPipe } from './pipes/time-elapsed.pipe';
     AddPeopleComponent,
     BottomGhostBannerComponent,
     AvatarComponent,
+    LandingComponent,
   ],
   imports: [
     BrowserModule,

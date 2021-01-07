@@ -1,6 +1,6 @@
 @import 'app/styles/vars.scss';
 
-main {
+.logged-in {
   overflow: hidden;
   display: grid;
   grid-template-rows: $header_height 0px $body_height $footer_height;
@@ -9,4 +9,8 @@ main {
     'outlet'
     'body'
     'footer';
+
+  router-outlet {
+    grid-area: unset;
+  }
 }

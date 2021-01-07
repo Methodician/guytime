@@ -15,10 +15,12 @@ import { MeConnectionsListComponent } from './components/profile/me-connections-
 import { OtherConnectionsListComponent } from './components/profile/other-connections-list/other-connections-list.component';
 import { ChatPeopleComponent } from './components/chat/chat-people/chat-people.component';
 import { AddPeopleComponent } from './components/chat/add-people/add-people.component';
+import { LandingComponent } from './components/landing/landing.component';
 
 const routes: Routes = [
   // Should ultimately go to home (browse/filter profiles) which will redirect to login if you're not logged in
   { path: '', redirectTo: 'guys', pathMatch: 'full' },
+  { path: 'landing', component: LandingComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   {
