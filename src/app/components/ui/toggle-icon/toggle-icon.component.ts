@@ -8,4 +8,5 @@ import { Component, Input } from '@angular/core';
 export class ToggleIconComponent {
   @Input() deselected;
   @Input() iconName;
+  @Input() iconType = 'material';
 }

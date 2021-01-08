@@ -1,6 +1,16 @@
-<mat-icon
-  [ngClass]="{
-    deselected: deselected
-  }"
-  >{{ iconName }}</mat-icon
->
+<main>
+  <mat-icon
+    *ngIf="iconType === 'material'"
+    [ngClass]="{
+      deselected: deselected
+    }"
+    >{{ iconName }}</mat-icon
+  >
+  <mat-icon
+    *ngIf="iconType === 'custom'"
+    [ngClass]="{
+      deselected: deselected
+    }"
+    [svgIcon]="iconName"
+  ></mat-icon>
+</main>
