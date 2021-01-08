@@ -9,7 +9,6 @@ main {
     width: 100%;
     position: fixed;
     bottom: 50px;
-    background-color: lightblue;
     height: 50px;
     z-index: 1000;
     .chat_input {
@@ -19,6 +18,8 @@ main {
       border: none;
       margin: 0 5px;
       width: stretch;
+      border: 2px solid $bc_dusty_blue_half;
+      font-size: large;
     }
     .chat_input_has_text {
       height: 100px;

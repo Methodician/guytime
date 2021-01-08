@@ -13,10 +13,11 @@ main {
 
   .mat-card {
     transition: background-color 3s ease-out;
+    color: $bc_deep_teal;
   }
 
   .unread {
-    background-color: #e283834f;
+    background-color: $bc_yellow_pop_reduced;
   }
 
   mat-card-content {
@@ -35,8 +36,9 @@ main {
 
 .owned_chat {
   grid-template-columns: auto 60px;
-  mat-card {
-    background-color: rgb(214, 244, 253);
+  .mat-card {
+    background-color: $bc_lime_green_faint;
+    color: $bc_dusty_blue;
   }
 
   .avatar-wrapper {

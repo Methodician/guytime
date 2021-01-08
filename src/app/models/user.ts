@@ -76,30 +76,88 @@ export const RelationshipStatusM = new Map<RelationshipStatusT, DisplayNameI>([
   ['UNSPECIFIED', { displayName: 'Unspecified' }],
 ]);
 
+// export type ActivityTypeT =
+//   | 'OUTDOOR'
+//   | 'SPORTS'
+//   | 'MOVIES'
+//   | 'ART_DESIGN'
+//   | 'READING'
+//   | 'GAMING'
+//   | 'COMMUNITY_SVC';
 export type ActivityTypeT =
+  // | 'HEALTH_FITNESS'
+  | 'FOODIE'
   | 'OUTDOOR'
   | 'SPORTS'
   | 'MOVIES'
   | 'ART_DESIGN'
   | 'READING'
-  | 'GAMING'
-  | 'COMMUNITY_SVC';
+  | 'GAMING';
+// | 'COMMUNITY_SVC';
 
 export const ActivityTypeM = new Map<ActivityTypeT, ActivityTypeI>([
-  ['OUTDOOR', { displayName: 'Great Outdoors', iconName: 'nature_people' }],
-  ['SPORTS', { displayName: 'Sports', iconName: 'sports_football' }],
-  ['MOVIES', { displayName: 'Movies', iconName: 'local_movies' }],
-  ['ART_DESIGN', { displayName: 'Arts and Design', iconName: 'brush' }],
-  ['READING', { displayName: 'Reading', iconName: 'menu_book' }],
-  ['GAMING', { displayName: 'Gaming', iconName: 'videogame_asset' }],
+  // [
+  //   'HEALTH_FITNESS',
+  //   {
+  //     displayName: 'Health and Fitness',
+  //     iconName: 'healthAndFitness',
+  //     iconType: 'custom',
+  //   },
+  // ],
   [
-    'COMMUNITY_SVC',
-    { displayName: 'Community Service', iconName: 'emoji_people' },
+    'FOODIE',
+    {
+      displayName: 'Food and Drink',
+      iconName: 'foodAndDrink',
+      iconType: 'custom',
+    },
   ],
+  [
+    'OUTDOOR',
+    {
+      displayName: 'Outdoor Recreation',
+      iconName: 'outdoorRecreation',
+      iconType: 'custom',
+    },
+  ],
+  ['SPORTS', { displayName: 'Sports', iconName: 'sports', iconType: 'custom' }],
+  [
+    'MOVIES',
+    { displayName: 'Movies', iconName: 'local_movies', iconType: 'material' },
+  ],
+  [
+    'ART_DESIGN',
+    {
+      displayName: 'Arts and Crafts',
+      iconName: 'artsAndCrafts',
+      iconType: 'custom',
+    },
+  ],
+  [
+    'READING',
+    { displayName: 'Reading', iconName: 'menu_book', iconType: 'material' },
+  ],
+  [
+    'GAMING',
+    {
+      displayName: 'Gaming',
+      iconName: 'videogame_asset',
+      iconType: 'material',
+    },
+  ],
+  // [
+  //   'COMMUNITY_SVC',
+  //   {
+  //     displayName: 'Community Service',
+  //     iconName: 'emoji_people',
+  //     iconType: 'material',
+  //   },
+  // ],
 ]);
 
 export interface ActivityTypeI extends DisplayNameI {
   iconName: string;
+  iconType: 'custom' | 'material';
 }
 
 export type TDrinkingHabit = 'REGULAR' | 'SOCIAL' | 'NON_DRINKER';

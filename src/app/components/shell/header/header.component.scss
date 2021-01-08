@@ -3,11 +3,14 @@
 main {
   display: grid;
   grid-template-columns: 30px auto 30px;
-  background-color: lightgray;
+  border: 3px solid $bc_dusty_blue_reduced;
+  color: $bc_dusty_blue;
   position: fixed;
   width: 100vw;
   z-index: 10000;
   height: $header-height;
+  align-content: center;
+
   .page_title {
     justify-self: center;
     align-self: center;

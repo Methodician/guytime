@@ -4,17 +4,17 @@
     (change)="onNavSelected($event)"
   >
     <mat-button-toggle value="guys" aria-label="Browse list of guys">
-      <mat-icon>view_list</mat-icon>
+      <mat-icon class="browse-icon" svgIcon="fistBump"></mat-icon>
     </mat-button-toggle>
     <mat-button-toggle value="me" aria-label="Profile and account management">
-      <mat-icon>account_circle</mat-icon>
+      <mat-icon svgIcon="profile"></mat-icon>
     </mat-button-toggle>
     <mat-button-toggle value="chat" aria-label="Open chats">
       <mat-icon
         [matBadge]="unreadMessagesCount"
         [matBadgeHidden]="unreadMessagesCount == 0"
-        >chat</mat-icon
-      >
+        svgIcon="messaging"
+      ></mat-icon>
     </mat-button-toggle>
   </mat-button-toggle-group>
 </main>
