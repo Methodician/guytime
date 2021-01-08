@@ -30,12 +30,11 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 
 // LOCAL IMPORTS
 import { environment } from '@env/environment';
-import { LoginComponent } from '@components/auth/login/login.component';
+
 import { LandingComponent } from './components/landing/landing.component';
 import { NgGuideComponent } from '@components/ng-guide/ng-guide.component';
 import { ProfileListComponent } from '@components/profile/profile-list/profile-list.component';
 import { ProfileDetailComponent } from '@components/profile/profile-detail/profile-detail.component';
-import { RegisterComponent } from '@components/auth/register/register.component';
 import { NavbarComponent } from '@components/shell/navbar/navbar.component';
 import { ChatListComponent } from '@components/chat/chat-list/chat-list.component';
 import { HeaderComponent } from '@components/shell/header/header.component';
@@ -61,11 +60,9 @@ import { TimeElapsedPipe } from './pipes/time-elapsed.pipe';
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
     NgGuideComponent,
     ProfileListComponent,
     ProfileDetailComponent,
-    RegisterComponent,
     NavbarComponent,
     ChatListComponent,
     HeaderComponent,

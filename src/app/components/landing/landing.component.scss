@@ -25,10 +25,20 @@ main {
 
   .actions-span {
     width: 100vw;
-    display: flex;
-    justify-content: center;
+    display: grid;
+
+    .actions-form {
+      margin: 1em;
+      background-color: rgba(196, 224, 233, 0.616);
+      color: $bc_dusty_blue;
+
+      .mat-form-field {
+        width: 100%;
+      }
+    }
 
     .actions-wrapper {
+      justify-self: center;
       width: 65vw;
       display: flex;
       justify-content: space-around;
@@ -38,6 +48,10 @@ main {
       }
     }
   }
+
+  // .active-action {
+  //   display: grid;
+  // }
 
   footer {
     position: absolute;

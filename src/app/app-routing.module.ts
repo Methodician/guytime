@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { LoginComponent } from '@components/auth/login/login.component';
 import { NgGuideComponent } from '@components/ng-guide/ng-guide.component';
 import { AuthGuard } from '@guards/auth.guard';
-import { RegisterComponent } from '@components/auth/register/register.component';
 import { ChatListComponent } from '@components/chat/chat-list/chat-list.component';
 import { ChatDetailComponent } from '@components/chat/chat-detail/chat-detail.component';
 import { ProfileEditComponent } from '@components/profile/profile-edit/profile-edit.component';
@@ -21,8 +19,6 @@ const routes: Routes = [
   // Should ultimately go to home (browse/filter profiles) which will redirect to login if you're not logged in
   { path: '', redirectTo: 'guys', pathMatch: 'full' },
   { path: 'landing', component: LandingComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
   {
     path: 'me',
     component: MeDetailComponent,

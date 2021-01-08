@@ -223,7 +223,7 @@
       </g>
     </svg>
   </div>
-  <section class="why">
+  <section *ngIf="activeSection === 'none'" class="why">
     <h3>Why Fellas?</h3>
     <ul>
       <li>I want to make friends outside of work.</li>
@@ -234,12 +234,128 @@
     </ul>
   </section>
 
-  <section class="actions-span">
+  <!-- Registration Component -->
+  <section class="actions-span" *ngIf="activeSection === 'register'">
+    <mat-card class="actions-form">
+      <form [formGroup]="registerForm">
+        <h1>Register</h1>
+
+        <mat-form-field class="full-width-input">
+          <input
+            matInput
+            type="email"
+            placeholder="Email"
+            formControlName="email"
+            required
+          />
+          <mat-error> Please provide a valid email address </mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width-input">
+          <input
+            matInput
+            type="password"
+            placeholder="Password"
+            formControlName="password"
+            required
+          />
+          <mat-error> Please provide a password </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="full-width-input">
+          <input
+            #confirmPass
+            matInput
+            type="password"
+            placeholder="Confirm Password"
+            formControlName="confirmPass"
+            required
+          />
+          <mat-error> Please provide a password </mat-error>
+        </mat-form-field>
+        <mat-error *ngIf="registerForm.hasError('passwordMissmatch')">
+          Please make sure both password fields match
+        </mat-error>
+      </form>
+    </mat-card>
+
     <div class="actions-wrapper">
-      <button routerLink="/register" mat-stroked-button color="accent">
+      <button
+        (click)="activeSection = 'none'"
+        mat-raised-button
+        color="primary"
+      >
+        Back
+      </button>
+      <button (click)="onRegister()" mat-raised-button color="primary">
         Register
       </button>
-      <button routerLink="/login" mat-stroked-button color="accent">
+    </div>
+  </section>
+
+  <!-- Login Component -->
+  <section class="actions-span" *ngIf="activeSection === 'login'">
+    <mat-card class="actions-form">
+      <form [formGroup]="loginForm">
+        <h1>Sign In</h1>
+        <mat-error *ngIf="wasWrongPasswordEntered()"
+          >You entered the wrong password.</mat-error
+        >
+        <mat-error *ngIf="wasWrongEmailEntered()"
+          >There is no account associated with that email.</mat-error
+        >
+
+        <mat-form-field class="full-width-input">
+          <input
+            matInput
+            type="email"
+            placeholder="Email"
+            formControlName="email"
+            required
+          />
+          <mat-error> Please provide a valid email address </mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width-input">
+          <input
+            matInput
+            type="password"
+            placeholder="Password"
+            formControlName="password"
+            required
+          />
+          <mat-error> Please provide a valid password </mat-error>
+        </mat-form-field>
+      </form>
+    </mat-card>
+
+    <div class="actions-wrapper">
+      <button
+        (click)="activeSection = 'none'"
+        mat-raised-button
+        color="primary"
+      >
+        Back
+      </button>
+      <button (click)="onLogin()" mat-raised-button color="primary">
+        Sign In
+      </button>
+    </div>
+  </section>
+
+  <!-- Landing Actions -->
+  <section class="actions-span" *ngIf="activeSection === 'none'">
+    <div class="actions-wrapper">
+      <button
+        (click)="activeSection = 'register'"
+        mat-raised-button
+        color="accent"
+      >
+        Register
+      </button>
+      <button
+        (click)="activeSection = 'login'"
+        mat-raised-button
+        color="accent"
+      >
         Sign In
       </button>
     </div>
