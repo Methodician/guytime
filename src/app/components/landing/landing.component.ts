@@ -1,7 +1,5 @@
-import { group } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import {
-  AbstractControl,
   FormBuilder,
   FormGroup,
   ValidatorFn,
@@ -16,7 +14,7 @@ import { AuthService } from '@app/services/auth.service';
   styleUrls: ['./landing.component.scss'],
 })
 export class LandingComponent implements OnInit {
-  activeSection: 'none' | 'login' | 'register' = 'register';
+  activeSection: 'none' | 'login' | 'register' = 'none';
 
   loginForm: FormGroup;
   registerForm: FormGroup;
