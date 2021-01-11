@@ -144,14 +144,10 @@
     </mat-card>
 
     <div class="actions-wrapper">
-      <button
-        (click)="activeSection = 'none'"
-        mat-raised-button
-        color="primary"
-      >
+      <button (click)="activeSection = 'none'" mat-raised-button color="warn">
         Back
       </button>
-      <button (click)="onRegister()" mat-raised-button color="primary">
+      <button (click)="onRegister()" mat-raised-button color="accent">
         Register
       </button>
     </div>
@@ -193,14 +189,10 @@
     </mat-card>
 
     <div class="actions-wrapper">
-      <button
-        (click)="activeSection = 'none'"
-        mat-raised-button
-        color="primary"
-      >
+      <button (click)="activeSection = 'none'" mat-raised-button color="warn">
         Back
       </button>
-      <button (click)="onLogin()" mat-raised-button color="primary">
+      <button (click)="onLogin()" mat-raised-button color="accent">
         Sign In
       </button>
     </div>
@@ -226,7 +218,7 @@
     </div>
   </section>
   <footer>
-    <button mat-button>Privacy Policy</button
-    ><button mat-button>What's Fellas?</button>
+    <button mat-button color="accent">Privacy Policy</button
+    ><button mat-button color="accent">What's Fellas?</button>
   </footer>
 </main>
