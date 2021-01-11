@@ -4,13 +4,11 @@ main {
   bottom: 0;
   width: 100%;
 
-  mat-button-toggle-group {
+  .mat-tab-nav-bar {
     height: $footer_height;
-    display: flex;
-    justify-content: space-evenly;
 
-    mat-button-toggle {
-      width: 33.3333%;
+    .mat-tab-link {
+      width: calc(100vw / 3);
     }
 
     .mat-icon {

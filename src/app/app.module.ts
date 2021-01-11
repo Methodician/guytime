@@ -18,8 +18,8 @@ import { AngularFirestoreModule, SETTINGS } from '@angular/fire/firestore';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonModule } from '@angular/material/button';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatChipsModule } from '@angular/material/chips';
@@ -98,10 +98,10 @@ import { TimeElapsedPipe } from './pipes/time-elapsed.pipe';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatTabsModule,
     MatIconModule,
     MatChipsModule,
     MatBadgeModule,
-    MatButtonToggleModule,
     MatMenuModule,
     MatListModule,
     MatSelectModule,
