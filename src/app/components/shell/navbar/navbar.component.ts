@@ -31,8 +31,8 @@ export class NavbarComponent implements OnInit {
     this.watchUnreadMessages();
   }
 
-  onNavSelected = $e => {
-    this.router.navigate([`/${$e.value}`]);
+  onNavClicked = (route: string) => {
+    this.router.navigateByUrl(`/${route}`);
   };
 
   watchUnreadMessages = () => {
