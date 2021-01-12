@@ -15,6 +15,7 @@ export class ChatGroupComponent implements OnInit {
   @Input() group: ChatGroupI;
   private unsubscribe$: Subject<void> = new Subject();
   users$: Observable<UserI[]>;
+  firstNames: string;
 
   constructor(private userSvc: UserService, private authSvc: AuthService) {}
 
@@ -36,6 +37,10 @@ export class ChatGroupComponent implements OnInit {
 
     const users$ = combineLatest(userObservables);
     this.users$ = users$;
+    const firstNames$ = users$.pipe(
+      map(users => users.map(user => user.fName)),
+    );
+    firstNames$.subscribe(names => (this.firstNames = names.join(', ')));
   };
 
   getUserObservable = (uid: string) =>

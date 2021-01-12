@@ -1,12 +1,23 @@
 main {
   max-width: calc(100vw - 48px);
 
-  .avatest {
+  .people {
     position: absolute;
     right: 0;
     display: flex;
-    overflow: scroll;
     max-width: 100%;
+    width: 100%;
+    height: 66px;
+
+    .avatar-row {
+      position: absolute;
+      right: 0;
+      display: flex;
+      overflow: scroll;
+      max-width: 100%;
+      height: 48px;
+      padding-right: 22px;
+    }
 
     .avatar-wrapper {
       width: 30px;
@@ -19,30 +30,21 @@ main {
         border: 3px solid white;
       }
     }
-  }
 
-  .users {
-    display: inline-flex;
-    max-width: 100%;
-    overflow: scroll;
+    .names-wrapper {
+      position: absolute;
+      bottom: 0;
+      max-width: 100%;
+      width: 100%;
+      text-align: right;
+      overflow: scroll;
 
-    .user {
-      margin-right: 7px;
-      width: 60px;
-
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-
-      .fname-wrapper {
-        max-width: 100%;
-        .fname {
-          display: block;
-          max-width: 100%;
-          text-overflow: ellipsis;
-          text-align: center;
-          font-size: 0.85em;
-        }
+      .first-names {
+        margin-right: 0.8em;
+        margin-left: 0.8em;
+        text-align: right;
+        white-space: nowrap;
+        font-size: 0.8em;
       }
     }
   }
@@ -52,9 +54,6 @@ main {
     margin: 0;
     position: absolute;
     bottom: 0;
-  }
-  b,
-  p {
     width: calc(100vw - 45px);
     overflow: hidden;
     text-overflow: ellipsis;
