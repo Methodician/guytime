@@ -9,24 +9,6 @@
         imageSize="45x45"
       ></gtm-avatar>
     </article>
-    <!-- <article class="user" *ngFor="let user of users$ | async">
-      <div class="fname-wrapper">
-        <b class="fname">{{ user.fName }}</b>
-      </div>
-      <gtm-avatar
-        [fileName]="user?.uploadedProfileImageMap['45x45']?.fileName"
-        imageSize="45x45"
-      ></gtm-avatar>
-    </article>
-    <article class="user" *ngFor="let user of users$ | async">
-      <div class="fname-wrapper">
-        <b class="fname">{{ user.fName }}</b>
-      </div>
-      <gtm-avatar
-        [fileName]="user?.uploadedProfileImageMap['45x45']?.fileName"
-        imageSize="45x45"
-      ></gtm-avatar>
-    </article> -->
   </section>
   <p class="latest_message" *ngIf="!!group && !!group.latestMessage">
     <b>{{ group.latestMessage.fName }} {{ group.latestMessage.lName }}:</b>

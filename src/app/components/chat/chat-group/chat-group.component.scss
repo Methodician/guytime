@@ -1,8 +1,11 @@
 @import 'styles.scss';
 
 main {
+  max-width: calc(100vw - 48px);
   .users {
     display: inline-flex;
+    max-width: 100%;
+    overflow: scroll;
 
     .user {
       margin-right: 7px;
