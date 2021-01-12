@@ -4,8 +4,6 @@ main {
   .people {
     position: absolute;
     right: 0;
-    display: flex;
-    max-width: 100%;
     width: 100%;
     height: 66px;
 
@@ -15,17 +13,14 @@ main {
       display: flex;
       overflow: scroll;
       max-width: 100%;
-      height: 48px;
       padding-right: 22px;
     }
 
     .avatar-wrapper {
       width: 30px;
-      display: flex;
 
       .avatar-border {
         width: 51px;
-        height: 51px;
         border-radius: 50%;
         border: 3px solid white;
       }
@@ -34,7 +29,6 @@ main {
     .names-wrapper {
       position: absolute;
       bottom: 0;
-      max-width: 100%;
       width: 100%;
       text-align: right;
       overflow: scroll;
@@ -42,7 +36,6 @@ main {
       .first-names {
         margin-right: 0.8em;
         margin-left: 0.8em;
-        text-align: right;
         white-space: nowrap;
         font-size: 0.8em;
       }
