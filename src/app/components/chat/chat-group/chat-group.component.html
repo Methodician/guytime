@@ -1,5 +1,39 @@
 <main>
-  <section class="users">
+  <section class="avatest">
+    <div class="avatar-wrapper" *ngFor="let user of users$ | async">
+      <div class="avatar-border">
+        <gtm-avatar
+          [fileName]="user?.uploadedProfileImageMap['45x45']?.fileName"
+          imageSize="45x45"
+        ></gtm-avatar>
+      </div>
+    </div>
+    <div class="avatar-wrapper" *ngFor="let user of users$ | async">
+      <div class="avatar-border">
+        <gtm-avatar
+          [fileName]="user?.uploadedProfileImageMap['45x45']?.fileName"
+          imageSize="45x45"
+        ></gtm-avatar>
+      </div>
+    </div>
+    <div class="avatar-wrapper" *ngFor="let user of users$ | async">
+      <div class="avatar-border">
+        <gtm-avatar
+          [fileName]="user?.uploadedProfileImageMap['45x45']?.fileName"
+          imageSize="45x45"
+        ></gtm-avatar>
+      </div>
+    </div>
+    <div class="avatar-wrapper" *ngFor="let user of users$ | async">
+      <div class="avatar-border">
+        <gtm-avatar
+          [fileName]="user?.uploadedProfileImageMap['45x45']?.fileName"
+          imageSize="45x45"
+        ></gtm-avatar>
+      </div>
+    </div>
+  </section>
+  <!-- <section class="users">
     <article class="user" *ngFor="let user of users$ | async">
       <div class="fname-wrapper">
         <b class="fname">{{ user.fName }}</b>
@@ -9,7 +43,7 @@
         imageSize="45x45"
       ></gtm-avatar>
     </article>
-  </section>
+  </section> -->
   <p class="latest_message" *ngIf="!!group && !!group.latestMessage">
     <b>{{ group.latestMessage.fName }} {{ group.latestMessage.lName }}:</b>
     {{ group.latestMessage.content }}

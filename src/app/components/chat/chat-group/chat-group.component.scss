@@ -1,5 +1,26 @@
 main {
   max-width: calc(100vw - 48px);
+
+  .avatest {
+    position: absolute;
+    right: 0;
+    display: flex;
+    overflow: scroll;
+    max-width: 100%;
+
+    .avatar-wrapper {
+      width: 30px;
+      display: flex;
+
+      .avatar-border {
+        width: 51px;
+        height: 51px;
+        border-radius: 50%;
+        border: 3px solid white;
+      }
+    }
+  }
+
   .users {
     display: inline-flex;
     max-width: 100%;
@@ -29,6 +50,8 @@ main {
   .latest_message {
     font-size: 0.75em;
     margin: 0;
+    position: absolute;
+    bottom: 0;
   }
   b,
   p {
