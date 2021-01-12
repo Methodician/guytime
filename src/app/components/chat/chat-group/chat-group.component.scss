@@ -1,6 +1,29 @@
 main {
-  .user_names {
-    font-size: 1em;
+  max-width: calc(100vw - 48px);
+  .users {
+    display: inline-flex;
+    max-width: 100%;
+    overflow: scroll;
+
+    .user {
+      margin-right: 7px;
+      width: 60px;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .fname-wrapper {
+        max-width: 100%;
+        .fname {
+          display: block;
+          max-width: 100%;
+          text-overflow: ellipsis;
+          text-align: center;
+          font-size: 0.85em;
+        }
+      }
+    }
   }
 
   .latest_message {

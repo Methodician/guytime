@@ -14,7 +14,7 @@ import { map, takeUntil } from 'rxjs/operators';
 export class ChatGroupComponent implements OnInit {
   @Input() group: ChatGroupI;
   private unsubscribe$: Subject<void> = new Subject();
-  userNames: string;
+  users$: Observable<UserI[]>;
 
   constructor(private userSvc: UserService, private authSvc: AuthService) {}
 
@@ -35,10 +35,7 @@ export class ChatGroupComponent implements OnInit {
     const userObservables = filteredIds.map(uid => this.getUserObservable(uid));
 
     const users$ = combineLatest(userObservables);
-    const firstNames$ = users$.pipe(
-      map(users => users.map(user => user.fName)),
-    );
-    firstNames$.subscribe(names => (this.userNames = names.join(', ')));
+    this.users$ = users$;
   };
 
   getUserObservable = (uid: string) =>
