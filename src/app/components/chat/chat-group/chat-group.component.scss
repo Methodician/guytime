@@ -1,27 +1,43 @@
 main {
   max-width: calc(100vw - 48px);
-  .users {
-    display: inline-flex;
-    max-width: 100%;
-    overflow: scroll;
 
-    .user {
-      margin-right: 7px;
-      width: 60px;
+  .people {
+    position: absolute;
+    right: 0;
+    width: 100%;
+    height: 66px;
 
+    .avatar-row {
+      position: absolute;
+      right: 0;
       display: flex;
-      flex-direction: column;
-      align-items: center;
+      overflow: scroll;
+      max-width: 100%;
+      padding-right: 22px;
+    }
 
-      .fname-wrapper {
-        max-width: 100%;
-        .fname {
-          display: block;
-          max-width: 100%;
-          text-overflow: ellipsis;
-          text-align: center;
-          font-size: 0.85em;
-        }
+    .avatar-wrapper {
+      width: 30px;
+
+      .avatar-border {
+        width: 51px;
+        border-radius: 50%;
+        border: 3px solid white;
+      }
+    }
+
+    .names-wrapper {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      text-align: right;
+      overflow: scroll;
+
+      .first-names {
+        margin-right: 0.8em;
+        margin-left: 0.8em;
+        white-space: nowrap;
+        font-size: 0.8em;
       }
     }
   }
@@ -29,9 +45,8 @@ main {
   .latest_message {
     font-size: 0.75em;
     margin: 0;
-  }
-  b,
-  p {
+    position: absolute;
+    bottom: 0;
     width: calc(100vw - 45px);
     overflow: hidden;
     text-overflow: ellipsis;
