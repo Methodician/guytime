@@ -52,6 +52,18 @@ main {
           .interest_icon_wrapper {
             margin: 0 5px;
           }
+
+          .sports_icon {
+            transform: scale(0.84);
+          }
+
+          .art_icon {
+            ::ng-deep main {
+              transform: rotate(180deg);
+              height: 24px;
+              padding-left: 4px;
+            }
+          }
         }
       }
     }

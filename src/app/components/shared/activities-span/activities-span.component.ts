@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ActivityTypeM, ActivityTypeT } from '@models/user';
+import { ActivityTypeT } from '@models/user';
 
 @Component({
   selector: 'gtm-activities-span',
@@ -8,7 +8,6 @@ import { ActivityTypeM, ActivityTypeT } from '@models/user';
 })
 export class ActivitiesSpanComponent implements OnInit {
   @Input() selectedActivities: ActivityTypeT[] = [];
-  activityTypeMap = ActivityTypeM;
 
   constructor() {}
 

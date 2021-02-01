@@ -2,20 +2,18 @@ main {
   display: flex;
   justify-content: center;
 
-  .interest-icon-wrapper {
+  .interest_icon_wrapper {
     margin: 0 2px;
   }
 
-  .sports-icon {
+  .sports_icon {
     transform: scale(0.84);
   }
 
-  .art-icon {
+  .art_icon {
     ::ng-deep main {
-      transform: rotate(90deg);
+      transform: rotate(180deg);
       height: 24px;
-      width: 29px;
-      padding-top: 4px;
     }
   }
 }
