@@ -76,13 +76,73 @@
         </div>
         <div class="interests">
           <div
+            (click)="onActivityTypeClicked('FOODIE')"
             class="interest_icon_wrapper"
-            *ngFor="let entry of activityTypeMap | keyvalue"
-            (click)="onActivityTypeClicked(entry.key)"
           >
             <gtm-toggle-icon
-              [deselected]="!isActivityTypeSelected(entry.key)"
-              [iconName]="entry.value.iconName"
+              [deselected]="!isActivityTypeSelected('FOODIE')"
+              iconName="foodAndDrink"
+              iconType="custom"
+            ></gtm-toggle-icon>
+          </div>
+          <div
+            (click)="onActivityTypeClicked('OUTDOOR')"
+            class="interest_icon_wrapper"
+          >
+            <gtm-toggle-icon
+              [deselected]="!isActivityTypeSelected('OUTDOOR')"
+              iconName="outdoorRecreation"
+              iconType="custom"
+            ></gtm-toggle-icon>
+          </div>
+          <div
+            (click)="onActivityTypeClicked('SPORTS')"
+            class="interest_icon_wrapper sports_icon"
+          >
+            <gtm-toggle-icon
+              [deselected]="!isActivityTypeSelected('SPORTS')"
+              iconName="sports"
+              iconType="custom"
+            ></gtm-toggle-icon>
+          </div>
+          <div
+            (click)="onActivityTypeClicked('MOVIES')"
+            class="interest_icon_wrapper"
+          >
+            <gtm-toggle-icon
+              [deselected]="!isActivityTypeSelected('MOVIES')"
+              iconName="local_movies"
+              iconType="material"
+            ></gtm-toggle-icon>
+          </div>
+          <div
+            (click)="onActivityTypeClicked('ART_DESIGN')"
+            class="interest_icon_wrapper art_icon"
+          >
+            <gtm-toggle-icon
+              [deselected]="!isActivityTypeSelected('ART_DESIGN')"
+              iconName="artsAndCrafts"
+              iconType="custom"
+            ></gtm-toggle-icon>
+          </div>
+          <div
+            (click)="onActivityTypeClicked('READING')"
+            class="interest_icon_wrapper"
+          >
+            <gtm-toggle-icon
+              [deselected]="!isActivityTypeSelected('READING')"
+              iconName="menu_book"
+              iconType="material"
+            ></gtm-toggle-icon>
+          </div>
+          <div
+            (click)="onActivityTypeClicked('GAMING')"
+            class="interest_icon_wrapper"
+          >
+            <gtm-toggle-icon
+              [deselected]="!isActivityTypeSelected('GAMING')"
+              iconName="videogame_asset"
+              iconType="material"
             ></gtm-toggle-icon>
           </div>
         </div>

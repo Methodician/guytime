@@ -1,12 +1,51 @@
 <main>
-  <div
-    *ngFor="let entry of activityTypeMap | keyvalue"
-    class="interest_icon_wrapper"
-  >
+  <div class="interest_icon_wrapper">
     <gtm-toggle-icon
-      [deselected]="!isActivityTypeSelected(entry.key)"
-      [iconName]="entry.value.iconName"
-      [iconType]="entry.value.iconType"
+      [deselected]="!isActivityTypeSelected('FOODIE')"
+      iconName="foodAndDrink"
+      iconType="custom"
+    ></gtm-toggle-icon>
+  </div>
+  <div class="interest_icon_wrapper">
+    <gtm-toggle-icon
+      [deselected]="!isActivityTypeSelected('OUTDOOR')"
+      iconName="outdoorRecreation"
+      iconType="custom"
+    ></gtm-toggle-icon>
+  </div>
+  <div class="interest_icon_wrapper sports_icon">
+    <gtm-toggle-icon
+      [deselected]="!isActivityTypeSelected('SPORTS')"
+      iconName="sports"
+      iconType="custom"
+    ></gtm-toggle-icon>
+  </div>
+  <div class="interest_icon_wrapper">
+    <gtm-toggle-icon
+      [deselected]="!isActivityTypeSelected('MOVIES')"
+      iconName="local_movies"
+      iconType="material"
+    ></gtm-toggle-icon>
+  </div>
+  <div class="interest_icon_wrapper art_icon">
+    <gtm-toggle-icon
+      [deselected]="!isActivityTypeSelected('ART_DESIGN')"
+      iconName="artsAndCrafts"
+      iconType="custom"
+    ></gtm-toggle-icon>
+  </div>
+  <div class="interest_icon_wrapper">
+    <gtm-toggle-icon
+      [deselected]="!isActivityTypeSelected('READING')"
+      iconName="menu_book"
+      iconType="material"
+    ></gtm-toggle-icon>
+  </div>
+  <div class="interest_icon_wrapper">
+    <gtm-toggle-icon
+      [deselected]="!isActivityTypeSelected('GAMING')"
+      iconName="videogame_asset"
+      iconType="material"
     ></gtm-toggle-icon>
   </div>
 </main>
