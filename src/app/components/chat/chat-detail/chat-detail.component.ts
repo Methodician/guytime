@@ -1,11 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { HeaderService } from '@app/services/header.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { takeUntil, map } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { ChatService } from '@services/chat.service';
-import { UserService } from '@app/services/user.service';
-import { UserI } from '@models/user';
 import { MessageI } from '@models/message';
 import { AuthService } from '@services/auth.service';
 import { FirebaseService } from '@app/services/firebase.service';
@@ -18,7 +15,6 @@ import { FirebaseService } from '@app/services/firebase.service';
 export class ChatDetailComponent implements OnInit {
   @ViewChild('chatList') private chatListEl: ElementRef;
   private unsubscribe$: Subject<void> = new Subject();
-  chatUsers$ = new BehaviorSubject<UserI[]>([]);
   msgInput = '';
   chats = [];
   chatGroupId = '';
@@ -30,7 +26,6 @@ export class ChatDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private chatSvc: ChatService,
-    private userSvc: UserService,
     private fbSvc: FirebaseService,
     private authSvc: AuthService,
   ) {}
@@ -45,7 +40,6 @@ export class ChatDetailComponent implements OnInit {
     this.route.params.subscribe(params => {
       if (params['id']) {
         this.chatGroupId = params['id'];
-        this.watchChatGroupAndUsers(this.chatGroupId);
         this.watchChatMessages(this.chatGroupId);
         this.updateHeader();
       }
@@ -78,49 +72,11 @@ export class ChatDetailComponent implements OnInit {
       });
   };
 
-  watchChatGroupAndUsers = (chatGroupId: string) => {
-    this.getChatObservable(chatGroupId).subscribe(chatGroup => {
-      const participantIds = Object.keys(chatGroup.participantsMap);
-      this.watchChatUsers(participantIds);
-    });
-  };
-
-  getChatObservable = (chatGroupId: string) => {
-    return this.chatSvc
-      .chatGroupDoc(chatGroupId)
-      .valueChanges()
-      .pipe(takeUntil(this.unsubscribe$));
-  };
-
-  watchChatUsers = (userIds: string[]) => {
-    const userObservables = userIds.map(uid => this.getUserObservable(uid));
-
-    const users$ = combineLatest(userObservables);
-    users$.subscribe(users => {
-      this.chatUsers$.next(users);
-    });
-  };
-
-  getUserObservable = (uid: string) =>
-    this.userSvc
-      .userRef(uid)
-      .valueChanges()
-      .pipe(
-        map(
-          user => ({ ...(user as object), uid }),
-          takeUntil(this.unsubscribe$),
-        ),
-      ) as Observable<UserI>;
-
   updateHeader = () => {
     setTimeout(() => delayedHeaderOperations());
 
     const delayedHeaderOperations = () => {
-      this.chatUsers$.pipe(takeUntil(this.unsubscribe$)).subscribe(users => {
-        const firstNames = users.map(user => user.fName);
-        const namesList = firstNames.join(', ');
-        this.headerSvc.setHeaderText(namesList);
-      });
+      this.headerSvc.setHeaderText('Messages');
 
       this.headerSvc.setHeaderOption('seePeople', {
         iconName: 'people',
