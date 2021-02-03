@@ -8,10 +8,35 @@ $button_height_2: 120px;
 main {
   .body {
     display: grid;
-    position: absolute;
     width: 100%;
     padding: 15px;
     height: $body_height;
+
+    grid-template-rows: 100px auto;
+
+    .info {
+      display: grid;
+      grid-template-columns: 100px auto;
+
+      .summary {
+        .words {
+          display: grid;
+          justify-content: center;
+
+          .name {
+            text-align: center;
+            font-size: 1.45rem;
+          }
+
+          .age_relationship {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: rgb(65, 64, 64);
+          }
+        }
+      }
+    }
   }
 
   .next_fella_wrapper {
@@ -20,7 +45,6 @@ main {
     width: 100vw;
     bottom: $button_height_1;
     justify-items: center;
-    // left: $button_indent_2;
   }
 
   .browse_btn {
