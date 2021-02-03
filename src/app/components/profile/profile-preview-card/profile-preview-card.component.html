@@ -4,8 +4,7 @@
       [imageSize]="avatarSize"
       [fileName]="avatarFileName()"
     ></gtm-avatar>
-    <b class="name">{{ user.fName }}</b>
-    <b class="age grid_cell_centered">{{ user.age }}</b>
+    <p>{{user.fName}} - {{user.age}}</p>
     <section class="content_wrapper grid_cell_centered">
       <ng-content></ng-content>
     </section>

@@ -1,5 +1,9 @@
 @import 'app/styles/vars.scss';
 
+main {
+  background-color: #eeeeee;
+}
+
 .logged-in {
   overflow: hidden;
   display: grid;

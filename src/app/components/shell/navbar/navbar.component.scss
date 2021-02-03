@@ -3,6 +3,7 @@ main {
   position: fixed;
   bottom: 0;
   width: 100%;
+  background-color: $bc_deep_teal;
 
   .mat-tab-nav-bar {
     height: $footer_height;
@@ -14,7 +15,7 @@ main {
     .mat-icon {
       height: 2em;
       width: 3em;
-      color: $bc-dusty_blue;
+      color: #fff;
     }
 
     .browse-icon {

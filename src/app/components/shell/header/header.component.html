@@ -1,4 +1,6 @@
 <main *ngIf="(options$ | async) && (headerText$ | async)">
+
+
   <div *ngIf="!shouldShowBack$.value" id="btn-placeholder"></div>
   <button
     *ngIf="shouldShowBack$.value"
@@ -9,8 +11,12 @@
   >
     <mat-icon>arrow_back</mat-icon>
   </button>
+
+  <!-- Header Center text -->
   <b class="page_title">{{ headerText$ | async }}</b>
 
+
+  <!-- Menu Buttons -->
   <div class="menu">
     <button
       class="menu_button"

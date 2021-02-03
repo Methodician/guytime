@@ -2,15 +2,17 @@ main {
   width: 100%;
 
   mat-card {
-    display: grid;
-    grid-template-columns: 15% 25% 60%;
-    grid-template-rows: 40% 60%;
-    grid-template-areas:
-      'avatar name content'
-      'avatar age content';
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
     width: 100%;
     height: 3.8rem;
     padding: 6px;
+
+    p {
+      min-width: 140px;
+      margin: 0;
+    }
     .grid_cell_centered {
       justify-self: center;
       align-self: center;
@@ -20,9 +22,6 @@ main {
       margin: 0;
       justify-self: center;
       align-self: flex-end;
-    }
-    .age {
-      grid-area: age;
     }
     .content_wrapper {
       grid-area: content;

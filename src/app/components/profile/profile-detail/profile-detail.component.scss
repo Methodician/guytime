@@ -9,18 +9,26 @@ main {
     padding: 15px;
 
     .header {
-      display: grid;
-      grid-template-columns: 100px auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .avatar {
+        padding: 10px 0;
+      }
 
       .summary {
         .stats {
           display: grid;
           justify-content: center;
+
         }
 
         .name {
           text-align: center;
           font-size: 1.68rem;
+          padding: 10px 0;
         }
 
         .age_relationship {
