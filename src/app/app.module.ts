@@ -57,6 +57,7 @@ import { AvatarComponent } from './components/shared/avatar/avatar.component';
 
 // pipes
 import { TimeElapsedPipe } from './pipes/time-elapsed.pipe';
+import { BrowseFellasComponent } from './components/profile/browse-fellas/browse-fellas.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -84,6 +85,7 @@ import { TimeElapsedPipe } from './pipes/time-elapsed.pipe';
     BottomGhostBannerComponent,
     AvatarComponent,
     LandingComponent,
+    BrowseFellasComponent,
   ],
   imports: [
     BrowserModule,

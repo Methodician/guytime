@@ -1,0 +1,59 @@
+<main *ngIf="currentUser()">
+  <section class="body">
+    <article class="header">
+      <gtm-avatar
+        [fileName]="avatarFileName()"
+        [imageHash]="avatarFileName()"
+        [imageSize]="avatarSize"
+      ></gtm-avatar>
+
+      <section class="summary">
+        <div class="words">
+          <b class="name"
+            >{{ currentUser().fName }} {{ currentUser().lName }}</b
+          >
+          <p class="age_relationship">
+            {{ currentUser().age }} -
+            {{
+              relationshipStatusMap.get(currentUser().relationshipStatus)
+                .displayName
+            }}
+          </p>
+        </div>
+        <gtm-activities-span
+          [selectedActivities]="currentUser().activityTypes"
+        ></gtm-activities-span>
+      </section>
+    </article>
+    <mat-card>{{ currentUser().bio }}</mat-card>
+  </section>
+  <div class="next_fella_wrapper">
+    <button class="next_fella" color="" (click)="cycleFella()" mat-fab>
+      <mat-icon>skip_next</mat-icon>
+    </button>
+  </div>
+  <button
+    class="browse_btn see_profile"
+    color=""
+    (click)="cycleFella()"
+    mat-fab
+  >
+    <mat-icon>person_search</mat-icon>
+  </button>
+  <button
+    class="browse_btn add_contact"
+    color=""
+    (click)="cycleFella()"
+    mat-mini-fab
+  >
+    <mat-icon>thumb_up</mat-icon>
+  </button>
+  <button
+    class="browse_btn send_message"
+    color=""
+    (click)="cycleFella()"
+    mat-mini-fab
+  >
+    <mat-icon>message</mat-icon>
+  </button>
+</main>

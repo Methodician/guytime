@@ -1,0 +1,44 @@
+@import 'app/styles/vars.scss';
+
+$button_indent_1: 35px;
+$button_indent_2: 140px;
+$button_height_1: 75px;
+$button_height_2: 120px;
+
+main {
+  .body {
+    display: grid;
+    position: absolute;
+    width: 100%;
+    padding: 15px;
+    height: $body_height;
+  }
+
+  .next_fella_wrapper {
+    position: absolute;
+    display: grid;
+    width: 100vw;
+    bottom: $button_height_1;
+    justify-items: center;
+    // left: $button_indent_2;
+  }
+
+  .browse_btn {
+    position: absolute;
+  }
+
+  .see_profile {
+    bottom: $button_height_1;
+    left: $button_indent_1;
+  }
+
+  .add_contact {
+    bottom: $button_height_2;
+    right: $button_indent_1;
+  }
+
+  .send_message {
+    bottom: $button_height_1;
+    right: $button_indent_1;
+  }
+}

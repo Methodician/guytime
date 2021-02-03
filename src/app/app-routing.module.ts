@@ -14,6 +14,7 @@ import { OtherConnectionsListComponent } from './components/profile/other-connec
 import { ChatPeopleComponent } from './components/chat/chat-people/chat-people.component';
 import { AddPeopleComponent } from './components/chat/add-people/add-people.component';
 import { LandingComponent } from './components/landing/landing.component';
+import { BrowseFellasComponent } from './components/profile/browse-fellas/browse-fellas.component';
 
 const routes: Routes = [
   // Should ultimately go to home (browse/filter profiles) which will redirect to login if you're not logged in
@@ -39,7 +40,7 @@ const routes: Routes = [
   },
   {
     path: 'guys',
-    component: BrowseGuysListComponent,
+    component: BrowseFellasComponent,
     canActivate: [AuthGuard],
     data: { shouldShowBack: false },
   },
