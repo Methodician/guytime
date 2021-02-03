@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   ProfileImageSizeT,
   RelationshipStatusM,
   UserI,
 } from '@app/models/user';
+import { AuthService } from '@app/services/auth.service';
+import { ChatService } from '@app/services/chat.service';
 import { HeaderService } from '@app/services/header.service';
 import { UserService } from '@app/services/user.service';
-import { Subject, BehaviorSubject, Observable } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -22,7 +25,13 @@ export class BrowseFellasComponent implements OnInit {
 
   relationshipStatusMap = RelationshipStatusM;
 
-  constructor(private userSvc: UserService, private headerSvc: HeaderService) {}
+  constructor(
+    private router: Router,
+    private chatSvc: ChatService,
+    private authSvc: AuthService,
+    private userSvc: UserService,
+    private headerSvc: HeaderService,
+  ) {}
 
   ngOnInit(): void {
     this.userSvc
@@ -38,7 +47,7 @@ export class BrowseFellasComponent implements OnInit {
     this.unsubscribe$.complete();
   }
 
-  cycleFella = () => {
+  onCycleClicked = () => {
     if (this.currentUserIndex < this.users.length - 1) {
       this.currentUserIndex++;
     } else {
@@ -47,6 +56,26 @@ export class BrowseFellasComponent implements OnInit {
       );
       this.currentUserIndex = 0;
     }
+  };
+
+  onProfileClicked = () =>
+    this.router.navigateByUrl(`/guys/${this.currentUser().uid}`);
+
+  onChatClicked = async () => {
+    const uid1 = this.authSvc.authInfo$.value.uid,
+      uid2 = this.currentUser().uid;
+
+    const chatId = await this.chatSvc.createPairChat(uid1, uid2);
+    this.router.navigateByUrl(`/chat/${chatId}`);
+  };
+
+  onConnectClicked = async () => {
+    const myUid = this.authSvc.authInfo$.value.uid,
+      theirUid = this.currentUser().uid;
+    await this.userSvc.addUserContact(myUid, theirUid);
+    alert(
+      'Connection saved! To view your connections look in your profile menu',
+    );
   };
 
   // HELPERS

@@ -28,14 +28,14 @@
     <mat-card>{{ currentUser().bio }}</mat-card>
   </section>
   <div class="next_fella_wrapper">
-    <button class="next_fella" color="" (click)="cycleFella()" mat-fab>
+    <button class="next_fella" color="" (click)="onCycleClicked()" mat-fab>
       <mat-icon>skip_next</mat-icon>
     </button>
   </div>
   <button
     class="browse_btn see_profile"
     color=""
-    (click)="cycleFella()"
+    (click)="onProfileClicked()"
     mat-fab
   >
     <mat-icon>person_search</mat-icon>
@@ -43,7 +43,7 @@
   <button
     class="browse_btn add_contact"
     color=""
-    (click)="cycleFella()"
+    (click)="onConnectClicked()"
     mat-mini-fab
   >
     <mat-icon>thumb_up</mat-icon>
@@ -51,7 +51,7 @@
   <button
     class="browse_btn send_message"
     color=""
-    (click)="cycleFella()"
+    (click)="onChatClicked()"
     mat-mini-fab
   >
     <mat-icon>message</mat-icon>
