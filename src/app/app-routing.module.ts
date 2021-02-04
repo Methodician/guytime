@@ -8,7 +8,6 @@ import { ProfileEditComponent } from '@components/profile/profile-edit/profile-e
 import { HasValidProfileGuard } from '@guards/has-valid-profile.guard';
 import { OtherDetailComponent } from '@components/profile/other-detail/other-detail.component';
 import { MeDetailComponent } from '@components/profile/me-detail/me-detail.component';
-import { BrowseGuysListComponent } from './components/profile/browse-guys-list/browse-guys-list.component';
 import { MeConnectionsListComponent } from './components/profile/me-connections-list/me-connections-list.component';
 import { OtherConnectionsListComponent } from './components/profile/other-connections-list/other-connections-list.component';
 import { ChatPeopleComponent } from './components/chat/chat-people/chat-people.component';
