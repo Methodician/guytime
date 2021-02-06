@@ -45,7 +45,6 @@ import { ProfilePreviewCardComponent } from '@components/profile/profile-preview
 import { OtherDetailComponent } from '@components/profile/other-detail/other-detail.component';
 import { MeDetailComponent } from '@components/profile/me-detail/me-detail.component';
 import { MeConnectionsListComponent } from '@components/profile/me-connections-list/me-connections-list.component';
-import { BrowseGuysListComponent } from '@components/profile/browse-guys-list/browse-guys-list.component';
 import { OtherConnectionsListComponent } from '@components/profile/other-connections-list/other-connections-list.component';
 import { ChatDetailComponent } from '@components/chat/chat-detail/chat-detail.component';
 import { ChatMessageComponent } from '@components/chat/chat-message/chat-message.component';
@@ -57,6 +56,7 @@ import { AvatarComponent } from './components/shared/avatar/avatar.component';
 
 // pipes
 import { TimeElapsedPipe } from './pipes/time-elapsed.pipe';
+import { BrowseFellasComponent } from './components/profile/browse-fellas/browse-fellas.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -73,7 +73,6 @@ import { TimeElapsedPipe } from './pipes/time-elapsed.pipe';
     OtherDetailComponent,
     MeDetailComponent,
     MeConnectionsListComponent,
-    BrowseGuysListComponent,
     OtherConnectionsListComponent,
     ChatDetailComponent,
     ChatMessageComponent,
@@ -84,6 +83,7 @@ import { TimeElapsedPipe } from './pipes/time-elapsed.pipe';
     BottomGhostBannerComponent,
     AvatarComponent,
     LandingComponent,
+    BrowseFellasComponent,
   ],
   imports: [
     BrowserModule,

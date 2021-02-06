@@ -4,19 +4,19 @@
       mat-tab-link
       (click)="onNavClicked('guys')"
       [active]="currentSelection === 'guys'"
-      ><mat-icon class="browse-icon" svgIcon="fistBump"></mat-icon
-    ></a>
-    <a
-      mat-tab-link
-      (click)="onNavClicked('me')"
-      [active]="currentSelection === 'me'"
-      ><mat-icon svgIcon="profile"></mat-icon
+      ><mat-icon class="browse-icon" svgIcon="profile"></mat-icon
     ></a>
     <a
       mat-tab-link
       (click)="onNavClicked('chat')"
-      [active]="currentSelection === 'chat'"
+      [active]="currentSelection === 'me'"
       ><mat-icon svgIcon="messaging"></mat-icon
+    ></a>
+    <a
+      mat-tab-link
+      (click)="onNavClicked('me')"
+      [active]="currentSelection === 'chat'"
+      ><mat-icon svgIcon="settings"></mat-icon
     ></a>
   </nav>
 </main>

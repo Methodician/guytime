@@ -56,7 +56,7 @@ export class AvatarComponent implements OnChanges {
       case '45x45':
         return '45px';
       case 'fullSize':
-        return '90px';
+        return '150px';
       default:
         return '90px';
     }

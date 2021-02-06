@@ -14,7 +14,7 @@ export class ChatService {
   setMessageAsSeenBy = async (uid: string, messageId: string) => {
     const messageDocRef = this.chatMessageDoc(messageId);
     const messageDocUpdate = { seenBy: { [uid]: true } };
-    return messageDocRef.set(messageDocUpdate, { merge: true });
+    return messageDocRef.update(messageDocUpdate);
   };
 
   createChatMessage = async (message: MessageI) => {

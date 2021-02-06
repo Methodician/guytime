@@ -16,7 +16,7 @@ export class HeaderService {
   shouldShowBack = false;
   defaultBackUrl: string;
 
-  headerText$ = new BehaviorSubject('Guy Time');
+  headerText$ = new BehaviorSubject('Fellas');
 
   wasBackJustClicked = false;
   previousUrls = [];
@@ -126,7 +126,7 @@ export class HeaderService {
 
   resetHeader = () => {
     this.clearHeaderOptions();
-    this.setHeaderText('Guy Time');
+    this.setHeaderText('Fellas');
     this.shouldShowBack = false;
     this.updateShouldShowBack();
     this.defaultUrl = null;

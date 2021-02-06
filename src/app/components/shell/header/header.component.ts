@@ -13,7 +13,7 @@ export class HeaderComponent implements OnInit {
   private unsubscribe$: Subject<void> = new Subject();
 
   options$: BehaviorSubject<HeaderOptionMapT> = new BehaviorSubject(new Map());
-  headerText$: BehaviorSubject<string> = new BehaviorSubject('Guy Time');
+  headerText$: BehaviorSubject<string> = new BehaviorSubject('Fellas');
   shouldShowBack$ = new BehaviorSubject(false);
 
   promptEvent;

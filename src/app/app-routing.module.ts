@@ -8,12 +8,12 @@ import { ProfileEditComponent } from '@components/profile/profile-edit/profile-e
 import { HasValidProfileGuard } from '@guards/has-valid-profile.guard';
 import { OtherDetailComponent } from '@components/profile/other-detail/other-detail.component';
 import { MeDetailComponent } from '@components/profile/me-detail/me-detail.component';
-import { BrowseGuysListComponent } from './components/profile/browse-guys-list/browse-guys-list.component';
 import { MeConnectionsListComponent } from './components/profile/me-connections-list/me-connections-list.component';
 import { OtherConnectionsListComponent } from './components/profile/other-connections-list/other-connections-list.component';
 import { ChatPeopleComponent } from './components/chat/chat-people/chat-people.component';
 import { AddPeopleComponent } from './components/chat/add-people/add-people.component';
 import { LandingComponent } from './components/landing/landing.component';
+import { BrowseFellasComponent } from './components/profile/browse-fellas/browse-fellas.component';
 
 const routes: Routes = [
   // Should ultimately go to home (browse/filter profiles) which will redirect to login if you're not logged in
@@ -39,7 +39,7 @@ const routes: Routes = [
   },
   {
     path: 'guys',
-    component: BrowseGuysListComponent,
+    component: BrowseFellasComponent,
     canActivate: [AuthGuard],
     data: { shouldShowBack: false },
   },

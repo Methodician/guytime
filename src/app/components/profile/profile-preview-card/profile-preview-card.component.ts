@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ProfileImageSizeT, UserI } from '@models/user';
-import { UserService } from '@services/user.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -14,7 +13,7 @@ export class ProfilePreviewCardComponent implements OnInit {
 
   avatarSize: ProfileImageSizeT = '45x45';
 
-  constructor(private userSvc: UserService, private router: Router) {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     if (!this.user || !this.user.uid)

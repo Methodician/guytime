@@ -1,0 +1,89 @@
+@import 'app/styles/vars.scss';
+
+$button_indent_1: 20px;
+$button_height_1: 70px;
+$button_height_2: 115px;
+
+main {
+  .branded_backdrop {
+    position: absolute;
+    top: $header_height;
+    height: 115px;
+    width: 100vw;
+    background-image: linear-gradient(
+      155deg,
+      map-get($fellas_teal, 400),
+      map-get($fellas_blue, 500)
+    );
+  }
+
+  .body {
+    position: relative;
+    z-index: 100;
+    display: grid;
+    width: 100%;
+    padding: 40px 15px 15px;
+    height: $body_height;
+
+    grid-template-rows: 250px auto;
+
+    .info {
+      display: grid;
+
+      gtm-avatar {
+        justify-self: center;
+      }
+
+      .summary {
+        .words {
+          display: grid;
+          justify-content: center;
+
+          .name {
+            text-align: center;
+            font-size: 1.45rem;
+          }
+
+          .age_relationship {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: rgb(65, 64, 64);
+          }
+        }
+      }
+    }
+  }
+
+  .browse_btn {
+    position: absolute;
+    z-index: 100;
+    // INOLIKEIT
+    // border: 1px solid black;
+  }
+
+  .next_fella {
+    bottom: $button_height_1;
+    left: $button_indent_1;
+  }
+
+  .add_contact {
+    bottom: $button_height_2;
+    right: $button_indent_1;
+  }
+
+  // prolly right way
+  // .send_message {
+  //   bottom: $button_height_1;
+  //   right: $button_indent_1;
+  // }
+
+  // tempfix
+  .send_message {
+    bottom: $button_height_1;
+    right: $button_indent_1;
+    height: 40px;
+    width: 40px;
+    border: none;
+  }
+}
