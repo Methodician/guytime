@@ -27,26 +27,22 @@
     </article>
     <mat-card>{{ currentUser().bio }}</mat-card>
   </section>
-  <div class="next_fella_wrapper">
-    <button class="next_fella" color="" (click)="onCycleClicked()" mat-fab>
-      <mat-icon>skip_next</mat-icon>
-    </button>
-  </div>
   <button
-    class="browse_btn see_profile"
+    class="browse_btn next_fella"
     color=""
-    (click)="onProfileClicked()"
-    mat-fab
+    (click)="onCycleClicked()"
+    mat-mini-fab
   >
-    <mat-icon>person_search</mat-icon>
+    <mat-icon svgIcon="nextFella"></mat-icon>
   </button>
+
   <button
     class="browse_btn add_contact"
     color=""
     (click)="onConnectClicked()"
     mat-mini-fab
   >
-    <mat-icon>thumb_up</mat-icon>
+    <mat-icon svgIcon="buttonHandshake"></mat-icon>
   </button>
   <button
     class="browse_btn send_message"
@@ -54,6 +50,6 @@
     (click)="onChatClicked()"
     mat-mini-fab
   >
-    <mat-icon>message</mat-icon>
+    <mat-icon svgIcon="message"></mat-icon>
   </button>
 </main>

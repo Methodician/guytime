@@ -1,9 +1,9 @@
 @import 'app/styles/vars.scss';
 
-$button_indent_1: 35px;
+$button_indent_1: 20px;
 $button_indent_2: 140px;
-$button_height_1: 75px;
-$button_height_2: 120px;
+$button_height_1: 70px;
+$button_height_2: 130px;
 
 main {
   .body {
@@ -39,19 +39,11 @@ main {
     }
   }
 
-  .next_fella_wrapper {
-    position: absolute;
-    display: grid;
-    width: 100vw;
-    bottom: $button_height_1;
-    justify-items: center;
-  }
-
   .browse_btn {
     position: absolute;
   }
 
-  .see_profile {
+  .next_fella {
     bottom: $button_height_1;
     left: $button_indent_1;
   }
