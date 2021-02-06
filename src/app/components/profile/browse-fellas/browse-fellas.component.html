@@ -13,7 +13,7 @@
             >{{ currentUser().fName }} {{ currentUser().lName }}</b
           >
           <p class="age_relationship">
-            {{ currentUser().age }} -
+            Age: {{ currentUser().age }} -
             {{
               relationshipStatusMap.get(currentUser().relationshipStatus)
                 .displayName

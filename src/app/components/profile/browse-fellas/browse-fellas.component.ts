@@ -21,7 +21,7 @@ export class BrowseFellasComponent implements OnInit {
   private unsubscribe$: Subject<void> = new Subject();
   users: UserI[] = [];
   currentUserIndex = 0;
-  avatarSize: ProfileImageSizeT = '90x90';
+  avatarSize: ProfileImageSizeT = 'fullSize';
 
   relationshipStatusMap = RelationshipStatusM;
 
@@ -82,7 +82,7 @@ export class BrowseFellasComponent implements OnInit {
   currentUser = () => this.users[this.currentUserIndex];
 
   avatarFileName = () => {
-    return this.currentUser()?.uploadedProfileImageMap[this.avatarSize]
+    return this.currentUser()?.uploadedProfileImageMap?.[this.avatarSize]
       ?.fileName;
   };
 }

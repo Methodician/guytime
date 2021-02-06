@@ -12,11 +12,14 @@ main {
     padding: 15px;
     height: $body_height;
 
-    grid-template-rows: 100px auto;
+    grid-template-rows: 250px auto;
 
     .info {
       display: grid;
-      grid-template-columns: 100px auto;
+
+      gtm-avatar {
+        justify-self: center;
+      }
 
       .summary {
         .words {
