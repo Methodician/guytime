@@ -3,7 +3,7 @@
 $button_indent_1: 20px;
 $button_indent_2: 140px;
 $button_height_1: 70px;
-$button_height_2: 130px;
+$button_height_2: 115px;
 
 main {
   .body {
@@ -41,6 +41,8 @@ main {
 
   .browse_btn {
     position: absolute;
+    // INOLIKEIT
+    // border: 1px solid black;
   }
 
   .next_fella {
@@ -53,8 +55,17 @@ main {
     right: $button_indent_1;
   }
 
+  // .send_message {
+  //   bottom: $button_height_1;
+  //   right: $button_indent_1;
+  // }
+
+  // tempfix
   .send_message {
     bottom: $button_height_1;
     right: $button_indent_1;
+    height: 40px;
+    width: 40px;
+    border: none;
   }
 }
