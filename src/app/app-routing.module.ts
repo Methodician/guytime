@@ -14,10 +14,13 @@ import { ChatPeopleComponent } from './components/chat/chat-people/chat-people.c
 import { AddPeopleComponent } from './components/chat/add-people/add-people.component';
 import { LandingComponent } from './components/landing/landing.component';
 import { BrowseFellasComponent } from './components/profile/browse-fellas/browse-fellas.component';
+import { TestFellasFlowComponent } from './components/testing/test-fellas-flow/test-fellas-flow.component';
 
 const routes: Routes = [
   // Should ultimately go to home (browse/filter profiles) which will redirect to login if you're not logged in
-  { path: '', redirectTo: 'guys', pathMatch: 'full' },
+  // { path: '', redirectTo: 'guys', pathMatch: 'full' },
+  { path: '', redirectTo: 'testing', pathMatch: 'full' },
+  { path: 'testing', component: TestFellasFlowComponent },
   { path: 'landing', component: LandingComponent },
   {
     path: 'me',

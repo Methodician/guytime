@@ -58,8 +58,11 @@ import { AddPeopleComponent } from './components/chat/add-people/add-people.comp
 import { AvatarComponent } from './components/shared/avatar/avatar.component';
 import { BrowseFellasComponent } from './components/profile/browse-fellas/browse-fellas.component';
 
+import { userReducer } from './store/user.reducer';
+
 // pipes
 import { TimeElapsedPipe } from './pipes/time-elapsed.pipe';
+import { TestFellasFlowComponent } from './components/testing/test-fellas-flow/test-fellas-flow.component';
 
 @NgModule({
   declarations: [
@@ -88,6 +91,7 @@ import { TimeElapsedPipe } from './pipes/time-elapsed.pipe';
     AvatarComponent,
     LandingComponent,
     BrowseFellasComponent,
+    TestFellasFlowComponent,
   ],
   imports: [
     BrowserModule,
@@ -114,7 +118,7 @@ import { TimeElapsedPipe } from './pipes/time-elapsed.pipe';
       enabled: environment.production,
       registrationStrategy: 'registerImmediately',
     }),
-    StoreModule.forRoot({}, {}),
+    StoreModule.forRoot({ fellasState: userReducer }, {}),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production,
