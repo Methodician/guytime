@@ -2,7 +2,11 @@ import { createReducer, on } from '@ngrx/store';
 import { FellasState } from './app.state';
 
 import * as UserActions from './user.actions';
-// import { UserI } from '../models/user';
+
+// Helper for state updates to be immutable
+// const newObject = (state, newData) => {
+//   return Object.assign({}, state, newData);
+// };
 
 // NgRx Docs
 const { nextFella, addFella } = UserActions;
@@ -30,10 +34,8 @@ export const userReducer = createReducer(
       return { ...state, currentFellaIndex: 0 };
     }
   }),
-  on(addFella, state => {
-    const { contactsIds, currentFellaIndex, fellas } = state;
-    const currentFella = fellas[currentFellaIndex];
-    const { uid } = currentFella as any;
+  on(addFella, (state, { uid }) => {
+    const { contactsIds } = state;
     const newContactIds = { ...contactsIds, [uid]: true };
     return { ...state, contactsIds: newContactIds };
   }),

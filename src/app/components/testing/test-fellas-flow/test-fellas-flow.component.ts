@@ -7,6 +7,7 @@ import {
   selectContactIds,
 } from '../../../store/user.selectors';
 import { nextFella, addFella } from '../../../store/user.actions';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'gtm-test-fellas-flow',
@@ -27,7 +28,8 @@ export class TestFellasFlowComponent implements OnInit {
   }
 
   onNext = () => this.store.dispatch(nextFella());
-  onAdd = () => {
-    this.store.dispatch(addFella());
-  };
+  onAdd = () =>
+    this.currentFella$
+      .pipe(take(1))
+      .subscribe(fella => this.store.dispatch(addFella({ uid: fella.uid })));
 }

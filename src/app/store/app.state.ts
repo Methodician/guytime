@@ -1,6 +1,10 @@
+export interface Fella {
+  name: string;
+  uid: string;
+}
 export interface FellasState {
   currentFellaIndex: number;
-  fellas: object[];
+  fellas: Fella[];
   contactsIds: object;
 }
 
