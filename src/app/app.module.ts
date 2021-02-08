@@ -1,6 +1,9 @@
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+
 // ANGULAR
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -53,10 +56,11 @@ import { ChatPeopleComponent } from './components/chat/chat-people/chat-people.c
 import { BottomGhostBannerComponent } from './components/ui/bottom-ghost-banner/bottom-ghost-banner.component';
 import { AddPeopleComponent } from './components/chat/add-people/add-people.component';
 import { AvatarComponent } from './components/shared/avatar/avatar.component';
+import { BrowseFellasComponent } from './components/profile/browse-fellas/browse-fellas.component';
 
 // pipes
 import { TimeElapsedPipe } from './pipes/time-elapsed.pipe';
-import { BrowseFellasComponent } from './components/profile/browse-fellas/browse-fellas.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -109,6 +113,11 @@ import { BrowseFellasComponent } from './components/profile/browse-fellas/browse
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       registrationStrategy: 'registerImmediately',
+    }),
+    StoreModule.forRoot({}, {}),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+      logOnly: environment.production,
     }),
   ],
   providers: [
