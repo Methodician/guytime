@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Store, select } from '@ngrx/store';
-import {
-  selectFellas,
-  selectCurrentFella,
-  selectContactIds,
-} from '../../../store/user.selectors';
-import { nextFella, addFella } from '../../../store/user.actions';
+
 import { take } from 'rxjs/operators';
+import { addFella, LOAD_FELLAS, nextFella } from '@app/store/fella.actions';
+import { selectCurrentFella, selectFellas } from '@app/store/fella.selectors';
 
 @Component({
   selector: 'gtm-test-fellas-flow',
@@ -17,14 +14,16 @@ import { take } from 'rxjs/operators';
 export class TestFellasFlowComponent implements OnInit {
   fellas$ = this.store.pipe(select(selectFellas));
   currentFella$ = this.store.pipe(select(selectCurrentFella));
-  contactsIds$ = this.store.pipe(select(selectContactIds));
+  // contactsIds$ = this.store.pipe(select(selectContactIds));
 
   constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.fellas$.subscribe(console.log);
     this.currentFella$.subscribe(console.log);
-    this.contactsIds$.subscribe(console.log);
+    // this.contactsIds$.subscribe(console.log);
+
+    this.store.dispatch({ type: LOAD_FELLAS });
   }
 
   onNext = () => this.store.dispatch(nextFella());

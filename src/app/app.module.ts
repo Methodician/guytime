@@ -62,7 +62,12 @@ import { userReducer } from './store/user.reducer';
 
 // pipes
 import { TimeElapsedPipe } from './pipes/time-elapsed.pipe';
+
+// Assorted automatic imports we have not yet organized (auto imports will usually end up here)
 import { TestFellasFlowComponent } from './components/testing/test-fellas-flow/test-fellas-flow.component';
+import { EffectsModule } from '@ngrx/effects';
+import { FellaEffects } from './store/fella.effects';
+import { fellaReducer } from './store/fella.reducer';
 
 @NgModule({
   declarations: [
@@ -118,11 +123,15 @@ import { TestFellasFlowComponent } from './components/testing/test-fellas-flow/t
       enabled: environment.production,
       registrationStrategy: 'registerImmediately',
     }),
-    StoreModule.forRoot({ fellasState: userReducer }, {}),
+    StoreModule.forRoot(
+      { fellaState: fellaReducer, testFellasState: userReducer },
+      {},
+    ),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production,
     }),
+    EffectsModule.forRoot([FellaEffects]),
   ],
   providers: [
     {

@@ -3,17 +3,17 @@ import { createSelector } from '@ngrx/store';
 import { AppState } from './app.state';
 
 export const selectFellas = createSelector(
-  (state: AppState) => state.fellasState.fellas,
+  (state: AppState) => state.testFellasState.fellas,
   fellas => fellas,
 );
 
 export const selectContactIds = createSelector(
-  (state: AppState) => state.fellasState.contactsIds,
+  (state: AppState) => state.testFellasState.contactsIds,
   contactIds => contactIds,
 );
 
 export const selectCurrentFellaIndex = createSelector(
-  (state: AppState) => state.fellasState.currentFellaIndex,
+  (state: AppState) => state.testFellasState.currentFellaIndex,
   currentFellaIndex => currentFellaIndex,
 );
 

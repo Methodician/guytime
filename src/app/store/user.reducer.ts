@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { FellasState } from './app.state';
+import { TestFellasState } from './app.state';
 
 import * as UserActions from './user.actions';
 
@@ -11,7 +11,7 @@ import * as UserActions from './user.actions';
 // NgRx Docs
 const { nextFella, addFella } = UserActions;
 
-export const initialState: FellasState = {
+export const initialState: TestFellasState = {
   currentFellaIndex: 0,
   fellas: [
     { name: 'joe', uid: 'asf3' },
