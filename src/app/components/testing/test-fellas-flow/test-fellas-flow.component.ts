@@ -19,8 +19,8 @@ export class TestFellasFlowComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.fellas$.subscribe(console.log);
-    this.currentFella$.subscribe(console.log);
+    // this.fellas$.subscribe(console.log);
+    // this.currentFella$.subscribe(console.log);
     // this.contactsIds$.subscribe(console.log);
 
     this.store.dispatch({ type: LOAD_FELLAS });

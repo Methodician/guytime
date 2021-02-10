@@ -68,6 +68,7 @@ import { TestFellasFlowComponent } from './components/testing/test-fellas-flow/t
 import { EffectsModule } from '@ngrx/effects';
 import { FellaEffects } from './store/fella.effects';
 import { fellaReducer } from './store/fella.reducer';
+import { UserEffects } from './store/user.effects';
 
 @NgModule({
   declarations: [
@@ -124,14 +125,14 @@ import { fellaReducer } from './store/fella.reducer';
       registrationStrategy: 'registerImmediately',
     }),
     StoreModule.forRoot(
-      { fellaState: fellaReducer, testFellasState: userReducer },
+      { fellaState: fellaReducer, userState: userReducer },
       {},
     ),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production,
     }),
-    EffectsModule.forRoot([FellaEffects]),
+    EffectsModule.forRoot([FellaEffects, UserEffects]),
   ],
   providers: [
     {

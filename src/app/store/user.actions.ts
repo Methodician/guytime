@@ -1,9 +1,16 @@
+import { UserI } from '@app/models/user';
 import { createAction, props } from '@ngrx/store';
 
-export const NEXT_FELLA = '[USER] Next';
-export const ADD_FELLA = '[USER] Add';
+export const USER_AUTHENTICATED = '[User] Authenticated';
+export const CURRENT_USER_LOADED = '[User] Current User Loaded';
+export const CURRENT_USER_LOAD_FAILED = '[User] Current User Load Failed';
 
-// NgRx Docs
-export const nextFella = createAction(NEXT_FELLA);
-// export const addFella = createAction(ADD_FELLA);
-export const addFella = createAction(ADD_FELLA, props<{ uid: string }>());
+export const userAuthenticated = createAction(
+  USER_AUTHENTICATED,
+  props<{ uid: string }>(),
+);
+
+export const currentUserLoaded = createAction(
+  CURRENT_USER_LOADED,
+  props<{ user: UserI }>(),
+);

@@ -4,18 +4,16 @@ export interface Fella {
   name: string;
   uid: string;
 }
-export interface TestFellasState {
-  currentFellaIndex: number;
-  fellas: Fella[];
-  contactsIds: object;
-}
-
 export interface FellaState {
   currentFellaIndex: number;
   fellas: ReadonlyArray<UserI>;
 }
 
+export interface UserState {
+  currentUser: UserI;
+}
+
 export interface AppState {
-  testFellasState: TestFellasState;
   fellaState: FellaState;
+  userState: UserState;
 }

@@ -4,6 +4,8 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AuthInfo } from '@models/auth-info';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { userAuthenticated } from '@app/store/user.actions';
 
 @Injectable({
   providedIn: 'root',
@@ -15,11 +17,16 @@ export class AuthService {
 
   isLoggedIn$: Observable<boolean>;
 
-  constructor(private router: Router, private afAuth: AngularFireAuth) {
+  constructor(
+    private router: Router,
+    private afAuth: AngularFireAuth,
+    private store: Store,
+  ) {
     this.isLoggedIn$ = this.afAuth.user.pipe(map(user => !!user && !!user.uid));
 
     this.afAuth.user.subscribe(user => {
       if (user) {
+        this.store.dispatch(userAuthenticated({ uid: user.uid }));
         this.authInfo$.next(
           new AuthInfo(
             user.uid,
