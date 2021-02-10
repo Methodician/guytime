@@ -70,6 +70,9 @@ import { FellaEffects } from './store/fella.effects';
 import { fellaReducer } from './store/fella.reducer';
 import { UserEffects } from './store/user.effects';
 
+import { contactsReducer } from './store/contacts-state/contacts.reducer';
+import { ContactsEffects } from './store/contacts-state/contacts.effects';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -125,14 +128,18 @@ import { UserEffects } from './store/user.effects';
       registrationStrategy: 'registerImmediately',
     }),
     StoreModule.forRoot(
-      { fellaState: fellaReducer, userState: userReducer },
+      {
+        fellaState: fellaReducer,
+        userState: userReducer,
+        contactsState: contactsReducer,
+      },
       {},
     ),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production,
     }),
-    EffectsModule.forRoot([FellaEffects, UserEffects]),
+    EffectsModule.forRoot([FellaEffects, UserEffects, ContactsEffects]),
   ],
   providers: [
     {

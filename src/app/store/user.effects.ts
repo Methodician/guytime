@@ -6,7 +6,14 @@ import {
   CURRENT_USER_LOAD_FAILED,
   userAuthenticated,
 } from './user.actions';
-import { catchError, exhaustMap, map } from 'rxjs/operators';
+import {
+  catchError,
+  exhaustMap,
+  mergeMap,
+  map,
+  take,
+  switchMap,
+} from 'rxjs/operators';
 import { of } from 'rxjs';
 
 @Injectable()
@@ -19,7 +26,7 @@ export class UserEffects {
       exhaustMap(action =>
         this.userSvc
           .userRef(action.uid)
-          .valueChanges()
+          .valueChanges({ idField: 'uid' })
           .pipe(
             map(user => ({
               type: CURRENT_USER_LOADED,
@@ -30,4 +37,12 @@ export class UserEffects {
       ),
     ),
   );
+
+  // loadUserContacts$ = createEffect(() =>
+  //   this.actions$.pipe(ofType(loadUserContacts),
+  //   exhaustMap(action => {
+  //     action.uids.map(uid => this.userSvc.userRef(uid).valueChanges().pipe(take(1)))
+  //   })
+  //   ),
+  // );
 }
