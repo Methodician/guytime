@@ -1,13 +1,29 @@
 import { Injectable } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AuthInfo } from '@app/models/auth-info';
 import { AuthService } from '@app/services/auth.service';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, exhaustMap, map } from 'rxjs/operators';
-import { login, loginFailure, loginSuccess } from './auth.actions';
+import {
+  loadAuth,
+  loadAuthFailure,
+  loadAuthSuccess,
+  login,
+  loginFailure,
+  loginSuccess,
+} from './auth.actions';
+
+// TODO: stop duplicating this object
+const NULL_USER = new AuthInfo(null, false, null, null);
 
 @Injectable()
 export class AuthEffects {
-  constructor(private actions$: Actions, private authSvc: AuthService) {}
+  constructor(
+    private actions$: Actions,
+    private authSvc: AuthService,
+    private afAuth: AngularFireAuth,
+  ) {}
 
   login$ = createEffect(() =>
     this.actions$.pipe(
@@ -18,6 +34,26 @@ export class AuthEffects {
           .pipe(map(credential => loginSuccess({ credential }))),
       ),
       catchError(error => of(loginFailure({ error }))),
+    ),
+  );
+
+  authInfo$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(loadAuth),
+      exhaustMap(_ => this.afAuth.user),
+      map(user =>
+        user
+          ? loadAuthSuccess({
+              authInfo: new AuthInfo(
+                user.uid,
+                user.emailVerified,
+                user.displayName,
+                user.email,
+              ),
+            })
+          : loadAuthSuccess({ authInfo: NULL_USER }),
+      ),
+      catchError(error => of(loadAuthFailure({ error }))),
     ),
   );
 }
