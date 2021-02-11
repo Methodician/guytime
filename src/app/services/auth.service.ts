@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AuthInfo } from '@models/auth-info';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, from, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { userAuthenticated } from '@app/store/user-state/user.actions';
@@ -55,7 +55,7 @@ export class AuthService {
     }
   };
 
-  signIn = async (email: string, password: string) => {
+  signIn = (email: string, password: string) => {
     const wasSignInErrorUnhandled = error =>
       !!error &&
       !!error.code &&
@@ -63,15 +63,15 @@ export class AuthService {
       error.code !== 'auth/user-not-found';
 
     try {
-      const credential = await this.afAuth.signInWithEmailAndPassword(
-        email,
-        password,
+      console.log({ email, password });
+      const credential$ = from(
+        this.afAuth.signInWithEmailAndPassword(email, password),
       );
-      return credential;
+      return credential$;
     } catch (error) {
       if (wasSignInErrorUnhandled(error)) console.error(error);
 
-      return error;
+      return of(error);
     }
   };
 

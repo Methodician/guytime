@@ -74,6 +74,7 @@ import { environment } from '@env/environment';
 import { FellaEffects } from './store/fella-state/fella.effects';
 import { fellaReducer } from './store/fella-state/fella.reducer';
 import { UserEffects } from './store/user-state/user.effects';
+import { AuthEffects } from './store/auth-state/auth.effects';
 
 @NgModule({
   declarations: [
@@ -140,7 +141,12 @@ import { UserEffects } from './store/user-state/user.effects';
       maxAge: 25,
       logOnly: environment.production,
     }),
-    EffectsModule.forRoot([FellaEffects, UserEffects, ContactsEffects]),
+    EffectsModule.forRoot([
+      AuthEffects,
+      FellaEffects,
+      UserEffects,
+      ContactsEffects,
+    ]),
   ],
   providers: [
     {
