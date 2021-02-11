@@ -13,7 +13,6 @@ export const fellaReducer = createReducer(
     return { ...state, fellas: action.users };
   }),
   on(fellasLoadFailed, (state, action) => {
-    console.log({ state, action });
     alert('failed to load fellas');
     return state;
   }),

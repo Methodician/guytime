@@ -21,7 +21,6 @@ export const contactsReducer = createReducer(
 
   on(userContactsLoaded, (state, action) => {
     const { contacts } = action;
-    console.log({ contacts, state });
 
     return Object.assign({}, state, contacts);
     return { ...state, ...contacts };

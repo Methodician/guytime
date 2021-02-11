@@ -54,7 +54,6 @@ export class AddPeopleComponent implements OnInit {
 
   watchChatGroup = () => {
     this.chatGroup$.subscribe(group => {
-      console.log(group);
       if (!group) return;
       const { participantsMap } = group;
       const participantIds = Object.keys(participantsMap);

@@ -114,7 +114,7 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
       'Please remind us to implement the disconnect feature if this is important',
     );
 
-  logClicked = () => console.log(this.user$.value.uid);
+  logClicked = () => console.info(this.user$.value.uid);
 
   onSeeConnectionsClicked = () =>
     this.router.navigateByUrl(`/guys/${this.user$.value.uid}/connections`);

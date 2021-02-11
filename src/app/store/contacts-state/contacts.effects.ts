@@ -26,7 +26,6 @@ export class ContactsEffects {
         );
         const users$ = combineLatest(userObservables);
         const contactSlice$ = users$.pipe(map(users => ({ [uid]: users })));
-        contactSlice$.subscribe(console.log);
         return contactSlice$.pipe(
           map(slice => ({ type: USER_CONTACTS_LOADED, contacts: slice })),
         );

@@ -152,5 +152,5 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
       });
   };
 
-  logClicked = () => console.log('clicked');
+  logClicked = () => console.info('clicked');
 }

@@ -7,6 +7,12 @@ export const selectFellas = createSelector(
   fellas => fellas,
 );
 
+export const selectOneFella = createSelector(
+  (state: AppState, props: { uid: string }) =>
+    state.fellaState.fellas.find(users => users.uid === props.uid),
+  fella => fella,
+);
+
 export const selectCurrentFella = createSelector(
   (state: AppState) =>
     state.fellaState.fellas[state.fellaState.currentFellaIndex],
