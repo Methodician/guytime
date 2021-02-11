@@ -137,6 +137,7 @@
   },
   "defaultProject": "guytime",
   "cli": {
-    "analytics": "7d3be354-da31-446f-90bb-d5f29ec02836"
+    "analytics": "7d3be354-da31-446f-90bb-d5f29ec02836",
+    "defaultCollection": "@ngrx/schematics"
   }
 }
