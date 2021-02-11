@@ -18,9 +18,7 @@ import { TestFellasFlowComponent } from './components/testing/test-fellas-flow/t
 
 const routes: Routes = [
   // Should ultimately go to home (browse/filter profiles) which will redirect to login if you're not logged in
-  // { path: '', redirectTo: 'guys', pathMatch: 'full' },
-  { path: '', redirectTo: 'testing', pathMatch: 'full' },
-  { path: 'testing', component: TestFellasFlowComponent },
+  { path: '', redirectTo: 'guys', pathMatch: 'full' },
   { path: 'landing', component: LandingComponent },
   {
     path: 'me',

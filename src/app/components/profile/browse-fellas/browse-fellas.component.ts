@@ -9,8 +9,11 @@ import { AuthService } from '@app/services/auth.service';
 import { ChatService } from '@app/services/chat.service';
 import { HeaderService } from '@app/services/header.service';
 import { UserService } from '@app/services/user.service';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { LOAD_FELLAS, nextFella } from '@app/store/fella.actions';
+import { selectCurrentFella } from '@app/store/fella.selectors';
+import { select, Store } from '@ngrx/store';
+import { Observable, Subject } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 
 @Component({
   selector: 'gtm-browse-fellas',
@@ -18,14 +21,13 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./browse-fellas.component.scss'],
 })
 export class BrowseFellasComponent implements OnInit {
-  private unsubscribe$: Subject<void> = new Subject();
-  users: UserI[] = [];
-  currentUserIndex = 0;
+  selectedFella$: Observable<UserI>;
   avatarSize: ProfileImageSizeT = 'fullSize';
 
   relationshipStatusMap = RelationshipStatusM;
 
   constructor(
+    private store: Store,
     private router: Router,
     private chatSvc: ChatService,
     private authSvc: AuthService,
@@ -34,44 +36,32 @@ export class BrowseFellasComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userSvc
-      .namedUsersRef()
-      .valueChanges({ idField: 'uid' })
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(users => (this.users = users));
+    this.store.dispatch({ type: LOAD_FELLAS });
+    this.selectedFella$ = this.store.pipe(select(selectCurrentFella));
   }
 
   ngOnDestroy(): void {
     this.headerSvc.resetHeader();
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
   }
 
   onCycleClicked = () => {
-    if (this.currentUserIndex < this.users.length - 1) {
-      this.currentUserIndex++;
-    } else {
-      alert(
-        "That's everyone in the app. Please invite your friends to join! In the mean time, we'll start back from the beginning.",
-      );
-      this.currentUserIndex = 0;
-    }
+    this.store.dispatch(nextFella());
   };
-
-  onProfileClicked = () =>
-    this.router.navigateByUrl(`/guys/${this.currentUser().uid}`);
 
   onChatClicked = async () => {
     const uid1 = this.authSvc.authInfo$.value.uid,
-      uid2 = this.currentUser().uid;
+      selectedFella = await this.selectedFella$.pipe(take(1)).toPromise(),
+      uid2 = selectedFella.uid;
 
     const chatId = await this.chatSvc.createPairChat(uid1, uid2);
     this.router.navigateByUrl(`/chat/${chatId}`);
   };
 
   onConnectClicked = async () => {
-    const myUid = this.authSvc.authInfo$.value.uid,
-      theirUid = this.currentUser().uid;
+    const selectedFella = await this.selectedFella$.pipe(take(1)).toPromise(),
+      myUid = this.authSvc.authInfo$.value.uid,
+      theirUid = selectedFella.uid;
+
     await this.userSvc.addUserContact(myUid, theirUid);
     alert(
       'Connection saved! To view your connections look in your profile menu',
@@ -79,10 +69,16 @@ export class BrowseFellasComponent implements OnInit {
   };
 
   // HELPERS
-  currentUser = () => this.users[this.currentUserIndex];
 
-  avatarFileName = () => {
-    return this.currentUser()?.uploadedProfileImageMap?.[this.avatarSize]
-      ?.fileName;
-  };
+  avatarFileName$ = () =>
+    this.selectedFella$.pipe(
+      map(user => user?.uploadedProfileImageMap?.[this.avatarSize]?.fileName),
+    );
+  avatarFileHash$ = () =>
+    this.selectedFella$.pipe(
+      map(
+        user =>
+          user?.uploadedProfileImageMap?.[this.avatarSize]?.imageUpdateRando,
+      ),
+    );
 }

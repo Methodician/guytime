@@ -1,32 +1,32 @@
-<main *ngIf="currentUser()">
+<main *ngIf="selectedFella$ | async as selectedFella">
   <div class="branded_backdrop"></div>
   <section class="body">
     <article class="info">
       <gtm-avatar
-        [fileName]="avatarFileName()"
-        [imageHash]="avatarFileName()"
+        [fileName]="avatarFileName$() | async"
+        [imageHash]="avatarFileName$() | async"
         [imageSize]="avatarSize"
       ></gtm-avatar>
 
       <section class="summary">
         <div class="words">
           <b class="name"
-            >{{ currentUser().fName }} {{ currentUser().lName }}</b
+            >{{ selectedFella.fName }} {{ selectedFella.lName }}</b
           >
           <p class="age_relationship">
-            Age: {{ currentUser().age }} -
+            Age: {{ selectedFella.age }} -
             {{
-              relationshipStatusMap.get(currentUser().relationshipStatus)
+              relationshipStatusMap.get(selectedFella.relationshipStatus)
                 .displayName
             }}
           </p>
         </div>
         <gtm-activities-span
-          [selectedActivities]="currentUser().activityTypes"
+          [selectedActivities]="selectedFella.activityTypes"
         ></gtm-activities-span>
       </section>
     </article>
-    <mat-card>{{ currentUser().bio }}</mat-card>
+    <mat-card>{{ selectedFella.bio }}</mat-card>
   </section>
   <button
     class="browse_btn next_fella"
