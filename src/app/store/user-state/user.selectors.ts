@@ -1,7 +1,7 @@
 import { UserI } from '@app/models/user';
 import { createSelector } from '@ngrx/store';
 
-import { AppState } from './app.state';
+import { AppState } from '@app/store/app.state';
 
 export const selectLoggedinUser = createSelector(
   (state: AppState) => state.userState.currentUser,

@@ -9,10 +9,10 @@ import { AuthService } from '@app/services/auth.service';
 import { ChatService } from '@app/services/chat.service';
 import { HeaderService } from '@app/services/header.service';
 import { UserService } from '@app/services/user.service';
-import { LOAD_FELLAS, nextFella } from '@app/store/fella.actions';
-import { selectCurrentFella } from '@app/store/fella.selectors';
+import { LOAD_FELLAS, nextFella } from '@app/store/fella-state/fella.actions';
+import { selectCurrentFella } from '@app/store/fella-state/fella.selectors';
 import { select, Store } from '@ngrx/store';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 @Component({

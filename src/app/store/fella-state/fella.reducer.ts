@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { FellaState } from './app.state';
+import { FellaState } from '../app.state';
 import { fellasLoaded, fellasLoadFailed, nextFella } from './fella.actions';
 
 const initialState: FellaState = {

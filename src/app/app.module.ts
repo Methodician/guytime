@@ -3,6 +3,7 @@ import { AppComponent } from './app.component';
 
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
 
 // ANGULAR
 import { BrowserModule } from '@angular/platform-browser';
@@ -32,8 +33,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
 // LOCAL IMPORTS
-import { environment } from '@env/environment';
 
+// Components
 import { LandingComponent } from './components/landing/landing.component';
 import { NgGuideComponent } from '@components/ng-guide/ng-guide.component';
 import { ProfileListComponent } from '@components/profile/profile-list/profile-list.component';
@@ -58,20 +59,21 @@ import { AddPeopleComponent } from './components/chat/add-people/add-people.comp
 import { AvatarComponent } from './components/shared/avatar/avatar.component';
 import { BrowseFellasComponent } from './components/profile/browse-fellas/browse-fellas.component';
 
-import { userReducer } from './store/user.reducer';
+// NgRx
+import { contactsReducer } from './store/contacts-state/contacts.reducer';
+import { ContactsEffects } from './store/contacts-state/contacts.effects';
+import { userReducer } from '@app/store/user-state/user.reducer';
 
 // pipes
 import { TimeElapsedPipe } from './pipes/time-elapsed.pipe';
 
-// Assorted automatic imports we have not yet organized (auto imports will usually end up here)
-import { TestFellasFlowComponent } from './components/testing/test-fellas-flow/test-fellas-flow.component';
-import { EffectsModule } from '@ngrx/effects';
-import { FellaEffects } from './store/fella.effects';
-import { fellaReducer } from './store/fella.reducer';
-import { UserEffects } from './store/user.effects';
+// Other
+import { environment } from '@env/environment';
 
-import { contactsReducer } from './store/contacts-state/contacts.reducer';
-import { ContactsEffects } from './store/contacts-state/contacts.effects';
+// Assorted automatic imports we have not yet organized (auto imports will usually end up here)
+import { FellaEffects } from './store/fella-state/fella.effects';
+import { fellaReducer } from './store/fella-state/fella.reducer';
+import { UserEffects } from './store/user-state/user.effects';
 
 @NgModule({
   declarations: [
@@ -100,7 +102,6 @@ import { ContactsEffects } from './store/contacts-state/contacts.effects';
     AvatarComponent,
     LandingComponent,
     BrowseFellasComponent,
-    TestFellasFlowComponent,
   ],
   imports: [
     BrowserModule,

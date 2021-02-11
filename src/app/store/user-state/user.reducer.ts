@@ -1,8 +1,8 @@
 import { UserI } from '@app/models/user';
 import { createReducer, on } from '@ngrx/store';
-import { UserState } from './app.state';
+import { UserState } from '@app/store/app.state';
 
-import { currentUserLoaded, userAuthenticated } from './user.actions';
+import { currentUserLoaded } from '@app/store/user-state/user.actions';
 
 const NULL_USER: UserI = {
   fName: null,

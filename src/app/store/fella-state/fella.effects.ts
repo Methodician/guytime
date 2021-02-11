@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { map, mergeMap, catchError } from 'rxjs/operators';
-import { UserService } from '../services/user.service';
+import { UserService } from '../../services/user.service';
 
 import {
   FELLAS_LOADED,

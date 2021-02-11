@@ -5,7 +5,7 @@ import { AuthInfo } from '@models/auth-info';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { userAuthenticated } from '@app/store/user.actions';
+import { userAuthenticated } from '@app/store/user-state/user.actions';
 
 @Injectable({
   providedIn: 'root',
