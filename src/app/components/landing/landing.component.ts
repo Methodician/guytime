@@ -6,7 +6,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { login } from '@app/auth/auth.actions';
 import { AuthService } from '@app/services/auth.service';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'gtm-landing',
@@ -22,6 +24,7 @@ export class LandingComponent implements OnInit {
   loginError = null;
 
   constructor(
+    private store: Store,
     private fb: FormBuilder,
     private authSvc: AuthService,
     private router: Router,
@@ -47,15 +50,17 @@ export class LandingComponent implements OnInit {
     const email = this.loginForm.get('email').value;
     const password = this.loginForm.get('password').value;
 
-    const result = await this.authSvc.signIn(email, password);
+    this.store.dispatch(login({ email, password }));
 
-    const isResultError = !!result.code && !!result.message;
-    if (isResultError) {
-      this.loginError = result;
-      return;
-    }
+    // const result = await this.authSvc.signIn(email, password);
 
-    this.router.navigateByUrl('/guys');
+    // const isResultError = !!result.code && !!result.message;
+    // if (isResultError) {
+    //   this.loginError = result;
+    //   return;
+    // }
+
+    // this.router.navigateByUrl('/guys');
   };
 
   onRegister = async () => {

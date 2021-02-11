@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AuthInfo } from '@models/auth-info';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -47,6 +47,9 @@ export class AuthService {
       return null;
     }
   };
+
+  login$ = (email: string, password: string) =>
+    from(this.afAuth.signInWithEmailAndPassword(email, password));
 
   signIn = async (email: string, password: string) => {
     const wasSignInErrorUnhandled = error =>
