@@ -59,8 +59,9 @@ import { TimeElapsedPipe } from './pipes/time-elapsed.pipe';
 import { BrowseFellasComponent } from './components/profile/browse-fellas/browse-fellas.component';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { environment } from '../environments/environment';
 import { EffectsModule } from '@ngrx/effects';
+import { reducers, metaReducers } from './reducers';
+import { AppEffects } from './app.effects';
 @NgModule({
   declarations: [
     AppComponent,
@@ -115,8 +116,13 @@ import { EffectsModule } from '@ngrx/effects';
       registrationStrategy: 'registerImmediately',
     }),
     StoreModule.forRoot({}, {}),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
-    EffectsModule.forRoot([]),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+      logOnly: environment.production,
+    }),
+    EffectsModule.forRoot([AppEffects]),
+    StoreModule.forRoot(reducers, { metaReducers }),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
   ],
   providers: [
     {
