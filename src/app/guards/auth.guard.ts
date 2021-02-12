@@ -7,15 +7,15 @@ import {
   Router,
 } from '@angular/router';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
-import { isLoggedIn } from '@app/store/auth/auth.selectors';
+import { map, tap } from 'rxjs/operators';
+
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(private router: Router, private store: Store) {}
+  constructor(private router: Router, private afAuth: AngularFireAuth) {}
 
   canActivate(
     next: ActivatedRouteSnapshot,
@@ -25,7 +25,8 @@ export class AuthGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    return this.store.select(isLoggedIn).pipe(
+    return this.afAuth.user.pipe(
+      map(user => !!user.uid),
       tap(isLoggedIn => {
         if (!isLoggedIn) this.router.navigateByUrl('/landing');
       }),

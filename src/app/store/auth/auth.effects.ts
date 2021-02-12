@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { Router } from '@angular/router';
 import { AuthInfo } from '@app/models/auth-info';
 import { AuthService } from '@app/services/auth.service';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, exhaustMap, map } from 'rxjs/operators';
+import { catchError, exhaustMap, map, tap } from 'rxjs/operators';
 import {
   loadAuth,
   loadAuthFailure,
@@ -23,15 +24,17 @@ export class AuthEffects {
     private actions$: Actions,
     private authSvc: AuthService,
     private afAuth: AngularFireAuth,
+    private router: Router,
   ) {}
 
   login$ = createEffect(() =>
     this.actions$.pipe(
       ofType(login),
       exhaustMap(action =>
-        this.authSvc
-          .login$(action.email, action.password)
-          .pipe(map(credential => loginSuccess({ credential }))),
+        this.authSvc.login$(action.email, action.password).pipe(
+          tap(_ => this.router.navigateByUrl('/')),
+          map(credential => loginSuccess({ credential })),
+        ),
       ),
       catchError(error => of(loginFailure({ error }))),
     ),
