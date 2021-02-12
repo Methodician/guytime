@@ -6,13 +6,11 @@ const NULL_USER = new AuthInfo(null, false, null, null);
 
 export const authFeatureKey = 'auth';
 
-export interface AuthStateI {
-  authInfo: AuthInfo;
-}
+export type AuthStateT = AuthInfo;
 
-export const initialState: AuthStateI = { authInfo: NULL_USER };
+export const initialState: AuthStateT = NULL_USER;
 
 export const authReducer = createReducer(
   initialState,
-  on(loadAuthSuccess, (_, action) => ({ authInfo: action.authInfo })),
+  on(loadAuthSuccess, (_, action) => action.authInfo),
 );

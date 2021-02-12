@@ -6,6 +6,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { select, Store } from '@ngrx/store';
 import { loadAuth } from '@app/store/auth/auth.actions';
 import { isLoggedIn } from '@app/store/auth/auth.selectors';
+import { loadUsers } from './store/user/user.actions';
 
 @Component({
   selector: 'gtm-root',
@@ -21,6 +22,7 @@ export class AppComponent {
     sanitizer: DomSanitizer,
   ) {
     this.store.dispatch(loadAuth());
+    this.store.dispatch(loadUsers());
 
     this.isLoggedIn$ = this.store.pipe(select(isLoggedIn));
 

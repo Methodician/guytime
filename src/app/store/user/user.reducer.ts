@@ -1,22 +1,14 @@
 import { UserI } from '@app/models/user';
-import { Action, createReducer, on } from '@ngrx/store';
+import { createReducer, on } from '@ngrx/store';
+import { loadUsersSuccess } from './user.actions';
 
-const NULL_USER: UserI = {
-  fName: null,
-  lName: null,
-  age: null,
-  relationshipStatus: 'UNSPECIFIED',
-  bio: null,
-  activityTypes: [],
-  connectionIds: [],
-};
+export const userFeatureKey = 'users';
 
-export const userFeatureKey = 'user';
+export type UserStateT = ReadonlyArray<UserI>;
 
-export interface UserStateI {
-  users: ReadonlyArray<UserI>;
-}
+export const initialState: UserStateT = [];
 
-export const initialState: UserStateI = { users: [] };
-
-export const reducer = createReducer(initialState);
+export const userReducer = createReducer(
+  initialState,
+  on(loadUsersSuccess, (_, action) => action.users),
+);

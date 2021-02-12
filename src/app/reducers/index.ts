@@ -1,26 +1,25 @@
 import {
   authFeatureKey,
   authReducer,
-  AuthStateI,
+  AuthStateT,
 } from '@app/store/auth/auth.reducer';
 import {
-  ActionReducer,
-  ActionReducerMap,
-  createFeatureSelector,
-  createSelector,
-  MetaReducer,
-  Selector,
-  Store,
-} from '@ngrx/store';
+  userFeatureKey,
+  userReducer,
+  UserStateT,
+} from '@app/store/user/user.reducer';
+import { ActionReducerMap, MetaReducer, Selector, Store } from '@ngrx/store';
 import { take } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 export interface StateI {
-  auth: AuthStateI;
+  auth: AuthStateT;
+  users: UserStateT;
 }
 
 export const reducers: ActionReducerMap<StateI> = {
   [authFeatureKey]: authReducer,
+  [userFeatureKey]: userReducer,
 };
 
 export const metaReducers: MetaReducer<StateI>[] = !environment.production
