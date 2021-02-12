@@ -1,4 +1,8 @@
-import { authFeatureKey, authReducer, AuthState } from '@app/auth/auth.reducer';
+import {
+  authFeatureKey,
+  authReducer,
+  AuthStateI,
+} from '@app/store/auth/auth.reducer';
 import {
   ActionReducer,
   ActionReducerMap,
@@ -12,7 +16,7 @@ import { take } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 export interface StateI {
-  auth: AuthState;
+  auth: AuthStateI;
 }
 
 export const reducers: ActionReducerMap<StateI> = {

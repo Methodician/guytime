@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect } from '@ngrx/effects';
 
-import { AuthEffects } from '@app/auth/auth.effects';
+import { AuthEffects } from '@app/store/auth/auth.effects';
 
 @Injectable()
 export class AppEffects {

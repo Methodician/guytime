@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { authUid } from '@app/auth/auth.selectors';
+import { authUid } from '@app/store/auth/auth.selectors';
 import { ChatGroupI } from '@app/models/chat-group';
 import { UserI } from '@app/models/user';
 import { UserService } from '@app/services/user.service';

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { authUid } from '@app/auth/auth.selectors';
+import { authUid } from '@app/store/auth/auth.selectors';
 import { UserService } from '@app/services/user.service';
 import { Store } from '@ngrx/store';
 import { debounceTime, map, switchMap } from 'rxjs/operators';

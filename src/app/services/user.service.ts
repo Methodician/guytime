@@ -5,7 +5,7 @@ import { AngularFireStorage } from '@angular/fire/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FirebaseService } from './firebase.service';
 import { Store } from '@ngrx/store';
-import { authInfo, authUid } from '@app/auth/auth.selectors';
+import { authInfo, authUid } from '@app/store/auth/auth.selectors';
 import { take } from 'rxjs/operators';
 
 @Injectable({

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { authUid } from '@app/auth/auth.selectors';
+import { authUid } from '@app/store/auth/auth.selectors';
 import {
   ProfileImageSizeT,
   RelationshipStatusM,

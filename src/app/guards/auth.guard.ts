@@ -9,7 +9,7 @@ import {
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { isLoggedIn } from '@app/auth/auth.selectors';
+import { isLoggedIn } from '@app/store/auth/auth.selectors';
 
 @Injectable({
   providedIn: 'root',

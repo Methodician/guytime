@@ -6,7 +6,7 @@ import { Subject, BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
 import { ChatService } from '@app/services/chat.service';
 import { Store } from '@ngrx/store';
-import { authUid } from '@app/auth/auth.selectors';
+import { authUid } from '@app/store/auth/auth.selectors';
 
 @Component({
   selector: 'gtm-chat-message',

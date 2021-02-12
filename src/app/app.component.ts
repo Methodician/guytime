@@ -4,8 +4,8 @@ import { navIconMap, activityIconMap, buttonIconMap } from './models/icon-maps';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { select, Store } from '@ngrx/store';
-import { loadAuth } from './auth/auth.actions';
-import { isLoggedIn } from './auth/auth.selectors';
+import { loadAuth } from '@app/store/auth/auth.actions';
+import { isLoggedIn } from '@app/store/auth/auth.selectors';
 
 @Component({
   selector: 'gtm-root',

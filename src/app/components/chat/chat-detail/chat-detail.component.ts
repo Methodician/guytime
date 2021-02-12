@@ -6,7 +6,7 @@ import { ChatService } from '@services/chat.service';
 import { MessageI } from '@models/message';
 import { FirebaseService } from '@app/services/firebase.service';
 import { Store } from '@ngrx/store';
-import { authUid } from '@app/auth/auth.selectors';
+import { authUid } from '@app/store/auth/auth.selectors';
 import { take } from 'rxjs/operators';
 
 @Component({

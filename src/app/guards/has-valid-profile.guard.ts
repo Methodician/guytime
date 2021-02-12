@@ -9,7 +9,7 @@ import {
 import { Observable, of } from 'rxjs';
 import { UserService } from '@services/user.service';
 import { map, switchMap, tap } from 'rxjs/operators';
-import { authUid, isLoggedIn } from '@app/auth/auth.selectors';
+import { authUid, isLoggedIn } from '@app/store/auth/auth.selectors';
 import { Store } from '@ngrx/store';
 
 @Injectable({
