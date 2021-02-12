@@ -12,6 +12,7 @@ import { UserService } from '@app/services/user.service';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
+import { loggedInUserContacts } from '@app/store/user/user.selectors';
 
 @Component({
   selector: 'gtm-browse-fellas',
@@ -40,6 +41,8 @@ export class BrowseFellasComponent implements OnInit {
       .valueChanges({ idField: 'uid' })
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(users => (this.users = users));
+
+    this.store.select(loggedInUserContacts).subscribe(console.log);
   }
 
   ngOnDestroy(): void {
