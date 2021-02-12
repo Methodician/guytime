@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { AuthService } from '@app/services/auth.service';
+import { authUid } from '@app/auth/auth.selectors';
 import { UserService } from '@app/services/user.service';
+import { Store } from '@ngrx/store';
 import { debounceTime, map, switchMap } from 'rxjs/operators';
 
 @Component({
@@ -15,8 +16,8 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private authSvc: AuthService,
     private userSvc: UserService,
+    private store: Store,
   ) {}
 
   ngOnInit(): void {
@@ -36,12 +37,12 @@ export class NavbarComponent implements OnInit {
   };
 
   watchUnreadMessages = () => {
-    this.authSvc.authInfo$
+    this.store
+      .select(authUid)
       .pipe(
-        map(info => info.uid),
         switchMap(uid => this.userSvc.unreadMessagesDoc(uid).valueChanges()),
+        debounceTime(5000),
       )
-      .pipe(debounceTime(5000))
       .subscribe(unreadMessagesMap => {
         if (!unreadMessagesMap) return;
 

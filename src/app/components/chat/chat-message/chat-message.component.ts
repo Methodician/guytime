@@ -1,11 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MessageI } from '@models/message';
 import { UserService } from '@services/user.service';
-import { AuthService } from '@services/auth.service';
 import { ProfileImageSizeT, UserI } from '@models/user';
 import { Subject, BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
 import { ChatService } from '@app/services/chat.service';
+import { Store } from '@ngrx/store';
+import { authUid } from '@app/auth/auth.selectors';
 
 @Component({
   selector: 'gtm-chat-message',
@@ -23,14 +24,15 @@ export class ChatMessageComponent implements OnInit {
 
   constructor(
     private userSvc: UserService,
-    private authSvc: AuthService,
     private chatSvc: ChatService,
+    private store: Store,
   ) {}
 
   ngOnInit(): void {
-    this.authSvc.authInfo$
+    this.store
+      .select(authUid)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(info => (this.loggedInUid = info.uid));
+      .subscribe(uid => (this.loggedInUid = uid));
     this.getUserObservable(this.chatMessage.senderId)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(user => {
@@ -57,14 +59,12 @@ export class ChatMessageComponent implements OnInit {
       ) as Observable<UserI>;
 
   wasMessageSeen = () =>
-    !!this.chatMessage.seenBy &&
-    this.chatMessage.seenBy[this.authSvc.authInfo$.value.uid];
+    !!this.chatMessage.seenBy && this.chatMessage.seenBy[this.loggedInUid];
 
   setAsSeen = () => {
-    const loggedInUid = this.authSvc.authInfo$.value.uid;
-    const wasAuthor = loggedInUid === this.chatMessage.senderId;
+    const wasAuthor = this.loggedInUid === this.chatMessage.senderId;
     if (!wasAuthor)
-      this.chatSvc.setMessageAsSeenBy(loggedInUid, this.chatMessage.id);
+      this.chatSvc.setMessageAsSeenBy(this.loggedInUid, this.chatMessage.id);
   };
 
   avatarFileName = () =>

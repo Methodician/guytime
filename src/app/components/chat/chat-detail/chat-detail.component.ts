@@ -4,8 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { ChatService } from '@services/chat.service';
 import { MessageI } from '@models/message';
-import { AuthService } from '@services/auth.service';
 import { FirebaseService } from '@app/services/firebase.service';
+import { Store } from '@ngrx/store';
+import { authUid } from '@app/auth/auth.selectors';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'gtm-chat-detail',
@@ -27,7 +29,7 @@ export class ChatDetailComponent implements OnInit {
     private router: Router,
     private chatSvc: ChatService,
     private fbSvc: FirebaseService,
-    private authSvc: AuthService,
+    private store: Store,
   ) {}
 
   ngOnDestroy(): void {
@@ -90,8 +92,8 @@ export class ChatDetailComponent implements OnInit {
   onPeopleClicked = () =>
     this.router.navigateByUrl(`chat/${this.chatGroupId}/people`);
 
-  onSendMessage = () => {
-    const { uid } = this.authSvc.authInfo$.value,
+  onSendMessage = async () => {
+    const uid = await this.store.select(authUid).pipe(take(1)).toPromise(),
       { chatGroupId, msgInput } = this;
 
     const messageData: MessageI = {

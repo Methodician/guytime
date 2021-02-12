@@ -3,8 +3,10 @@ import { UserI } from '@models/user';
 import { BehaviorSubject } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { AuthService } from './auth.service';
 import { FirebaseService } from './firebase.service';
+import { Store } from '@ngrx/store';
+import { authInfo, authUid } from '@app/auth/auth.selectors';
+import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -24,10 +26,10 @@ export class UserService {
   constructor(
     private afStorage: AngularFireStorage,
     private afs: AngularFirestore,
-    private authSvc: AuthService,
     private fbSvc: FirebaseService,
+    private store: Store,
   ) {
-    this.authSvc.authInfo$.subscribe(authInfo => {
+    this.store.select(authInfo).subscribe(authInfo => {
       if (!authInfo.isLoggedIn()) {
         this.loggedInUser$.next(this.NULL_USER);
       } else {
@@ -41,8 +43,8 @@ export class UserService {
     });
   }
 
-  createUser = (user: UserI) => {
-    const uid = this.authSvc.authInfo$.value.uid;
+  createUser = async (user: UserI) => {
+    const uid = await this.getLoggedinUid();
     if (uid) {
       user.createdAt = this.fbSvc.fsTimestamp();
       return this.userRef(uid).set(user);
@@ -50,18 +52,18 @@ export class UserService {
     return;
   };
 
-  updateUser = (user: UserI) => {
-    const uid = this.authSvc.authInfo$.value.uid;
+  updateUser = async (user: UserI) => {
+    const uid = await this.getLoggedinUid();
     if (uid) {
       return this.userRef(uid).update(user);
     }
     return;
   };
 
-  uploadProfileImage = (image: File) => {
+  uploadProfileImage = async (image: File) => {
     const { name, type } = image;
     const isImage = type.startsWith('image/');
-    const uid = this.authSvc.authInfo$.value.uid;
+    const uid = this.getLoggedinUid();
     const fileExtension = name.slice(((name.lastIndexOf('.') - 1) >>> 0) + 2);
 
     if (!isImage) {
@@ -137,6 +139,9 @@ export class UserService {
 
     return isValid;
   };
+
+  // Should we bother with this kind of thing? Can it be centralized?
+  getLoggedinUid = () => this.store.select(authUid).pipe(take(1)).toPromise();
 }
 
 export type ThumbnailOptionsT = 'fullSize' | '90x90' | '45x45';

@@ -1,10 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { authUid } from '@app/auth/auth.selectors';
 import { ChatGroupI } from '@app/models/chat-group';
 import { UserI } from '@app/models/user';
-import { AuthService } from '@app/services/auth.service';
 import { UserService } from '@app/services/user.service';
+import { Store } from '@ngrx/store';
 import { combineLatest, Observable, Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { map, take, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'gtm-chat-group',
@@ -17,7 +18,7 @@ export class ChatGroupComponent implements OnInit {
   users$: Observable<UserI[]>;
   firstNames: string;
 
-  constructor(private userSvc: UserService, private authSvc: AuthService) {}
+  constructor(private userSvc: UserService, private store: Store) {}
 
   ngOnInit(): void {
     this.watchChatUsers();
@@ -28,11 +29,10 @@ export class ChatGroupComponent implements OnInit {
     this.unsubscribe$.complete();
   }
 
-  watchChatUsers = () => {
-    const userIds = Object.keys(this.group.participantsMap);
-    const filteredIds = userIds.filter(
-      id => id !== this.authSvc.authInfo$.value.uid,
-    );
+  watchChatUsers = async () => {
+    const uid = await this.store.select(authUid).pipe(take(1)).toPromise(),
+      userIds = Object.keys(this.group.participantsMap),
+      filteredIds = userIds.filter(id => id !== uid);
     const userObservables = filteredIds.map(uid => this.getUserObservable(uid));
 
     const users$ = combineLatest(userObservables);

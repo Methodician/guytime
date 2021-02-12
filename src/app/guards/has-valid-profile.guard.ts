@@ -7,16 +7,17 @@ import {
   Router,
 } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { AuthService } from '@services/auth.service';
 import { UserService } from '@services/user.service';
 import { map, switchMap, tap } from 'rxjs/operators';
+import { authUid, isLoggedIn } from '@app/auth/auth.selectors';
+import { Store } from '@ngrx/store';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HasValidProfileGuard implements CanActivate {
   constructor(
-    private authSvc: AuthService,
+    private store: Store,
     private userSvc: UserService,
     private router: Router,
   ) {}
@@ -34,12 +35,12 @@ export class HasValidProfileGuard implements CanActivate {
       );
       this.router.navigateByUrl('/me/edit');
     };
-    return this.authSvc.isLoggedIn$.pipe(
-      switchMap(isLoggedIn =>
-        !isLoggedIn
+
+    return this.store.select(isLoggedIn).pipe(
+      switchMap(isUserLoggedIn =>
+        !isUserLoggedIn
           ? of(false)
-          : this.authSvc.authInfo$.pipe(
-              map(info => info.uid),
+          : this.store.select(authUid).pipe(
               switchMap(
                 uid =>
                   !!uid &&

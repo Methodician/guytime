@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ChatGroupI } from '@app/models/chat-group';
-import { AuthService } from '@app/services/auth.service';
 import { ChatService } from '@app/services/chat.service';
 import { Observable } from 'rxjs';
 import { KeyMapI } from '@models/shared';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, take } from 'rxjs/operators';
 import { HeaderService } from '@app/services/header.service';
+import { Store } from '@ngrx/store';
+import { authUid } from '@app/auth/auth.selectors';
 
 @Component({
   selector: 'gtm-chat-list',
@@ -18,7 +19,7 @@ export class ChatListComponent implements OnInit {
 
   constructor(
     private chatSvc: ChatService,
-    private authSvc: AuthService,
+    private store: Store,
     private headerSvc: HeaderService,
   ) {}
 
@@ -35,16 +36,17 @@ export class ChatListComponent implements OnInit {
     };
   };
 
-  watchChatList = () => {
-    const loggedInUid = this.authSvc.authInfo$.value.uid;
+  watchChatList = async () => {
+    const loggedInUid = await this.store
+      .select(authUid)
+      .pipe(take(1))
+      .toPromise();
     this.chatList$ = this.chatSvc.watchChatsByUser$(loggedInUid);
     this.chatList$.pipe(debounceTime(5000)).subscribe(list => {
       const newBadgeList: KeyMapI<number> = {};
       for (let item of list) {
         if (!item.unreadMessagesByUser) continue;
-        const unreadMessageList = item.unreadMessagesByUser[
-          this.authSvc.authInfo$.value.uid
-        ] as any;
+        const unreadMessageList = item.unreadMessagesByUser[loggedInUid] as any;
         const unreadCount = unreadMessageList
           ? Object.keys(unreadMessageList).length
           : 0;
@@ -53,7 +55,4 @@ export class ChatListComponent implements OnInit {
       }
     });
   };
-
-  getUnreadMessageCount = (group: ChatGroupI) =>
-    group.unreadMessagesByUser[this.authSvc.authInfo$.value.uid].length;
 }

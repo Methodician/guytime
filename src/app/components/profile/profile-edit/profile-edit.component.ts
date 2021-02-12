@@ -125,11 +125,10 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
       if (!this.avatarFile) {
         isComplete$.next(true);
       } else {
-        const { task } = this.userSvc.uploadProfileImage(this.avatarFile);
+        this.userSvc
+          .uploadProfileImage(this.avatarFile)
+          .then(({ task }) => task.then(() => isComplete$.next(true)));
         // ToDo: add progress dialog
-        task.then(() => {
-          isComplete$.next(true);
-        });
       }
       return isComplete$;
     };

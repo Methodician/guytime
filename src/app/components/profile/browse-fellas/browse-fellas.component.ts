@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { authUid } from '@app/auth/auth.selectors';
 import {
   ProfileImageSizeT,
   RelationshipStatusM,
   UserI,
 } from '@app/models/user';
-import { AuthService } from '@app/services/auth.service';
 import { ChatService } from '@app/services/chat.service';
 import { HeaderService } from '@app/services/header.service';
 import { UserService } from '@app/services/user.service';
+import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'gtm-browse-fellas',
@@ -28,9 +29,9 @@ export class BrowseFellasComponent implements OnInit {
   constructor(
     private router: Router,
     private chatSvc: ChatService,
-    private authSvc: AuthService,
     private userSvc: UserService,
     private headerSvc: HeaderService,
+    private store: Store,
   ) {}
 
   ngOnInit(): void {
@@ -62,7 +63,7 @@ export class BrowseFellasComponent implements OnInit {
     this.router.navigateByUrl(`/guys/${this.currentUser().uid}`);
 
   onChatClicked = async () => {
-    const uid1 = this.authSvc.authInfo$.value.uid,
+    const uid1 = await this.store.select(authUid).pipe(take(1)).toPromise(),
       uid2 = this.currentUser().uid;
 
     const chatId = await this.chatSvc.createPairChat(uid1, uid2);
@@ -70,7 +71,7 @@ export class BrowseFellasComponent implements OnInit {
   };
 
   onConnectClicked = async () => {
-    const myUid = this.authSvc.authInfo$.value.uid,
+    const myUid = await this.store.select(authUid).pipe(take(1)).toPromise(),
       theirUid = this.currentUser().uid;
     await this.userSvc.addUserContact(myUid, theirUid);
     alert(
