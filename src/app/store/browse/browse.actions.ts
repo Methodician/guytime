@@ -1,13 +1,8 @@
 import { createAction, props } from '@ngrx/store';
 
-export const nextFellaClick = createAction(
-  '[Browse] Next Clicked',
-  props<{ maxIndex: number }>(),
-);
-
 export const nextFella = createAction(
   '[Browse] Next Fella',
-  props<{ newIndex: number }>(),
+  props<{ maxIndex: number }>(),
 );
 
 export const addFella = createAction(
