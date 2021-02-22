@@ -12,7 +12,10 @@ import { UserService } from '@app/services/user.service';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import { loggedInUserContacts } from '@app/store/user/user.selectors';
+import {
+  fellasToBrowse,
+  loggedInUserContacts,
+} from '@app/store/user/user.selectors';
 
 @Component({
   selector: 'gtm-browse-fellas',
@@ -22,6 +25,7 @@ import { loggedInUserContacts } from '@app/store/user/user.selectors';
 export class BrowseFellasComponent implements OnInit {
   private unsubscribe$: Subject<void> = new Subject();
   users: UserI[] = [];
+  users$ = this.store.select(fellasToBrowse);
   currentUserIndex = 0;
   avatarSize: ProfileImageSizeT = 'fullSize';
 

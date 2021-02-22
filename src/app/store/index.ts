@@ -11,22 +11,24 @@ import {
 import { ActionReducerMap, MetaReducer, Selector, Store } from '@ngrx/store';
 import { take } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import {
+  browseFeatureKey,
+  browseReducer,
+  BrowseStateI,
+} from './browse/browse.reducer';
 
 export interface StateI {
   auth: AuthStateT;
   users: UserStateT;
+  browse: BrowseStateI;
 }
 
 export const reducers: ActionReducerMap<StateI> = {
   [authFeatureKey]: authReducer,
   [userFeatureKey]: userReducer,
+  [browseFeatureKey]: browseReducer,
 };
 
 export const metaReducers: MetaReducer<StateI>[] = !environment.production
   ? []
   : [];
-
-// NgRx Helpers - do these belong elsewhere?
-
-export const selectPromise = (store: Store, selector: Selector<any, any>) =>
-  store.select(selector).pipe(take(1)).toPromise();

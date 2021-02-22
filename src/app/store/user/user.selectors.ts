@@ -1,5 +1,5 @@
 import { state } from '@angular/animations';
-import { StateI } from '@app/reducers';
+import { StateI } from '@app/store';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 
 const getLoggedInUser = (state: StateI) =>

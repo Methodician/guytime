@@ -1,4 +1,4 @@
-import { StateI } from '@app/reducers';
+import { StateI } from '@app/store';
 import { createSelector } from '@ngrx/store';
 
 export const authInfo = createSelector(
