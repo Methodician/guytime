@@ -9,7 +9,8 @@ import { Store } from '@ngrx/store';
 import { map, switchMap, take } from 'rxjs/operators';
 import { fellasToBrowse } from '@app/store/user/user.selectors';
 import { browseIndex } from '@app/store/browse/browse.selectors';
-import { nextFella } from '@app/store/browse/browse.actions';
+import { addFella, nextFella } from '@app/store/browse/browse.actions';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'gtm-browse-fellas',
@@ -47,35 +48,33 @@ export class BrowseFellasComponent implements OnInit {
 
   onProfileClicked = () =>
     this.currentUser$
+      .pipe(
+        map(user => user.uid),
+        take(1),
+      )
+      .subscribe(uid => this.router.navigateByUrl(`/guys/${uid}`));
+
+  onChatClicked = () => {
+    combineLatest([
+      this.store.select(authUid),
+      this.currentUser$.pipe(map(user => user.uid)),
+    ])
       .pipe(take(1))
-      .subscribe(user => this.router.navigateByUrl(`/guys/${user.uid}`));
-
-  onChatClicked = async () => {
-    const uid1 = await this.store.select(authUid).pipe(take(1)).toPromise(),
-      uid2 = await this.currentUser$
-        .pipe(
-          take(1),
-          map(user => user.uid),
-        )
-        .toPromise();
-
-    const chatId = await this.chatSvc.createPairChat(uid1, uid2);
-    this.router.navigateByUrl(`/chat/${chatId}`);
+      .subscribe(async ([uid1, uid2]) => {
+        const chatId = await this.chatSvc.createPairChat(uid1, uid2);
+        this.router.navigateByUrl(`/chat/${chatId}`);
+      });
   };
 
-  onConnectClicked = async () => {
-    const myUid = await this.store.select(authUid).pipe(take(1)).toPromise(),
-      theirUid = await this.currentUser$
-        .pipe(
-          take(1),
-          map(user => user.uid),
-        )
-        .toPromise();
-    await this.userSvc.addUserContact(myUid, theirUid);
-    alert(
-      'Connection saved! To view your connections look in your profile menu',
-    );
-  };
+  onConnectClicked = () =>
+    combineLatest([
+      this.store.select(authUid),
+      this.currentUser$.pipe(map(user => user.uid)),
+    ])
+      .pipe(take(1))
+      .subscribe(([myUid, theirUid]) =>
+        this.store.dispatch(addFella({ myUid, theirUid })),
+      );
 
   // HELPERS
   currentUser$ = this.browseIndex$.pipe(

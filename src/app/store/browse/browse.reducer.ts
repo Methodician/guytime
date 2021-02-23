@@ -1,4 +1,4 @@
-import { Action, createReducer, on } from '@ngrx/store';
+import { createReducer, on } from '@ngrx/store';
 import { nextFella } from './browse.actions';
 
 export const browseFeatureKey = 'browse';
