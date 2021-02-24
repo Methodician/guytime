@@ -1,10 +1,10 @@
 <main>
   <mat-list>
-    <mat-list-item *ngFor="let chat of chatList$ | async">
+    <mat-list-item *ngFor="let chat of chatGroupList$ | async">
       <mat-card
         [routerLink]="['/chat', chat.id]"
-        [matBadge]="badgeList[chat.id]"
-        [matBadgeHidden]="badgeList[chat.id] == 0"
+        [matBadge]="selectUnreadMessageCount$(chat.id) | async"
+        [matBadgeHidden]="(selectUnreadMessageCount$(chat.id) | async) === 0"
         matBadgePosition="before"
         matBadgeSize="small"
       >
