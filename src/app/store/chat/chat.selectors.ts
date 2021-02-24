@@ -6,8 +6,13 @@ export const selectOpenChatGroups = createSelector(
   groups => groups,
 );
 
-export const selectUnreadMessageCount = createSelector(
+export const selectUnreadMessageCountByChatGroup = createSelector(
   (state: StateI, groupId: string) =>
     state.chats.unreadMessageCountMap[groupId],
   count => count,
+);
+
+export const selectUnreadMessagesCountForUser = createSelector(
+  (state: StateI) => state.chats.unreadMessages,
+  unreadMessages => Object.keys(unreadMessages).length,
 );

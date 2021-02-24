@@ -3,7 +3,7 @@ import { HeaderService } from '@app/services/header.service';
 import { Store } from '@ngrx/store';
 import { loadChatGroups } from '@app/store/chat/chat.actions';
 import {
-  selectUnreadMessageCount,
+  selectUnreadMessageCountByChatGroup,
   selectOpenChatGroups,
 } from '@app/store/chat/chat.selectors';
 
@@ -22,8 +22,8 @@ export class ChatListComponent implements OnInit {
     this.store.dispatch(loadChatGroups());
   }
 
-  selectUnreadMessageCount$ = (messageId: string) =>
-    this.store.select(selectUnreadMessageCount, messageId);
+  selectUnreadMessageCountByChatGroup$ = (messageId: string) =>
+    this.store.select(selectUnreadMessageCountByChatGroup, messageId);
 
   updateHeader = () => {
     setTimeout(() => delayedHeaderOperations());

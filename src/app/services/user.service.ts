@@ -7,6 +7,7 @@ import { FirebaseService } from './firebase.service';
 import { Store } from '@ngrx/store';
 import { authInfo, authUid } from '@app/store/auth/auth.selectors';
 import { take } from 'rxjs/operators';
+import { KeyMapI } from '../../../functions/src';
 
 @Injectable({
   providedIn: 'root',
@@ -121,7 +122,9 @@ export class UserService {
   userRef = (uid: string) => this.allUsersRef().doc<UserI>(uid);
 
   unreadMessagesDoc = (uid: string) =>
-    this.userRef(uid).collection('meta').doc('unreadMessages');
+    this.userRef(uid)
+      .collection('meta')
+      .doc<KeyMapI<boolean>>('unreadMessages');
 
   // HELPERS
   testUserValidity = (user: UserI) => {

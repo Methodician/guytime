@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { authUid } from '@app/store/auth/auth.selectors';
-import { UserService } from '@app/services/user.service';
 import { Store } from '@ngrx/store';
-import { debounceTime, map, switchMap } from 'rxjs/operators';
+import { loadUserUnreadMessages } from '@app/store/chat/chat.actions';
+import { selectUnreadMessagesCountForUser } from '@app/store/chat/chat.selectors';
+import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'gtm-navbar',
@@ -11,43 +12,26 @@ import { debounceTime, map, switchMap } from 'rxjs/operators';
   styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent implements OnInit {
-  currentSelection: string;
-  unreadMessagesCount: number;
+  currentSelection$: Observable<string>;
+  unreadMessagesCount$ = this.store.select(selectUnreadMessagesCountForUser);
 
-  constructor(
-    private router: Router,
-    private userSvc: UserService,
-    private store: Store,
-  ) {}
+  constructor(private router: Router, private store: Store) {}
 
   ngOnInit(): void {
-    this.router.events.subscribe($e => {
-      if ($e instanceof NavigationEnd) {
+    this.currentSelection$ = this.router.events.pipe(
+      filter($e => $e instanceof NavigationEnd),
+      map(($e: NavigationEnd) => {
         const { url } = $e;
         const parts = url.split('/');
         const base = parts[1];
-        this.currentSelection = base;
-      }
-    });
-    this.watchUnreadMessages();
+        return base;
+      }),
+    );
+
+    this.store.dispatch(loadUserUnreadMessages());
   }
 
   onNavClicked = (route: string) => {
     this.router.navigateByUrl(`/${route}`);
-  };
-
-  watchUnreadMessages = () => {
-    this.store
-      .select(authUid)
-      .pipe(
-        switchMap(uid => this.userSvc.unreadMessagesDoc(uid).valueChanges()),
-        debounceTime(5000),
-      )
-      .subscribe(unreadMessagesMap => {
-        if (!unreadMessagesMap) return;
-
-        const count = Object.keys(unreadMessagesMap).length;
-        this.unreadMessagesCount = count;
-      });
   };
 }

@@ -4,6 +4,7 @@ import { KeyMapI } from '../../../../functions/src';
 import {
   createUnreadMessageCountMapSuccess,
   loadChatGroupsSuccess,
+  loadUserUnreadMessagesSuccess,
 } from './chat.actions';
 
 export const chatFeatureKey = 'chats';
@@ -11,11 +12,13 @@ export const chatFeatureKey = 'chats';
 export interface ChatStateI {
   chatGroups: ReadonlyArray<ChatGroupI>;
   unreadMessageCountMap: KeyMapI<number>;
+  unreadMessages: KeyMapI<boolean>;
 }
 
 export const initialState: ChatStateI = {
   chatGroups: [],
   unreadMessageCountMap: {},
+  unreadMessages: {},
 };
 
 export const chatReducer = createReducer(
@@ -31,4 +34,8 @@ export const chatReducer = createReducer(
       unreadMessageCountMap,
     }),
   ),
+  on(loadUserUnreadMessagesSuccess, (state, { unreadMessages }) => ({
+    ...state,
+    unreadMessages,
+  })),
 );

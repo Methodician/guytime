@@ -3,19 +3,22 @@
     <a
       mat-tab-link
       (click)="onNavClicked('guys')"
-      [active]="currentSelection === 'guys'"
+      [active]="(currentSelection$ | async) === 'guys'"
       ><mat-icon class="browse-icon" svgIcon="profile"></mat-icon
     ></a>
     <a
       mat-tab-link
       (click)="onNavClicked('chat')"
-      [active]="currentSelection === 'me'"
-      ><mat-icon svgIcon="messaging"></mat-icon
+      [active]="(currentSelection$ | async) === 'chat'"
+      ><mat-icon
+        svgIcon="messaging"
+        [matBadge]="unreadMessagesCount$ | async"
+      ></mat-icon
     ></a>
     <a
       mat-tab-link
       (click)="onNavClicked('me')"
-      [active]="currentSelection === 'chat'"
+      [active]="(currentSelection$ | async) === 'me'"
       ><mat-icon svgIcon="settings"></mat-icon
     ></a>
   </nav>
