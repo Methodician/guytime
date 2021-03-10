@@ -72,7 +72,6 @@ export class ChatEffects {
       ofType(loadUserUnreadMessages),
       exhaustMap(() =>
         this.store.select(authUid).pipe(
-          take(1),
           switchMap(loggedInUid =>
             this.userSvc.unreadMessagesDoc(loggedInUid).valueChanges(),
           ),

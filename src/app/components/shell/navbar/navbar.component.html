@@ -13,6 +13,7 @@
       ><mat-icon
         svgIcon="messaging"
         [matBadge]="unreadMessagesCount$ | async"
+        [matBadgeHidden]="(unreadMessagesCount$ | async) === 0"
       ></mat-icon
     ></a>
     <a
