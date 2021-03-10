@@ -12,6 +12,9 @@ import {
   loadChatGroups,
   loadChatGroupsFailure,
   loadChatGroupsSuccess,
+  loadChatMessages,
+  loadChatMessagesFailure,
+  loadChatMessagesSuccess,
   loadUserUnreadMessages,
   loadUserUnreadMessagesFailure,
   loadUserUnreadMessagesSuccess,
@@ -81,6 +84,19 @@ export class ChatEffects {
         ),
       ),
       catchError(error => of(loadUserUnreadMessagesFailure({ error }))),
+    ),
+  );
+
+  loadChatMessages$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(loadChatMessages),
+      switchMap(action =>
+        this.chatSvc
+          .chatMessagesByGroupQuery(action.chatGroupId)
+          .valueChanges({ idField: 'id' }),
+      ),
+      map(chatMessages => loadChatMessagesSuccess({ chatMessages })),
+      catchError(error => of(loadChatMessagesFailure({ error }))),
     ),
   );
 }

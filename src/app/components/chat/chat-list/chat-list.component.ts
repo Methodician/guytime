@@ -3,8 +3,8 @@ import { HeaderService } from '@app/services/header.service';
 import { Store } from '@ngrx/store';
 import { loadChatGroups } from '@app/store/chat/chat.actions';
 import {
-  selectUnreadMessageCountByChatGroup,
-  selectOpenChatGroups,
+  unreadMessageCountByChatGroup,
+  openChatGroups,
 } from '@app/store/chat/chat.selectors';
 
 @Component({
@@ -13,7 +13,7 @@ import {
   styleUrls: ['./chat-list.component.scss'],
 })
 export class ChatListComponent implements OnInit {
-  chatGroupList$ = this.store.select(selectOpenChatGroups);
+  chatGroupList$ = this.store.select(openChatGroups);
 
   constructor(private store: Store, private headerSvc: HeaderService) {}
 
@@ -22,8 +22,8 @@ export class ChatListComponent implements OnInit {
     this.store.dispatch(loadChatGroups());
   }
 
-  selectUnreadMessageCountByChatGroup$ = (messageId: string) =>
-    this.store.select(selectUnreadMessageCountByChatGroup, messageId);
+  unreadMessageCountByChatGroup$ = (messageId: string) =>
+    this.store.select(unreadMessageCountByChatGroup, messageId);
 
   updateHeader = () => {
     setTimeout(() => delayedHeaderOperations());

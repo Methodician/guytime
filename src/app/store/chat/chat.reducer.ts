@@ -1,24 +1,28 @@
 import { ChatGroupI } from '@app/models/chat-group';
+import { ChatMessageI } from '@app/models/message';
 import { createReducer, on } from '@ngrx/store';
 import { KeyMapI } from '../../../../functions/src';
 import {
   createUnreadMessageCountMapSuccess,
   loadChatGroupsSuccess,
+  loadChatMessagesSuccess,
   loadUserUnreadMessagesSuccess,
 } from './chat.actions';
 
-export const chatFeatureKey = 'chats';
+export const chatFeatureKey = 'chat';
 
 export interface ChatStateI {
   chatGroups: ReadonlyArray<ChatGroupI>;
   unreadMessageCountMap: KeyMapI<number>;
   unreadMessages: KeyMapI<boolean>;
+  chatMessages: ReadonlyArray<ChatMessageI>;
 }
 
 export const initialState: ChatStateI = {
   chatGroups: [],
   unreadMessageCountMap: {},
   unreadMessages: {},
+  chatMessages: [],
 };
 
 export const chatReducer = createReducer(
@@ -37,5 +41,9 @@ export const chatReducer = createReducer(
   on(loadUserUnreadMessagesSuccess, (state, { unreadMessages }) => ({
     ...state,
     unreadMessages,
+  })),
+  on(loadChatMessagesSuccess, (state, { chatMessages }) => ({
+    ...state,
+    chatMessages,
   })),
 );

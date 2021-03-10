@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { MessageI } from '@models/message';
+import { ChatMessageI } from '@models/message';
 import { UserService } from '@services/user.service';
 import { ProfileImageSizeT, UserI } from '@models/user';
 import { Subject, BehaviorSubject, combineLatest, Observable } from 'rxjs';
@@ -15,7 +15,7 @@ import { authUid } from '@app/store/auth/auth.selectors';
 })
 export class ChatMessageComponent implements OnInit {
   private unsubscribe$: Subject<void> = new Subject();
-  @Input() chatMessage: MessageI;
+  @Input() chatMessage: ChatMessageI;
 
   user$ = new BehaviorSubject<UserI>(null);
   loggedInUid: string;

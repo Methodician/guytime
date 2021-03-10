@@ -1,13 +1,15 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { HeaderService } from '@app/services/header.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { ChatService } from '@services/chat.service';
-import { MessageI } from '@models/message';
+import { ChatMessageI } from '@models/message';
 import { FirebaseService } from '@app/services/firebase.service';
 import { Store } from '@ngrx/store';
 import { authUid } from '@app/store/auth/auth.selectors';
 import { take } from 'rxjs/operators';
+import { loadChatMessages } from '@app/store/chat/chat.actions';
+import { chatMessages } from '@app/store/chat/chat.selectors';
 
 @Component({
   selector: 'gtm-chat-detail',
@@ -18,10 +20,8 @@ export class ChatDetailComponent implements OnInit {
   @ViewChild('chatList') private chatListEl: ElementRef;
   private unsubscribe$: Subject<void> = new Subject();
   msgInput = '';
-  chats = [];
   chatGroupId = '';
-  authUid = '';
-  messages: MessageI[];
+  messages$: Observable<ReadonlyArray<ChatMessageI>>;
 
   constructor(
     private headerSvc: HeaderService,
@@ -41,11 +41,13 @@ export class ChatDetailComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       if (params['id']) {
-        this.chatGroupId = params['id'];
-        this.watchChatMessages(this.chatGroupId);
+        const { id } = params;
+        this.chatGroupId = id;
+        this.store.dispatch(loadChatMessages({ chatGroupId: id }));
         this.updateHeader();
       }
     });
+    this.messages$ = this.store.select(chatMessages);
   }
 
   ngAfterViewChecked() {
@@ -57,22 +59,6 @@ export class ChatDetailComponent implements OnInit {
       this.chatListEl.nativeElement.scrollTop = this.chatListEl.nativeElement.scrollHeight;
     } catch (error) {}
   }
-
-  watchChatMessages = (chatGroupId: string) => {
-    this.chatSvc
-      .chatMessagesByGroupQuery(chatGroupId)
-      .snapshotChanges()
-      .subscribe(msgChangeActions => {
-        const messages = msgChangeActions.map(msgChangeAction => {
-          const { payload } = msgChangeAction,
-            { doc } = payload,
-            { id } = doc;
-          const msg = doc.data();
-          return { ...msg, id };
-        });
-        this.messages = messages;
-      });
-  };
 
   updateHeader = () => {
     setTimeout(() => delayedHeaderOperations());
@@ -96,7 +82,7 @@ export class ChatDetailComponent implements OnInit {
     const uid = await this.store.select(authUid).pipe(take(1)).toPromise(),
       { chatGroupId, msgInput } = this;
 
-    const messageData: MessageI = {
+    const messageData: ChatMessageI = {
       chatGroupId,
       senderId: uid,
       content: msgInput,
@@ -107,7 +93,7 @@ export class ChatDetailComponent implements OnInit {
     this.msgInput = '';
   };
 
-  trackMessageBy = (index: number, item: any): number => {
+  trackMessageBy = (_, item: any): number => {
     return item.id;
   };
 }

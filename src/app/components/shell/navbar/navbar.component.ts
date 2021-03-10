@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { loadUserUnreadMessages } from '@app/store/chat/chat.actions';
-import { selectUnreadMessagesCountForUser } from '@app/store/chat/chat.selectors';
+import { unreadMessagesCountForUser } from '@app/store/chat/chat.selectors';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
@@ -13,7 +13,7 @@ import { filter, map } from 'rxjs/operators';
 })
 export class NavbarComponent implements OnInit {
   currentSelection$: Observable<string>;
-  unreadMessagesCount$ = this.store.select(selectUnreadMessagesCountForUser);
+  unreadMessagesCount$ = this.store.select(unreadMessagesCountForUser);
 
   constructor(private router: Router, private store: Store) {}
 
