@@ -26,7 +26,7 @@ export class AuthGuard implements CanActivate {
     | boolean
     | UrlTree {
     return this.afAuth.user.pipe(
-      map(user => !!user.uid),
+      map(user => !!user && !!user.uid),
       tap(isLoggedIn => {
         if (!isLoggedIn) this.router.navigateByUrl('/landing');
       }),

@@ -53,4 +53,8 @@ export class ChatGroupComponent implements OnInit {
           takeUntil(this.unsubscribe$),
         ),
       ) as Observable<UserI>;
+
+  // Helpers
+  avatarFileName = (user: UserI) =>
+    user?.uploadedProfileImageMap?.['45x45'].fileName;
 }
