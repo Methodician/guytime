@@ -79,6 +79,9 @@ export class ChatDetailComponent implements OnInit {
     this.router.navigateByUrl(`chat/${this.chatGroupId}/people`);
 
   onSendMessage = async () => {
+    // Could be put in effects in theory, but unclear what the advangage would
+    // be other than a cleaner component code and separation of concerns
+    // (which is not a trivial advantage, but maybe not worth the refactor)
     const uid = await this.store.select(authUid).pipe(take(1)).toPromise(),
       { chatGroupId, msgInput } = this;
 
