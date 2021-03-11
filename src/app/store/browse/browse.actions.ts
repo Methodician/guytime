@@ -7,5 +7,14 @@ export const nextFella = createAction(
 
 export const addFella = createAction(
   '[Browse] Add Contact',
-  props<{ uid: string }>(),
+  props<{ myUid: string; theirUid: string }>(),
+);
+
+export const addFellaSuccess = createAction(
+  '[Browse] Contact Added Successfully',
+);
+
+export const addFellaFailure = createAction(
+  '[Browse] Failed to Add Contact',
+  props<{ error: any }>(),
 );

@@ -1,4 +1,4 @@
-import { state } from '@angular/animations';
+import { KeyMapI } from '@app/models/shared';
 import { StateI } from '@app/store';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 
@@ -34,5 +34,13 @@ export const userContacts = createSelector(
 export const loggedInUserContacts = createSelector(
   (state: StateI) =>
     state.users.filter(user => getLoggedInUser(state).contacts?.[user.uid]),
+  users => users,
+);
+
+export const userListByIds = createSelector(
+  (state: StateI, uidMap: KeyMapI<boolean>) =>
+    state.users.filter(
+      user => !!uidMap[user.uid] && !(state.auth.uid === user.uid),
+    ),
   users => users,
 );

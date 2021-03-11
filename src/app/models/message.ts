@@ -1,6 +1,6 @@
 import { KeyMapI } from './shared';
 
-export interface MessageI {
+export interface ChatMessageI {
   id?: string;
   chatGroupId: string;
   senderId: string;
