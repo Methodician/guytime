@@ -1,4 +1,5 @@
 // import { Timestamp } from '@google-cloud/firestore';
+import { KeyMapI } from '../../../functions/src';
 import { DisplayNameI } from './shared';
 
 // export interface UserI {
@@ -44,7 +45,7 @@ export interface UserI {
   activityTypes: ActivityTypeT[];
   connectionIds: string[];
   uploadedProfileImageMap?: ProfileImageNameMapI;
-  contacts?: any;
+  contacts?: KeyMapI<boolean>;
   createdAt?: any;
 }
 

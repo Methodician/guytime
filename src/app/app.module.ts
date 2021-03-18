@@ -116,7 +116,6 @@ import { allEffects } from './app.effects';
       enabled: environment.production,
       registrationStrategy: 'registerImmediately',
     }),
-    StoreModule.forRoot({}, {}),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production,
