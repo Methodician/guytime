@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { nextFella } from './browse.actions';
+import { nextFellaSuccess } from './browse.actions';
 
 export const browseFeatureKey = 'browse';
 
@@ -13,15 +13,8 @@ export const initialState: BrowseStateI = {
 
 export const browseReducer = createReducer(
   initialState,
-  on(nextFella, (state, action) => {
-    const { maxIndex } = action;
-    const { browseIndex } = state;
-    const newIndex = browseIndex >= maxIndex ? 0 : browseIndex + 1;
-    if (newIndex === 0) {
-      alert(
-        "That's everyone in the app. Please invite your friends to join! In the mean time, we'll start back from the beginning.",
-      );
-    }
+  on(nextFellaSuccess, (state, action) => {
+    const { newIndex } = action;
     return { ...state, browseIndex: newIndex };
   }),
 );

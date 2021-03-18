@@ -22,8 +22,8 @@ export class ChatListComponent implements OnInit {
     this.store.dispatch(loadChatGroups());
   }
 
-  unreadMessageCountByChatGroup$ = (messageId: string) =>
-    this.store.select(unreadMessageCountByChatGroup, messageId);
+  unreadMessageCountByChatGroup$ = (groupId: string) =>
+    this.store.select(unreadMessageCountByChatGroup(groupId));
 
   updateHeader = () => {
     setTimeout(() => delayedHeaderOperations());

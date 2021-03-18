@@ -1,22 +1,22 @@
-import { createSelector } from '@ngrx/store';
-import { StateI } from '@app/store';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { chatFeatureKey, ChatStateI } from './chat.reducer';
+
+export const chatState = createFeatureSelector<ChatStateI>(chatFeatureKey);
 
 export const openChatGroups = createSelector(
-  (state: StateI) => state.chat.chatGroups,
-  groups => groups,
+  chatState,
+  state => state.chatGroups,
 );
 
-export const unreadMessageCountByChatGroup = createSelector(
-  (state: StateI, groupId: string) => state.chat.unreadMessageCountMap[groupId],
-  count => count,
-);
+export const unreadMessageCountByChatGroup = (chatGroupId: string) =>
+  createSelector(chatState, state => state.unreadMessageCountMap[chatGroupId]);
 
-export const unreadMessagesCountForUser = createSelector(
-  (state: StateI) => state.chat.unreadMessages,
-  unreadMessages => Object.keys(unreadMessages).length,
-);
+export const unreadMessagesCountForUser = createSelector(chatState, state => {
+  const { unreadMessages } = state;
+  return Object.keys(unreadMessages).length;
+});
 
 export const chatMessages = createSelector(
-  (state: StateI) => state.chat.chatMessages,
-  chatMessages => chatMessages,
+  chatState,
+  state => state.chatMessages,
 );

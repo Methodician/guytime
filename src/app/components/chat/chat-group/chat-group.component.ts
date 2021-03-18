@@ -4,7 +4,7 @@ import { UserI } from '@app/models/user';
 import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { userListByIds } from '@app/store/user/user.selectors';
+import { userListByIdMap } from '@app/store/user/user.selectors';
 
 @Component({
   selector: 'gtm-chat-group',
@@ -31,7 +31,9 @@ export class ChatGroupComponent implements OnInit {
   }
 
   watchChatUsers = async () => {
-    const users$ = this.store.select(userListByIds, this.group.participantsMap);
+    const users$ = this.store.select(
+      userListByIdMap(this.group.participantsMap),
+    );
     this.users$ = users$;
 
     users$
