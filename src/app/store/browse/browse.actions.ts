@@ -1,8 +1,10 @@
 import { createAction, props } from '@ngrx/store';
 
-export const nextFella = createAction(
-  '[Browse] Next Fella',
-  props<{ maxIndex: number }>(),
+export const nextFella = createAction('[Browse] Next Fellaa');
+
+export const nextFellaSuccess = createAction(
+  '[Browse] Successfully cycled to next fella',
+  props<{ newIndex: number }>(),
 );
 
 export const addFella = createAction(

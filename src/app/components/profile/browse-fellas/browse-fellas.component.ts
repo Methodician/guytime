@@ -5,9 +5,8 @@ import { ProfileImageSizeT, RelationshipStatusM } from '@app/models/user';
 import { ChatService } from '@app/services/chat.service';
 import { HeaderService } from '@app/services/header.service';
 import { Store } from '@ngrx/store';
-import { map, switchMap, take } from 'rxjs/operators';
-import { fellasToBrowse } from '@app/store/user/user.selectors';
-import { browseIndex } from '@app/store/browse/browse.selectors';
+import { map, take } from 'rxjs/operators';
+import { selectedFella } from '@app/store/browse/browse.selectors';
 import { addFella, nextFella } from '@app/store/browse/browse.actions';
 import { combineLatest } from 'rxjs';
 
@@ -17,8 +16,7 @@ import { combineLatest } from 'rxjs';
   styleUrls: ['./browse-fellas.component.scss'],
 })
 export class BrowseFellasComponent implements OnInit {
-  users$ = this.store.select(fellasToBrowse);
-  browseIndex$ = this.store.select(browseIndex);
+  selectedFella$ = this.store.select(selectedFella);
   avatarSize: ProfileImageSizeT = 'fullSize';
 
   relationshipStatusMap = RelationshipStatusM;
@@ -37,15 +35,11 @@ export class BrowseFellasComponent implements OnInit {
   }
 
   onCycleClicked = () => {
-    this.users$
-      .pipe(take(1))
-      .subscribe(users =>
-        this.store.dispatch(nextFella({ maxIndex: users.length - 1 })),
-      );
+    this.store.dispatch(nextFella());
   };
 
   onProfileClicked = () =>
-    this.currentUser$
+    this.selectedFella$
       .pipe(
         map(user => user.uid),
         take(1),
@@ -55,7 +49,7 @@ export class BrowseFellasComponent implements OnInit {
   onChatClicked = () => {
     combineLatest([
       this.store.select(authUid),
-      this.currentUser$.pipe(map(user => user.uid)),
+      this.selectedFella$.pipe(map(user => user.uid)),
     ])
       .pipe(take(1))
       .subscribe(async ([uid1, uid2]) => {
@@ -67,19 +61,14 @@ export class BrowseFellasComponent implements OnInit {
   onConnectClicked = () =>
     combineLatest([
       this.store.select(authUid),
-      this.currentUser$.pipe(map(user => user.uid)),
+      this.selectedFella$.pipe(map(user => user.uid)),
     ])
       .pipe(take(1))
       .subscribe(([myUid, theirUid]) =>
         this.store.dispatch(addFella({ myUid, theirUid })),
       );
 
-  // HELPERS
-  currentUser$ = this.browseIndex$.pipe(
-    switchMap(index => this.users$.pipe(map(users => users && users[index]))),
-  );
-
-  avatarFileData$ = this.currentUser$.pipe(
+  avatarFileData$ = this.selectedFella$.pipe(
     map(user => user?.uploadedProfileImageMap?.[this.avatarSize]),
   );
 }
