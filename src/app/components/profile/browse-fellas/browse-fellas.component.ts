@@ -4,7 +4,6 @@ import { authUid } from '@app/store/auth/auth.selectors';
 import { ProfileImageSizeT, RelationshipStatusM } from '@app/models/user';
 import { ChatService } from '@app/services/chat.service';
 import { HeaderService } from '@app/services/header.service';
-import { UserService } from '@app/services/user.service';
 import { Store } from '@ngrx/store';
 import { map, switchMap, take } from 'rxjs/operators';
 import { fellasToBrowse } from '@app/store/user/user.selectors';
@@ -27,7 +26,6 @@ export class BrowseFellasComponent implements OnInit {
   constructor(
     private router: Router,
     private chatSvc: ChatService,
-    private userSvc: UserService,
     private headerSvc: HeaderService,
     private store: Store,
   ) {}
