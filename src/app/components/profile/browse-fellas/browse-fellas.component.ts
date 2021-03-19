@@ -1,16 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import {
-  ProfileImageSizeT,
-  RelationshipStatusM,
-  UserI,
-} from '@app/models/user';
-import { AuthService } from '@app/services/auth.service';
+import { authUid } from '@app/store/auth/auth.selectors';
+import { ProfileImageSizeT, RelationshipStatusM } from '@app/models/user';
 import { ChatService } from '@app/services/chat.service';
 import { HeaderService } from '@app/services/header.service';
-import { UserService } from '@app/services/user.service';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { map, take } from 'rxjs/operators';
+import { selectedFella } from '@app/store/browse/browse.selectors';
+import { addFella, nextFella } from '@app/store/browse/browse.actions';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'gtm-browse-fellas',
@@ -18,9 +16,7 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./browse-fellas.component.scss'],
 })
 export class BrowseFellasComponent implements OnInit {
-  private unsubscribe$: Subject<void> = new Subject();
-  users: UserI[] = [];
-  currentUserIndex = 0;
+  selectedFella$ = this.store.select(selectedFella);
   avatarSize: ProfileImageSizeT = 'fullSize';
 
   relationshipStatusMap = RelationshipStatusM;
@@ -28,61 +24,51 @@ export class BrowseFellasComponent implements OnInit {
   constructor(
     private router: Router,
     private chatSvc: ChatService,
-    private authSvc: AuthService,
-    private userSvc: UserService,
     private headerSvc: HeaderService,
+    private store: Store,
   ) {}
 
-  ngOnInit(): void {
-    this.userSvc
-      .namedUsersRef()
-      .valueChanges({ idField: 'uid' })
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(users => (this.users = users));
-  }
+  ngOnInit(): void {}
 
   ngOnDestroy(): void {
     this.headerSvc.resetHeader();
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
   }
 
   onCycleClicked = () => {
-    if (this.currentUserIndex < this.users.length - 1) {
-      this.currentUserIndex++;
-    } else {
-      alert(
-        "That's everyone in the app. Please invite your friends to join! In the mean time, we'll start back from the beginning.",
-      );
-      this.currentUserIndex = 0;
-    }
+    this.store.dispatch(nextFella());
   };
 
   onProfileClicked = () =>
-    this.router.navigateByUrl(`/guys/${this.currentUser().uid}`);
+    this.selectedFella$
+      .pipe(
+        map(user => user.uid),
+        take(1),
+      )
+      .subscribe(uid => this.router.navigateByUrl(`/guys/${uid}`));
 
-  onChatClicked = async () => {
-    const uid1 = this.authSvc.authInfo$.value.uid,
-      uid2 = this.currentUser().uid;
-
-    const chatId = await this.chatSvc.createPairChat(uid1, uid2);
-    this.router.navigateByUrl(`/chat/${chatId}`);
+  onChatClicked = () => {
+    combineLatest([
+      this.store.select(authUid),
+      this.selectedFella$.pipe(map(user => user.uid)),
+    ])
+      .pipe(take(1))
+      .subscribe(async ([uid1, uid2]) => {
+        const chatId = await this.chatSvc.createPairChat(uid1, uid2);
+        this.router.navigateByUrl(`/chat/${chatId}`);
+      });
   };
 
-  onConnectClicked = async () => {
-    const myUid = this.authSvc.authInfo$.value.uid,
-      theirUid = this.currentUser().uid;
-    await this.userSvc.addUserContact(myUid, theirUid);
-    alert(
-      'Connection saved! To view your connections look in your profile menu',
-    );
-  };
+  onConnectClicked = () =>
+    combineLatest([
+      this.store.select(authUid),
+      this.selectedFella$.pipe(map(user => user.uid)),
+    ])
+      .pipe(take(1))
+      .subscribe(([myUid, theirUid]) =>
+        this.store.dispatch(addFella({ myUid, theirUid })),
+      );
 
-  // HELPERS
-  currentUser = () => this.users[this.currentUserIndex];
-
-  avatarFileName = () => {
-    return this.currentUser()?.uploadedProfileImageMap?.[this.avatarSize]
-      ?.fileName;
-  };
+  avatarFileData$ = this.selectedFella$.pipe(
+    map(user => user?.uploadedProfileImageMap?.[this.avatarSize]),
+  );
 }

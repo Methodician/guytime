@@ -1,10 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ChatGroupI } from '@app/models/chat-group';
 import { UserI } from '@app/models/user';
-import { AuthService } from '@app/services/auth.service';
-import { UserService } from '@app/services/user.service';
-import { combineLatest, Observable, Subject } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
+import {
+  avatarFileName,
+  userListByIdMap,
+} from '@app/store/user/user.selectors';
 
 @Component({
   selector: 'gtm-chat-group',
@@ -13,11 +16,13 @@ import { map, takeUntil } from 'rxjs/operators';
 })
 export class ChatGroupComponent implements OnInit {
   @Input() group: ChatGroupI;
+
   private unsubscribe$: Subject<void> = new Subject();
+
   users$: Observable<UserI[]>;
   firstNames: string;
 
-  constructor(private userSvc: UserService, private authSvc: AuthService) {}
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.watchChatUsers();
@@ -28,29 +33,21 @@ export class ChatGroupComponent implements OnInit {
     this.unsubscribe$.complete();
   }
 
-  watchChatUsers = () => {
-    const userIds = Object.keys(this.group.participantsMap);
-    const filteredIds = userIds.filter(
-      id => id !== this.authSvc.authInfo$.value.uid,
+  watchChatUsers = async () => {
+    const users$ = this.store.select(
+      userListByIdMap(this.group.participantsMap),
     );
-    const userObservables = filteredIds.map(uid => this.getUserObservable(uid));
-
-    const users$ = combineLatest(userObservables);
     this.users$ = users$;
-    const firstNames$ = users$.pipe(
-      map(users => users.map(user => user.fName)),
-    );
-    firstNames$.subscribe(names => (this.firstNames = names.join(', ')));
+
+    users$
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        map(users => users.map(user => user.fName)),
+      )
+      .subscribe(names => (this.firstNames = names.join(', ')));
   };
 
-  getUserObservable = (uid: string) =>
-    this.userSvc
-      .userRef(uid)
-      .valueChanges()
-      .pipe(
-        map(
-          user => ({ ...(user as object), uid }),
-          takeUntil(this.unsubscribe$),
-        ),
-      ) as Observable<UserI>;
+  // Helpers
+  avatarFileName$ = (uid: string) =>
+    this.store.select(avatarFileName(uid, '45x45'));
 }

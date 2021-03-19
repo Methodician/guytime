@@ -1,11 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { MessageI } from '@models/message';
-import { UserService } from '@services/user.service';
-import { AuthService } from '@services/auth.service';
+import { ChatMessageI } from '@models/message';
 import { ProfileImageSizeT, UserI } from '@models/user';
-import { Subject, BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { takeUntil, map } from 'rxjs/operators';
+import { Subject, Observable } from 'rxjs';
+import { takeUntil, switchMap } from 'rxjs/operators';
 import { ChatService } from '@app/services/chat.service';
+import { Store } from '@ngrx/store';
+import { authUid } from '@app/store/auth/auth.selectors';
+import { avatarFileName, specificUser } from '@app/store/user/user.selectors';
 
 @Component({
   selector: 'gtm-chat-message',
@@ -14,28 +15,21 @@ import { ChatService } from '@app/services/chat.service';
 })
 export class ChatMessageComponent implements OnInit {
   private unsubscribe$: Subject<void> = new Subject();
-  @Input() chatMessage: MessageI;
+  @Input() chatMessage: ChatMessageI;
 
-  user$ = new BehaviorSubject<UserI>(null);
+  user$: Observable<UserI>;
   loggedInUid: string;
 
   avatarSize: ProfileImageSizeT = '45x45';
 
-  constructor(
-    private userSvc: UserService,
-    private authSvc: AuthService,
-    private chatSvc: ChatService,
-  ) {}
+  constructor(private chatSvc: ChatService, private store: Store) {}
 
   ngOnInit(): void {
-    this.authSvc.authInfo$
+    this.store
+      .select(authUid)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(info => (this.loggedInUid = info.uid));
-    this.getUserObservable(this.chatMessage.senderId)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(user => {
-        this.user$.next(user);
-      });
+      .subscribe(uid => (this.loggedInUid = uid));
+    this.user$ = this.store.select(specificUser(this.chatMessage.senderId));
 
     if (!this.wasMessageSeen()) {
       setTimeout(() => this.setAsSeen(), 5000);
@@ -47,29 +41,20 @@ export class ChatMessageComponent implements OnInit {
     this.unsubscribe$.complete();
   }
 
-  getUserObservable = (uid: string) =>
-    this.userSvc
-      .userRef(uid)
-      .valueChanges()
-      .pipe(
-        map(user => ({ ...(user as object), uid })),
-        takeUntil(this.unsubscribe$),
-      ) as Observable<UserI>;
-
   wasMessageSeen = () =>
-    !!this.chatMessage.seenBy &&
-    this.chatMessage.seenBy[this.authSvc.authInfo$.value.uid];
+    !!this.chatMessage.seenBy && this.chatMessage.seenBy[this.loggedInUid];
 
   setAsSeen = () => {
-    const loggedInUid = this.authSvc.authInfo$.value.uid;
-    const wasAuthor = loggedInUid === this.chatMessage.senderId;
+    const wasAuthor = this.loggedInUid === this.chatMessage.senderId;
     if (!wasAuthor)
-      this.chatSvc.setMessageAsSeenBy(loggedInUid, this.chatMessage.id);
+      this.chatSvc.setMessageAsSeenBy(this.loggedInUid, this.chatMessage.id);
   };
 
-  avatarFileName = () =>
-    this.user$.value &&
-    this.user$.value.uploadedProfileImageMap &&
-    this.user$.value.uploadedProfileImageMap[this.avatarSize] &&
-    this.user$.value.uploadedProfileImageMap[this.avatarSize].fileName;
+  avatarFileName$ = () =>
+    this.user$.pipe(
+      takeUntil(this.unsubscribe$),
+      switchMap(user =>
+        this.store.select(avatarFileName(user.uid, this.avatarSize)),
+      ),
+    );
 }

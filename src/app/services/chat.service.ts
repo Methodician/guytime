@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FirebaseService } from './firebase.service';
 import { ChatGroupI } from '../models/chat-group';
-import { MessageI } from '../models/message';
+import { ChatMessageI } from '../models/message';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -17,7 +17,7 @@ export class ChatService {
     return messageDocRef.update(messageDocUpdate);
   };
 
-  createChatMessage = async (message: MessageI) => {
+  createChatMessage = async (message: ChatMessageI) => {
     const messageDocRef = await this.chatMessagesCol().add(message);
     const { id } = messageDocRef;
     return id;
@@ -110,16 +110,16 @@ export class ChatService {
     return chatsCol;
   };
 
-  chatMessagesCol = () => this.afs.collection<MessageI>('chatMessages');
+  chatMessagesCol = () => this.afs.collection<ChatMessageI>('chatMessages');
   chatMessageDoc = (messageId: string) => this.chatMessagesCol().doc(messageId);
 
   chatMessagesByGroupQuery = (chatGroupId: string) =>
-    this.afs.collection<MessageI>('chatMessages', ref =>
+    this.afs.collection<ChatMessageI>('chatMessages', ref =>
       ref.where('chatGroupId', '==', chatGroupId).orderBy('createdAt', 'asc'),
     );
 
   chatMessagesBySenderQuery = (senderId: string) =>
-    this.afs.collection<MessageI>('chatMessages', ref =>
+    this.afs.collection<ChatMessageI>('chatMessages', ref =>
       ref.where('senderId', '==', senderId),
     );
 }

@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
-import { AuthService } from './services/auth.service';
 import { Observable } from 'rxjs';
 import { navIconMap, activityIconMap, buttonIconMap } from './models/icon-maps';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { select, Store } from '@ngrx/store';
+import { loadAuth } from '@app/store/auth/auth.actions';
+import { isLoggedIn } from '@app/store/auth/auth.selectors';
+import { loadUsers } from './store/user/user.actions';
 
 @Component({
   selector: 'gtm-root',
@@ -14,11 +17,14 @@ export class AppComponent {
   isLoggedIn$: Observable<boolean>;
 
   constructor(
-    private authSvc: AuthService,
+    private store: Store,
     iconRegistry: MatIconRegistry,
     sanitizer: DomSanitizer,
   ) {
-    this.isLoggedIn$ = this.authSvc.isLoggedIn$;
+    this.store.dispatch(loadAuth());
+    this.store.dispatch(loadUsers());
+
+    this.isLoggedIn$ = this.store.pipe(select(isLoggedIn));
 
     Object.entries(navIconMap).map(([name, path]) =>
       iconRegistry.addSvgIcon(

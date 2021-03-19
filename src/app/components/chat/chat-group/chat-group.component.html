@@ -4,7 +4,7 @@
       <div class="avatar-wrapper" *ngFor="let user of users$ | async">
         <div class="avatar-border">
           <gtm-avatar
-            [fileName]="user?.uploadedProfileImageMap['45x45']?.fileName"
+            [fileName]="avatarFileName$(user.uid) | async"
             imageSize="45x45"
           ></gtm-avatar>
         </div>
