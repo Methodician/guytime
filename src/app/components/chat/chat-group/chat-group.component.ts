@@ -4,7 +4,10 @@ import { UserI } from '@app/models/user';
 import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { userListByIdMap } from '@app/store/user/user.selectors';
+import {
+  avatarFileName,
+  userListByIdMap,
+} from '@app/store/user/user.selectors';
 
 @Component({
   selector: 'gtm-chat-group',
@@ -45,6 +48,6 @@ export class ChatGroupComponent implements OnInit {
   };
 
   // Helpers
-  avatarFileName = (user: UserI) =>
-    user?.uploadedProfileImageMap?.['45x45'].fileName;
+  avatarFileName$ = (uid: string) =>
+    this.store.select(avatarFileName(uid, '45x45'));
 }
