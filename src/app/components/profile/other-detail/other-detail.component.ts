@@ -23,7 +23,6 @@ import { loggedInUser, specificUser } from '@app/store/user/user.selectors';
 export class OtherDetailComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<void> = new Subject();
   user$: Observable<UserI>;
-  // user$ = new BehaviorSubject<UserI>(null);
 
   constructor(
     private store: Store,
