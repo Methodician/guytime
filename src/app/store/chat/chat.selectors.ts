@@ -13,6 +13,9 @@ export const unreadMessageCountByChatGroup = (chatGroupId: string) =>
 
 export const unreadMessagesCountForUser = createSelector(chatState, state => {
   const { unreadMessages } = state;
+
+  if (!unreadMessages) return 0;
+
   return Object.keys(unreadMessages).length;
 });
 

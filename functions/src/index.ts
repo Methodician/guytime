@@ -7,6 +7,8 @@ export const FIRESTORE_EMULATOR_HOST = 'localhost:8080';
 
 export { onFileUpload } from './storage.functions';
 
+export { onUserCreated } from './auth.functions';
+
 const fsFunc = functions.firestore;
 const adminFs = admin.firestore();
 
