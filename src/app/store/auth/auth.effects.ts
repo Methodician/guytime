@@ -13,6 +13,12 @@ import {
   login,
   loginFailure,
   loginSuccess,
+  logout,
+  logoutFailure,
+  logoutSuccess,
+  register,
+  registerSuccess,
+  registerFailure,
 } from './auth.actions';
 
 // TODO: stop duplicating this object
@@ -32,7 +38,7 @@ export class AuthEffects {
       ofType(login),
       exhaustMap(action =>
         this.authSvc.login$(action.email, action.password).pipe(
-          tap(_ => this.router.navigateByUrl('/')),
+          tap(_ => this.router.navigateByUrl('/guys')),
           map(credential => loginSuccess({ credential })),
         ),
       ),
@@ -40,7 +46,33 @@ export class AuthEffects {
     ),
   );
 
-  authInfo$ = createEffect(() =>
+  logout$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(logout),
+      exhaustMap(_ =>
+        this.authSvc.logout$().pipe(
+          tap(_ => this.router.navigateByUrl('/landing')),
+          map(_ => logoutSuccess()),
+        ),
+      ),
+      catchError(error => of(logoutFailure({ error }))),
+    ),
+  );
+
+  register$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(register),
+      exhaustMap(action =>
+        this.authSvc.register$(action.email, action.password).pipe(
+          tap(_ => this.router.navigateByUrl('/me/edit')),
+          map(credential => registerSuccess({ credential })),
+        ),
+      ),
+      catchError(error => of(registerFailure({ error }))),
+    ),
+  );
+
+  loadAuth$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadAuth),
       exhaustMap(_ => this.afAuth.user),

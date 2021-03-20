@@ -1,8 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PwaService } from '@services/pwa.service';
-import { AuthService } from '@services/auth.service';
 import { HeaderService, HeaderOptionMapT } from '@app/services/header.service';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { logout } from '@app/store/auth/auth.actions';
 
 @Component({
   selector: 'gtm-header',
@@ -19,7 +20,7 @@ export class HeaderComponent implements OnInit {
   promptEvent;
 
   constructor(
-    private authSvc: AuthService,
+    private store: Store,
     private pwaSvc: PwaService,
     private headerSvc: HeaderService,
   ) {
@@ -44,5 +45,5 @@ export class HeaderComponent implements OnInit {
 
   installPwa = () => this.promptEvent.prompt();
 
-  logout = () => this.authSvc.logout();
+  logout = () => this.store.dispatch(logout());
 }

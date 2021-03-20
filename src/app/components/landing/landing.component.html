@@ -123,7 +123,9 @@
             formControlName="password"
             required
           />
-          <mat-error> Please provide a password </mat-error>
+          <mat-error>
+            Please provide a password of at least 6 characters
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field class="full-width-input">
@@ -135,7 +137,7 @@
             formControlName="confirmPass"
             required
           />
-          <mat-error> Please provide a password </mat-error>
+          <mat-error> This must match the password field </mat-error>
         </mat-form-field>
         <mat-error *ngIf="registerForm.hasError('passwordMissmatch')">
           Please make sure both password fields match
@@ -192,7 +194,12 @@
       <button (click)="activeSection = 'none'" mat-raised-button color="warn">
         Back
       </button>
-      <button (click)="onLogin()" mat-raised-button color="accent">
+      <button
+        (click)="onLogin()"
+        [disabled]="!loginForm.valid"
+        mat-raised-button
+        color="accent"
+      >
         Sign In
       </button>
     </div>

@@ -5,9 +5,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
-import { login } from '@app/store/auth/auth.actions';
-import { AuthService } from '@app/services/auth.service';
+import { login, register } from '@app/store/auth/auth.actions';
 import { Store } from '@ngrx/store';
 
 @Component({
@@ -23,34 +21,29 @@ export class LandingComponent implements OnInit {
 
   loginError = null;
 
-  constructor(
-    private store: Store,
-    private fb: FormBuilder,
-    private authSvc: AuthService,
-    private router: Router,
-  ) {}
+  constructor(private store: Store, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       email: ['', [Validators.email, Validators.required]],
-      password: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
 
     this.registerForm = this.fb.group(
       {
         email: ['', [Validators.email, Validators.required]],
-        password: ['', Validators.required],
-        confirmPass: ['', [Validators.required]],
+        password: ['', [Validators.required, Validators.minLength(6)]],
+        confirmPass: ['', [Validators.required, Validators.minLength(6)]],
       },
       { validators: this.passwordMatchValidator },
     );
   }
 
-  onLogin = async () => {
+  onLogin = () => {
     const email = this.loginForm.get('email').value;
     const password = this.loginForm.get('password').value;
 
-    this.store.dispatch(login({ email, password }));
+    return this.store.dispatch(login({ email, password }));
 
     // const result = await this.authSvc.signIn(email, password);
 
@@ -63,12 +56,11 @@ export class LandingComponent implements OnInit {
     // this.router.navigateByUrl('/guys');
   };
 
-  onRegister = async () => {
+  onRegister = () => {
     const email = this.registerForm.get('email').value;
     const password = this.registerForm.get('password').value;
 
-    await this.authSvc.register(email, password);
-    this.router.navigateByUrl('/me/edit');
+    return this.store.dispatch(register({ email, password }));
   };
 
   wasWrongPasswordEntered = () =>
