@@ -44,16 +44,6 @@ export class LandingComponent implements OnInit {
     const password = this.loginForm.get('password').value;
 
     return this.store.dispatch(login({ email, password }));
-
-    // const result = await this.authSvc.signIn(email, password);
-
-    // const isResultError = !!result.code && !!result.message;
-    // if (isResultError) {
-    //   this.loginError = result;
-    //   return;
-    // }
-
-    // this.router.navigateByUrl('/guys');
   };
 
   onRegister = () => {

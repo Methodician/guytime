@@ -13,6 +13,8 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { Router } from '@angular/router';
 import { HeaderService } from '@app/services/header.service';
 import { takeUntil } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { avatarFileName, loggedInUser } from '@app/store/user/user.selectors';
 
 @Component({
   selector: 'gtm-profile-edit',
@@ -33,6 +35,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   avatarUrl$: BehaviorSubject<string | ArrayBuffer> = new BehaviorSubject(null);
 
   constructor(
+    private store: Store,
     private fb: FormBuilder,
     private userSvc: UserService,
     private router: Router,
@@ -67,16 +70,14 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   };
 
   watchLoggedInUser = () => {
-    this.userSvc.loggedInUser$
+    this.store
+      .select(loggedInUser)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(user => {
-        if (
-          user &&
-          user.uploadedProfileImageMap &&
-          user.uploadedProfileImageMap[this.avatarSize]
-        ) {
-          this.avatarFileName = user.uploadedProfileImageMap['90x90'].fileName;
-        }
+        this.store
+          .select(avatarFileName(user.uid, '90x90'))
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe(fileName => (this.avatarFileName = fileName));
         this.form.patchValue(user);
       });
   };

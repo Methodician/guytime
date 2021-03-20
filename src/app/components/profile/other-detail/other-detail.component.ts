@@ -1,11 +1,19 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  from,
+  Observable,
+  Subject,
+} from 'rxjs';
 import { UserI } from '@models/user';
 import { UserService } from '@services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HeaderService } from '@app/services/header.service';
 import { ChatService } from '@app/services/chat.service';
-import { takeUntil } from 'rxjs/operators';
+import { switchMap, take, takeUntil } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { loggedInUser, specificUser } from '@app/store/user/user.selectors';
 
 @Component({
   selector: 'gtm-other-detail',
@@ -14,9 +22,11 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class OtherDetailComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<void> = new Subject();
-  user$ = new BehaviorSubject<UserI>(null);
+  user$: Observable<UserI>;
+  // user$ = new BehaviorSubject<UserI>(null);
 
   constructor(
+    private store: Store,
     private userSvc: UserService,
     private route: ActivatedRoute,
     private router: Router,
@@ -29,14 +39,7 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
     this.route.params.subscribe(params => {
       if (params['id']) {
         const uid = params['id'];
-        this.userSvc
-          .userRef(uid)
-          .valueChanges()
-          .subscribe(user => {
-            if (user) {
-              this.user$.next({ ...user, uid });
-            }
-          });
+        this.user$ = this.store.select(specificUser(uid));
       }
     });
   }
@@ -84,16 +87,11 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
     };
   };
 
-  watchForConnection = () => {
-    const bothUsers$ = combineLatest(
-      this.user$,
-      this.userSvc.loggedInUser$,
-      (user, loggedInUser) => ({ user, loggedInUser }),
-    );
-    bothUsers$
+  watchForConnection = () =>
+    combineLatest([this.user$, this.store.select(loggedInUser)])
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(({ user, loggedInUser }) => {
-        if (user && loggedInUser.contacts && loggedInUser.contacts[user.uid]) {
+      .subscribe(([user, loggedInUser]) => {
+        if (user && loggedInUser?.contacts?.[user.uid]) {
           this.headerSvc.disableHeaderOption('addConnection');
           this.headerSvc.enableHeaderOption('removeContact');
         } else {
@@ -101,29 +99,33 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
           this.headerSvc.disableHeaderOption('removeContact');
         }
       });
-  };
 
   onConnectClicked = () =>
-    this.userSvc.addUserContact(
-      this.userSvc.loggedInUser$.value.uid,
-      this.user$.value.uid,
-    );
+    combineLatest([this.store.select(loggedInUser), this.user$])
+      .pipe(take(1))
+      .subscribe(([loggedInUser, user]) =>
+        this.userSvc.addUserContact(loggedInUser.uid, user.uid),
+      );
 
   onDisconnectClicked = () =>
     alert(
       'Please remind us to implement the disconnect feature if this is important',
     );
 
-  logClicked = () => console.log(this.user$.value.uid);
-
   onSeeConnectionsClicked = () =>
-    this.router.navigateByUrl(`/guys/${this.user$.value.uid}/connections`);
+    this.user$
+      .pipe(take(1))
+      .subscribe(user =>
+        this.router.navigateByUrl(`/guys/${user.uid}/connections`),
+      );
 
-  onChatClicked = async () => {
-    const uid1 = this.userSvc.loggedInUser$.value.uid,
-      uid2 = this.user$.value.uid;
-
-    const chatId = await this.chatSvc.createPairChat(uid1, uid2);
-    this.router.navigateByUrl(`/chat/${chatId}`);
-  };
+  onChatClicked = () =>
+    combineLatest([this.store.select(loggedInUser), this.user$])
+      .pipe(
+        take(1),
+        switchMap(([loggedInUser, user]) =>
+          from(this.chatSvc.createPairChat(loggedInUser.uid, user.uid)),
+        ),
+      )
+      .subscribe(chatId => this.router.navigateByUrl(`/chat/${chatId}`));
 }

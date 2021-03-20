@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { UserI } from '@app/models/user';
-import { UserService } from '@app/services/user.service';
-import { map, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { HeaderService } from '@app/services/header.service';
+import { Store } from '@ngrx/store';
+import { loggedInUser, userListByIdMap } from '@app/store/user/user.selectors';
 
 @Component({
   selector: 'gtm-me-connections-list',
@@ -17,35 +18,20 @@ export class MeConnectionsListComponent implements OnInit {
   doesUserHaveContacts = false;
   wasUserReturned = false;
 
-  constructor(private userSvc: UserService, private headerSvc: HeaderService) {}
+  constructor(private store: Store, private headerSvc: HeaderService) {}
 
   ngOnInit(): void {
-    this.userSvc.loggedInUser$
+    this.store
+      .select(loggedInUser)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(user => {
         if (user && user.uid) {
           this.wasUserReturned = true;
         }
-        if (user && user.contacts && Object.keys(user.contacts).length > 0) {
-          this.doesUserHaveContacts = true;
-          const contactIds = Object.keys(user.contacts).map(contact => contact);
-          const contactObservables = contactIds.map(id =>
-            this.userSvc
-              .userRef(id)
-              .snapshotChanges()
-              .pipe(
-                map(userSnap => {
-                  const uid = userSnap.payload.id;
-                  const user = userSnap.payload.data();
-                  return { ...user, uid };
-                }),
-              ),
-          );
-          const contactsObservable = combineLatest(contactObservables);
-          contactsObservable
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe(contacts => this.users$.next(contacts));
-        }
+        this.store
+          .select(userListByIdMap(user.contacts))
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe(contacts => this.users$.next(contacts));
       });
 
     this.updateHeader();

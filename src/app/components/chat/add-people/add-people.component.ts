@@ -6,8 +6,10 @@ import { ChatService } from '@app/services/chat.service';
 import { HeaderService } from '@app/services/header.service';
 
 import { UserService } from '@app/services/user.service';
-import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
-import { map, tap, takeUntil } from 'rxjs/operators';
+import { loggedInUser, userListByIdMap } from '@app/store/user/user.selectors';
+import { Store } from '@ngrx/store';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'gtm-add-people',
@@ -24,8 +26,8 @@ export class AddPeopleComponent implements OnInit {
   wasUserReturned = false;
 
   constructor(
+    private store: Store,
     private chatSvc: ChatService,
-    private userSvc: UserService,
     private headerSvc: HeaderService,
     private route: ActivatedRoute,
     private router: Router,
@@ -87,7 +89,8 @@ export class AddPeopleComponent implements OnInit {
   expandChatGroup = () => alert('gotta make this possible too');
 
   initializeContactList = () => {
-    this.userSvc.loggedInUser$
+    this.store
+      .select(loggedInUser)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(user => {
         if (user && user.uid) {
@@ -96,26 +99,8 @@ export class AddPeopleComponent implements OnInit {
         }
         if (user && user.contacts && Object.keys(user.contacts).length > 0) {
           this.doesUserHaveContacts = true;
-          const contactIds = Object.keys(user.contacts).map(contact => contact);
-          const contactObservables = contactIds.map(id =>
-            this.userSvc
-              .userRef(id)
-              .snapshotChanges()
-              .pipe(
-                tap(userSnap => {
-                  const uid = userSnap.payload.id;
-                  this.selectedUsers[uid] = false;
-                }),
-                map(userSnap => {
-                  const uid = userSnap.payload.id;
-                  const user = userSnap.payload.data();
-                  return { ...user, uid };
-                }),
-              ),
-          );
-          const contactsObservable = combineLatest(contactObservables);
-          contactsObservable
-            .pipe(takeUntil(this.unsubscribe$))
+          this.store
+            .select(userListByIdMap(user.contacts))
             .subscribe(contacts => {
               this.users$.next(contacts);
               this.watchChatGroup();

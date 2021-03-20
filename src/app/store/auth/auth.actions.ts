@@ -1,4 +1,4 @@
-import { AuthInfo } from '@app/models/auth-info';
+import { AuthInfoI } from '@app/models/auth-info';
 import { createAction, props } from '@ngrx/store';
 
 export const login = createAction(
@@ -44,7 +44,7 @@ export const loadAuth = createAction('[Auth] Load Auth');
 
 export const loadAuthSuccess = createAction(
   '[Auth] Load Auth Success',
-  props<{ authInfo: AuthInfo }>(),
+  props<{ authInfo: AuthInfoI }>(),
 );
 
 export const loadAuthFailure = createAction(

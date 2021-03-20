@@ -1,12 +1,12 @@
-import { AuthInfo } from '@app/models/auth-info';
+import { AuthInfoI } from '@app/models/auth-info';
 import { createReducer, on } from '@ngrx/store';
 import { loadAuthSuccess } from './auth.actions';
 
-const NULL_USER = new AuthInfo(null, false, null, null);
+const NULL_USER: AuthInfoI = { uid: null };
 
 export const authFeatureKey = 'auth';
 
-export type AuthStateT = AuthInfo;
+export type AuthStateT = AuthInfoI;
 
 export const initialState: AuthStateT = NULL_USER;
 
