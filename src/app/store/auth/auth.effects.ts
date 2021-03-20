@@ -66,12 +66,16 @@ export class AuthEffects {
   register$ = createEffect(() =>
     this.actions$.pipe(
       ofType(register),
-      exhaustMap(action =>
-        this.authSvc.register$(action.email, action.password).pipe(
-          tap(_ => this.router.navigateByUrl('/me/edit')),
-          map(credential => registerSuccess({ credential })),
-        ),
-      ),
+      exhaustMap(action => {
+        this.afAuth
+          .createUserWithEmailAndPassword(action.email, action.password)
+          .then(credential => {
+            if (!!credential?.user?.uid) {
+              this.router.navigateByUrl('/me/edit');
+            }
+          });
+        return of(registerSuccess({ credential: null }));
+      }),
       catchError(error => of(registerFailure({ error }))),
     ),
   );
