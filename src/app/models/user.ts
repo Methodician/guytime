@@ -1,6 +1,5 @@
 // import { Timestamp } from '@google-cloud/firestore';
-import { KeyMapI } from '../../../functions/src';
-import { DisplayNameI } from './shared';
+import { DisplayNameI, KeyMapI } from './shared';
 
 // export interface UserI {
 //   uid?: string;

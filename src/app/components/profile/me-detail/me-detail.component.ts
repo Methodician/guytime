@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { BehaviorSubject, of, Subject } from 'rxjs';
-import { UserI } from '@app/models/user';
-import { UserService } from '@app/services/user.service';
+import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
 import { HeaderService } from '@app/services/header.service';
-import { switchMap, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { loggedInUser } from '@app/store/user/user.selectors';
 
 @Component({
   selector: 'gtm-me-detail',
@@ -13,19 +13,17 @@ import { switchMap, takeUntil } from 'rxjs/operators';
 })
 export class MeDetailComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<void> = new Subject();
-  user$ = new BehaviorSubject<UserI>(null);
+  user$ = this.store.select(loggedInUser);
 
   promptEvent;
 
   constructor(
-    private userSvc: UserService,
+    private store: Store,
     private router: Router,
     private headerSvc: HeaderService,
   ) {}
 
   ngOnInit(): void {
-    this.user$ = this.userSvc.loggedInUser$;
-
     setTimeout(() => this.updateHeader());
   }
 

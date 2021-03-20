@@ -8,7 +8,7 @@
 
 $fellas-primary: mat-palette($fellas-teal);
 $fellas-accent: mat-palette($fellas-yellow, 500, A100, A400);
-$fellas-warn: mat-palette($fellas-lime);
+$fellas-warn: mat-palette($fellas-gray, A200);
 
 $fellas-theme: mat-light-theme(
   (

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import { AuthInfo } from '@app/models/auth-info';
+import { AuthInfoI } from '@app/models/auth-info';
 import { AuthService } from '@app/services/auth.service';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
@@ -13,10 +13,16 @@ import {
   login,
   loginFailure,
   loginSuccess,
+  logout,
+  logoutFailure,
+  logoutSuccess,
+  register,
+  registerSuccess,
+  registerFailure,
 } from './auth.actions';
 
 // TODO: stop duplicating this object
-const NULL_USER = new AuthInfo(null, false, null, null);
+const NULL_USER: AuthInfoI = { uid: null };
 
 @Injectable()
 export class AuthEffects {
@@ -30,29 +36,58 @@ export class AuthEffects {
   login$ = createEffect(() =>
     this.actions$.pipe(
       ofType(login),
-      exhaustMap(action =>
-        this.authSvc.login$(action.email, action.password).pipe(
-          tap(_ => this.router.navigateByUrl('/')),
-          map(credential => loginSuccess({ credential })),
-        ),
-      ),
+      exhaustMap(action => {
+        this.afAuth
+          .signInWithEmailAndPassword(action.email, action.password)
+          .then(credential => {
+            if (!!credential?.user?.uid) {
+              this.router.navigateByUrl('/guys');
+            }
+          });
+        return of(loginSuccess({ credential: null }));
+      }),
       catchError(error => of(loginFailure({ error }))),
     ),
   );
 
-  authInfo$ = createEffect(() =>
+  logout$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(logout),
+      exhaustMap(_ =>
+        this.authSvc.logout$().pipe(
+          tap(_ => this.router.navigateByUrl('/landing')),
+          map(_ => logoutSuccess()),
+        ),
+      ),
+      catchError(error => of(logoutFailure({ error }))),
+    ),
+  );
+
+  register$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(register),
+      exhaustMap(action => {
+        this.afAuth
+          .createUserWithEmailAndPassword(action.email, action.password)
+          .then(credential => {
+            if (!!credential?.user?.uid) {
+              this.router.navigateByUrl('/me/edit');
+            }
+          });
+        return of(registerSuccess({ credential: null }));
+      }),
+      catchError(error => of(registerFailure({ error }))),
+    ),
+  );
+
+  loadAuth$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadAuth),
       exhaustMap(_ => this.afAuth.user),
       map(user =>
         user
           ? loadAuthSuccess({
-              authInfo: new AuthInfo(
-                user.uid,
-                user.emailVerified,
-                user.displayName,
-                user.email,
-              ),
+              authInfo: { uid: user.uid, email: user.email },
             })
           : loadAuthSuccess({ authInfo: NULL_USER }),
       ),

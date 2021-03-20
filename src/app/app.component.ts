@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
 import { navIconMap, activityIconMap, buttonIconMap } from './models/icon-maps';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -14,7 +13,7 @@ import { loadUsers } from './store/user/user.actions';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  isLoggedIn$: Observable<boolean>;
+  isLoggedIn$ = this.store.pipe(select(isLoggedIn));
 
   constructor(
     private store: Store,
@@ -23,8 +22,6 @@ export class AppComponent {
   ) {
     this.store.dispatch(loadAuth());
     this.store.dispatch(loadUsers());
-
-    this.isLoggedIn$ = this.store.pipe(select(isLoggedIn));
 
     Object.entries(navIconMap).map(([name, path]) =>
       iconRegistry.addSvgIcon(

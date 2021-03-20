@@ -5,7 +5,7 @@ import { AngularFireStorage } from '@angular/fire/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FirebaseService } from './firebase.service';
 import { Store } from '@ngrx/store';
-import { authInfo, authUid } from '@app/store/auth/auth.selectors';
+import { authUid } from '@app/store/auth/auth.selectors';
 import { take } from 'rxjs/operators';
 import { KeyMapI } from '../../../functions/src';
 
@@ -13,36 +13,12 @@ import { KeyMapI } from '../../../functions/src';
   providedIn: 'root',
 })
 export class UserService {
-  private NULL_USER: UserI = {
-    fName: null,
-    lName: null,
-    age: null,
-    relationshipStatus: 'UNSPECIFIED',
-    bio: null,
-    activityTypes: [],
-    connectionIds: [],
-  };
-  loggedInUser$: BehaviorSubject<UserI> = new BehaviorSubject(this.NULL_USER);
-
   constructor(
     private afStorage: AngularFireStorage,
     private afs: AngularFirestore,
     private fbSvc: FirebaseService,
     private store: Store,
-  ) {
-    this.store.select(authInfo).subscribe(authInfo => {
-      if (!authInfo.isLoggedIn()) {
-        this.loggedInUser$.next(this.NULL_USER);
-      } else {
-        this.userRef(authInfo.uid)
-          .valueChanges()
-          .subscribe(user => {
-            const { uid } = authInfo;
-            this.loggedInUser$.next({ ...user, uid });
-          });
-      }
-    });
-  }
+  ) {}
 
   createUser = async (user: UserI) => {
     const uid = await this.getLoggedinUid();

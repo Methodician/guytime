@@ -26,10 +26,8 @@ export class ProfileDetailComponent {
   }
 
   avatarFileName = () =>
-    this.userInfo.uploadedProfileImageMap &&
-    this.userInfo.uploadedProfileImageMap[this.avatarSize].fileName;
+    this.userInfo?.uploadedProfileImageMap?.[this.avatarSize]?.fileName;
 
   avatarFileHash = () =>
-    this.userInfo.uploadedProfileImageMap &&
-    this.userInfo.uploadedProfileImageMap[this.avatarSize].imageUpdateRando;
+    this.userInfo?.uploadedProfileImageMap?.[this.avatarSize]?.imageUpdateRando;
 }
