@@ -2,7 +2,7 @@
   <form *ngIf="form" [formGroup]="form" class="body">
     <article class="basics">
       <section class="avatar_input_group">
-        <div *ngIf="!!avatarFileName" class="avatarWrapper">
+        <div class="avatarWrapper">
           <gtm-avatar
             [fileName]="avatarFileName"
             [imageSize]="avatarSize"

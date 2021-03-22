@@ -40,7 +40,7 @@ export class UserService {
   uploadProfileImage = async (image: File) => {
     const { name, type } = image;
     const isImage = type.startsWith('image/');
-    const uid = this.getLoggedinUid();
+    const uid = await this.getLoggedinUid();
     const fileExtension = name.slice(((name.lastIndexOf('.') - 1) >>> 0) + 2);
 
     if (!isImage) {
