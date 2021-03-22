@@ -187,6 +187,8 @@
           />
           <mat-error> Please provide a valid password </mat-error>
         </mat-form-field>
+
+        <mat-error>{{ (authError$ | async)?.message }}</mat-error>
       </form>
     </mat-card>
 

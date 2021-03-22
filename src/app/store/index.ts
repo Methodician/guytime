@@ -1,7 +1,7 @@
 import {
   authFeatureKey,
   authReducer,
-  AuthStateT,
+  AuthStateI,
 } from '@app/store/auth/auth.reducer';
 import {
   userFeatureKey,
@@ -18,7 +18,7 @@ import {
 import { chatFeatureKey, chatReducer, ChatStateI } from './chat/chat.reducer';
 
 export interface StateI {
-  [authFeatureKey]: AuthStateT;
+  [authFeatureKey]: AuthStateI;
   [userFeatureKey]: UserStateT;
   [browseFeatureKey]: BrowseStateI;
   [chatFeatureKey]: ChatStateI;
