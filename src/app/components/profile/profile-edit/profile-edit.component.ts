@@ -32,7 +32,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   avatarFileName: string;
   avatarFile: File;
   imageUploadTask: AngularFireUploadTask;
-  avatarUrl$: BehaviorSubject<string | ArrayBuffer> = new BehaviorSubject(null);
+  avatarUrl$: BehaviorSubject<string | ArrayBuffer> = new BehaviorSubject(
+    'assets/icons/square_icon.svg',
+  );
 
   constructor(
     private store: Store,
