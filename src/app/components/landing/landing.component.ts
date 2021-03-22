@@ -6,6 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { login, register } from '@app/store/auth/auth.actions';
+import { authError } from '@app/store/auth/auth.selectors';
 import { Store } from '@ngrx/store';
 
 @Component({
@@ -20,6 +21,7 @@ export class LandingComponent implements OnInit {
   registerForm: FormGroup;
 
   loginError = null;
+  authError$ = this.store.select(authError);
 
   constructor(private store: Store, private fb: FormBuilder) {}
 

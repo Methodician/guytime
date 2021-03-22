@@ -1,16 +1,26 @@
 import { AuthInfoI } from '@app/models/auth-info';
 import { createReducer, on } from '@ngrx/store';
-import { loadAuthSuccess } from './auth.actions';
+import { loadAuthSuccess, loginFailure } from './auth.actions';
 
 const NULL_USER: AuthInfoI = { uid: null };
 
 export const authFeatureKey = 'auth';
 
-export type AuthStateT = AuthInfoI;
+export interface AuthStateI {
+  authInfo: AuthInfoI;
+  authError: any;
+}
 
-export const initialState: AuthStateT = NULL_USER;
+export const initialState: AuthStateI = {
+  authInfo: NULL_USER,
+  authError: null,
+};
 
 export const authReducer = createReducer(
   initialState,
-  on(loadAuthSuccess, (_, action) => action.authInfo),
+  on(loadAuthSuccess, (_, action) => ({
+    authInfo: action.authInfo,
+    authError: null,
+  })),
+  on(loginFailure, (state, action) => ({ ...state, authError: action.error })),
 );

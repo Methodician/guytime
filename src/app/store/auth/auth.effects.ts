@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { AuthInfoI } from '@app/models/auth-info';
 import { AuthService } from '@app/services/auth.service';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { of } from 'rxjs';
-import { catchError, exhaustMap, map, tap } from 'rxjs/operators';
+import { from, of } from 'rxjs';
+import { catchError, exhaustMap, map, switchMap, tap } from 'rxjs/operators';
 import {
   loadAuth,
   loadAuthFailure,
@@ -36,16 +36,19 @@ export class AuthEffects {
   login$ = createEffect(() =>
     this.actions$.pipe(
       ofType(login),
-      exhaustMap(action => {
-        this.afAuth
-          .signInWithEmailAndPassword(action.email, action.password)
-          .then(credential => {
+      exhaustMap(action =>
+        from(
+          this.afAuth.signInWithEmailAndPassword(action.email, action.password),
+        ).pipe(
+          tap(credential => {
             if (!!credential?.user?.uid) {
               this.router.navigateByUrl('/guys');
             }
-          });
-        return of(loginSuccess({ credential: null }));
-      }),
+          }),
+          map(_ => loginSuccess({ credential: null })),
+          catchError(error => of(loginFailure({ error }))),
+        ),
+      ),
       catchError(error => of(loginFailure({ error }))),
     ),
   );
@@ -66,15 +69,21 @@ export class AuthEffects {
   register$ = createEffect(() =>
     this.actions$.pipe(
       ofType(register),
-      exhaustMap(action => {
-        this.afAuth
-          .createUserWithEmailAndPassword(action.email, action.password)
-          .then(credential => {
+      switchMap(action => {
+        return from(
+          this.afAuth.createUserWithEmailAndPassword(
+            action.email,
+            action.password,
+          ),
+        ).pipe(
+          tap(credential => {
             if (!!credential?.user?.uid) {
               this.router.navigateByUrl('/me/edit');
             }
-          });
-        return of(registerSuccess({ credential: null }));
+          }),
+          map(_ => registerSuccess({ credential: null })),
+          catchError(error => of(registerFailure({ error }))),
+        );
       }),
       catchError(error => of(registerFailure({ error }))),
     ),
