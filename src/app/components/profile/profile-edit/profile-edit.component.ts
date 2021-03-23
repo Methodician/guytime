@@ -9,7 +9,7 @@ import {
 } from '@models/user';
 import { HtmlInputEventI } from '@models/shared';
 import { UserService } from '@services/user.service';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Router } from '@angular/router';
 import { HeaderService } from '@app/services/header.service';
 import { takeUntil } from 'rxjs/operators';
@@ -29,12 +29,10 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   form: FormGroup;
 
   avatarSize: ProfileImageSizeT = '90x90';
-  avatarFileName: string;
+  avatarFileName$: Observable<String>;
   avatarFile: File;
   imageUploadTask: AngularFireUploadTask;
-  avatarUrl$: BehaviorSubject<string | ArrayBuffer> = new BehaviorSubject(
-    'assets/icons/square_icon.svg',
-  );
+  avatarUrl$: BehaviorSubject<string | ArrayBuffer> = new BehaviorSubject(null);
 
   constructor(
     private store: Store,
@@ -78,10 +76,10 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
       .subscribe(user => {
         if (!user?.uid) return;
 
-        this.store
-          .select(avatarFileName(user.uid, '90x90'))
-          .pipe(takeUntil(this.unsubscribe$))
-          .subscribe(fileName => (this.avatarFileName = fileName));
+        this.avatarFileName$ = this.store.select(
+          avatarFileName(user.uid, '90x90'),
+        );
+
         this.form.patchValue(user);
       });
   };
