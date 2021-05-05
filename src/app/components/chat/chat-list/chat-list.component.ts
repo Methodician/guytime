@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { HeaderService } from '@app/services/header.service';
 import { Store } from '@ngrx/store';
 import { loadChatGroups } from '@app/store/chat/chat.actions';
 import {
   unreadMessageCountByChatGroup,
   openChatGroups,
 } from '@app/store/chat/chat.selectors';
+import { resetHeader, setHeaderText } from '@app/store/header/header.actions';
 
 @Component({
   selector: 'gtm-chat-list',
@@ -15,11 +15,15 @@ import {
 export class ChatListComponent implements OnInit {
   chatGroupList$ = this.store.select(openChatGroups);
 
-  constructor(private store: Store, private headerSvc: HeaderService) {}
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.updateHeader();
     this.store.dispatch(loadChatGroups());
+  }
+
+  ngOnDestroy(): void {
+    this.store.dispatch(resetHeader());
   }
 
   unreadMessageCountByChatGroup$ = (groupId: string) =>
@@ -29,7 +33,7 @@ export class ChatListComponent implements OnInit {
     setTimeout(() => delayedHeaderOperations());
 
     const delayedHeaderOperations = () => {
-      this.headerSvc.setHeaderText('Your Open Chats');
+      this.store.dispatch(setHeaderText({ headerText: 'Your Open Chats' }));
     };
   };
 }

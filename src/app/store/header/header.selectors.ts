@@ -9,3 +9,8 @@ export const shouldShowBack = createSelector(
   headerState,
   state => state.shouldShowBack,
 );
+
+export const headerText = createSelector(
+  headerState,
+  state => state.headerText,
+);

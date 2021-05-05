@@ -1,11 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import {
-  BehaviorSubject,
-  combineLatest,
-  from,
-  Observable,
-  Subject,
-} from 'rxjs';
+import { combineLatest, from, Observable, Subject } from 'rxjs';
 import { UserI } from '@models/user';
 import { UserService } from '@services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,6 +8,7 @@ import { ChatService } from '@app/services/chat.service';
 import { switchMap, take, takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { loggedInUser, specificUser } from '@app/store/user/user.selectors';
+import { resetHeader, setHeaderText } from '@app/store/header/header.actions';
 
 @Component({
   selector: 'gtm-other-detail',
@@ -44,7 +39,7 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.headerSvc.resetHeader();
+    this.store.dispatch(resetHeader());
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
@@ -55,8 +50,11 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
     const delayedHeaderOperations = () => {
       this.watchForConnection();
       this.user$.pipe(takeUntil(this.unsubscribe$)).subscribe(user => {
-        if (user && user.fName)
-          this.headerSvc.setHeaderText(`About ${user.fName}`);
+        if (user && user.fName) {
+          this.store.dispatch(
+            setHeaderText({ headerText: `About ${user.fName}` }),
+          );
+        }
       });
 
       this.headerSvc.setHeaderOption('seeConnections', {

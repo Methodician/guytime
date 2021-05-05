@@ -10,6 +10,7 @@ import { authUid } from '@app/store/auth/auth.selectors';
 import { take } from 'rxjs/operators';
 import { loadChatMessages } from '@app/store/chat/chat.actions';
 import { chatMessages } from '@app/store/chat/chat.selectors';
+import { resetHeader, setHeaderText } from '@app/store/header/header.actions';
 
 @Component({
   selector: 'gtm-chat-detail',
@@ -33,7 +34,7 @@ export class ChatDetailComponent implements OnInit {
   ) {}
 
   ngOnDestroy(): void {
-    this.headerSvc.resetHeader();
+    this.store.dispatch(resetHeader());
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
@@ -63,8 +64,9 @@ export class ChatDetailComponent implements OnInit {
   updateHeader = () => {
     setTimeout(() => delayedHeaderOperations());
 
+    // Delayed header options may no longer be needed with ngRx
     const delayedHeaderOperations = () => {
-      this.headerSvc.setHeaderText('Messages');
+      this.store.dispatch(setHeaderText({ headerText: 'Messages' }));
 
       this.headerSvc.setHeaderOption('seePeople', {
         iconName: 'people',

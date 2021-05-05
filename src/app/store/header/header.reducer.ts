@@ -1,6 +1,9 @@
-import { UrlSegment } from '@angular/router';
 import { Action, createReducer, on } from '@ngrx/store';
-import { watchNavigationSuccess } from './header.actions';
+import {
+  resetHeader,
+  setHeaderText,
+  watchNavigationSuccess,
+} from './header.actions';
 
 export const headerFeatureKey = 'header';
 
@@ -33,4 +36,9 @@ export const headerReducer = createReducer(
     ...state,
     shouldShowBack,
   })),
+  on(setHeaderText, (state, { headerText }) => ({
+    ...state,
+    headerText,
+  })),
+  on(resetHeader, () => initialState),
 );

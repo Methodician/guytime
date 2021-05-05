@@ -1,7 +1,7 @@
 <main *ngIf="(options$ | async) && (headerText$ | async)">
-  <div *ngIf="!shouldShowBack$.value" id="btn-placeholder"></div>
+  <div *ngIf="!(shouldShowBack$ | async)" id="btn-placeholder"></div>
   <button
-    *ngIf="shouldShowBack$.value"
+    *ngIf="shouldShowBack$ | async"
     (click)="onBackClicked()"
     class="back_button"
     mat-icon-button

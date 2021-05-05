@@ -4,7 +4,11 @@ import { HeaderService, HeaderOptionMapT } from '@app/services/header.service';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { logout } from '@app/store/auth/auth.actions';
-import { backButtonClicked } from '@app/store/header/header.actions';
+import {
+  backButtonClicked,
+  resetHeader,
+} from '@app/store/header/header.actions';
+import { headerText, shouldShowBack } from '@app/store/header/header.selectors';
 
 @Component({
   selector: 'gtm-header',
@@ -15,8 +19,8 @@ export class HeaderComponent implements OnInit {
   private unsubscribe$: Subject<void> = new Subject();
 
   options$: BehaviorSubject<HeaderOptionMapT> = new BehaviorSubject(new Map());
-  headerText$: BehaviorSubject<string> = new BehaviorSubject('Fellas');
-  shouldShowBack$ = new BehaviorSubject(false);
+  headerText$ = this.store.select(headerText);
+  shouldShowBack$ = this.store.select(shouldShowBack);
 
   promptEvent;
 
@@ -30,18 +34,15 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.options$ = this.headerSvc.headerOptions$;
-    this.headerText$ = this.headerSvc.headerText$;
-    this.shouldShowBack$ = this.headerSvc.shouldShowBack$;
   }
 
   ngOnDestroy(): void {
-    this.headerSvc.resetHeader();
+    this.store.dispatch(resetHeader());
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
   onBackClicked = () => {
-    // this.headerSvc.onBackClicked();
     this.store.dispatch(backButtonClicked());
   };
 

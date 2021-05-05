@@ -18,3 +18,10 @@ export const backClickFailure = createAction(
   '[Header] Failed to process back click... Weird.',
   props<{ error: any }>(),
 );
+
+export const setHeaderText = createAction(
+  '[Header] Set Header Text',
+  props<{ headerText: string }>(),
+);
+
+export const resetHeader = createAction('[Header] Reset Header');

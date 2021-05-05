@@ -12,7 +12,6 @@ export class HeaderService {
   );
   headerOptions: HeaderOptionMapT = new Map();
 
-  shouldShowBack$ = new BehaviorSubject(false);
   shouldShowBack = false;
   defaultBackUrl: string;
 
@@ -27,6 +26,7 @@ export class HeaderService {
     this.watchNavigation();
   }
 
+  // migrated
   watchNavigation = () => {
     this.router.events
       .pipe(filter(($e: any) => $e instanceof ActivationEnd))
@@ -105,7 +105,6 @@ export class HeaderService {
         'Back can not be displayed without a default URL in the HeaderService. Set a defaultUrl first',
       );
     }
-    this.shouldShowBack$.next(shouldShowBack);
   };
 
   setHeaderText = (text: string) => this.headerText$.next(text);

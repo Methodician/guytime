@@ -9,6 +9,7 @@ import { map, take } from 'rxjs/operators';
 import { selectedFella } from '@app/store/browse/browse.selectors';
 import { addFella, nextFella } from '@app/store/browse/browse.actions';
 import { combineLatest } from 'rxjs';
+import { resetHeader } from '@app/store/header/header.actions';
 
 @Component({
   selector: 'gtm-browse-fellas',
@@ -31,7 +32,7 @@ export class BrowseFellasComponent implements OnInit {
   ngOnInit(): void {}
 
   ngOnDestroy(): void {
-    this.headerSvc.resetHeader();
+    this.store.dispatch(resetHeader());
   }
 
   onCycleClicked = () => {

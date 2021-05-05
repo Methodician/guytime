@@ -5,6 +5,7 @@ import { HeaderService } from '@app/services/header.service';
 import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { loggedInUser } from '@app/store/user/user.selectors';
+import { resetHeader, setHeaderText } from '@app/store/header/header.actions';
 
 @Component({
   selector: 'gtm-me-detail',
@@ -28,7 +29,7 @@ export class MeDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.headerSvc.resetHeader();
+    this.store.dispatch(resetHeader());
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
@@ -49,8 +50,11 @@ export class MeDetailComponent implements OnInit, OnDestroy {
     });
 
     this.user$.pipe(takeUntil(this.unsubscribe$)).subscribe(user => {
-      if (user && user.fName)
-        this.headerSvc.setHeaderText(`About ${user.fName}`);
+      if (user && user.fName) {
+        this.store.dispatch(
+          setHeaderText({ headerText: `About ${user.fName}` }),
+        );
+      }
     });
   };
 

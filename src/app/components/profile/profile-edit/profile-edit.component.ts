@@ -11,10 +11,10 @@ import { HtmlInputEventI } from '@models/shared';
 import { UserService } from '@services/user.service';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Router } from '@angular/router';
-import { HeaderService } from '@app/services/header.service';
 import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { avatarFileName, loggedInUser } from '@app/store/user/user.selectors';
+import { resetHeader, setHeaderText } from '@app/store/header/header.actions';
 
 @Component({
   selector: 'gtm-profile-edit',
@@ -39,7 +39,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private userSvc: UserService,
     private router: Router,
-    private headerSvc: HeaderService,
   ) {}
 
   ngOnInit(): void {
@@ -56,7 +55,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.headerSvc.resetHeader();
+    this.store.dispatch(resetHeader());
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
@@ -65,7 +64,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     setTimeout(() => delayedHeaderOperations());
 
     const delayedHeaderOperations = () => {
-      this.headerSvc.setHeaderText('Update Your Info');
+      this.store.dispatch(setHeaderText({ headerText: 'Update Your Info' }));
     };
   };
 

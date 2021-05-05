@@ -4,8 +4,8 @@ import { UserService } from '@app/services/user.service';
 import { UserI } from '@models/user';
 import { Subject, BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
-import { HeaderService } from '@app/services/header.service';
-import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { resetHeader, setHeaderText } from '@app/store/header/header.actions';
 
 @Component({
   selector: 'gtm-other-connections-list',
@@ -20,15 +20,15 @@ export class OtherConnectionsListComponent implements OnInit, OnDestroy {
   wasUserReturned = false;
 
   constructor(
+    private store: Store,
     private route: ActivatedRoute,
     private userSvc: UserService,
-    private headerSvc: HeaderService,
   ) {}
 
   ngOnDestroy(): void {
+    this.store.dispatch(resetHeader());
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
-    this.headerSvc.resetHeader();
   }
 
   ngOnInit(): void {
@@ -44,6 +44,7 @@ export class OtherConnectionsListComponent implements OnInit, OnDestroy {
     });
   }
 
+  // Is this vestigial?
   getUserObservable = (uid: string) => {
     return this.userSvc
       .userRef(uid)
@@ -76,8 +77,11 @@ export class OtherConnectionsListComponent implements OnInit, OnDestroy {
 
     const delayedHeaderOperations = () => {
       this.user$.pipe(takeUntil(this.unsubscribe$)).subscribe(user => {
-        if (user && user.fName)
-          this.headerSvc.setHeaderText(`${user.fName}'s contacts`);
+        if (user && user.fName) {
+          this.store.dispatch(
+            setHeaderText({ headerText: `${user.fName}'s contacts` }),
+          );
+        }
       });
     };
   };

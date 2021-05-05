@@ -3,9 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ChatGroupI } from '@app/models/chat-group';
 import { UserI } from '@app/models/user';
 import { ChatService } from '@app/services/chat.service';
-import { HeaderService } from '@app/services/header.service';
 
-import { UserService } from '@app/services/user.service';
+import { resetHeader, setHeaderText } from '@app/store/header/header.actions';
 import { loggedInUser, userListByIdMap } from '@app/store/user/user.selectors';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -28,7 +27,6 @@ export class AddPeopleComponent implements OnInit {
   constructor(
     private store: Store,
     private chatSvc: ChatService,
-    private headerSvc: HeaderService,
     private route: ActivatedRoute,
     private router: Router,
   ) {}
@@ -49,7 +47,7 @@ export class AddPeopleComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.headerSvc.resetHeader();
+    this.store.dispatch(resetHeader());
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
@@ -113,7 +111,7 @@ export class AddPeopleComponent implements OnInit {
     setTimeout(() => delayedHederOperations());
 
     const delayedHederOperations = () => {
-      this.headerSvc.setHeaderText('Create a Group');
+      this.store.dispatch(setHeaderText({ headerText: 'Create a Gropup' }));
     };
   };
 }

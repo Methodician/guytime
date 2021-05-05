@@ -5,6 +5,8 @@ import { UserI } from '@app/models/user';
 import { ChatService } from '@app/services/chat.service';
 import { HeaderService } from '@app/services/header.service';
 import { UserService } from '@app/services/user.service';
+import { resetHeader, setHeaderText } from '@app/store/header/header.actions';
+import { Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, of, Subject } from 'rxjs';
 import { map, switchMap, takeUntil } from 'rxjs/operators';
 
@@ -21,6 +23,7 @@ export class ChatPeopleComponent implements OnInit {
   chatUsers$: BehaviorSubject<UserI[]> = new BehaviorSubject(null);
 
   constructor(
+    private store: Store,
     private headerSvc: HeaderService,
     private chatSvc: ChatService,
     private userSvc: UserService,
@@ -41,9 +44,9 @@ export class ChatPeopleComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
+    this.store.dispatch(resetHeader());
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
-    this.headerSvc.resetHeader();
   }
 
   watchChatGroup = (id: string) => {
@@ -80,7 +83,7 @@ export class ChatPeopleComponent implements OnInit {
     setTimeout(() => delayedHeaderOperations());
 
     const delayedHeaderOperations = () => {
-      this.headerSvc.setHeaderText('People in the Chat');
+      this.store.dispatch(setHeaderText({ headerText: 'People in the Chat' }));
     };
   };
 
