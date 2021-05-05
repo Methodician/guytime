@@ -4,3 +4,8 @@ import { headerFeatureKey, HeaderStateI } from './header.reducer';
 export const headerState = createFeatureSelector<HeaderStateI>(
   headerFeatureKey,
 );
+
+export const shouldShowBack = createSelector(
+  headerState,
+  state => state.shouldShowBack,
+);
