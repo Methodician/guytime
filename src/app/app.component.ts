@@ -6,6 +6,7 @@ import { select, Store } from '@ngrx/store';
 import { loadAuth } from '@app/store/auth/auth.actions';
 import { isLoggedIn } from '@app/store/auth/auth.selectors';
 import { loadUsers } from './store/user/user.actions';
+import { watchNavigation } from './store/header/header.actions';
 
 @Component({
   selector: 'gtm-root',
@@ -22,6 +23,7 @@ export class AppComponent {
   ) {
     this.store.dispatch(loadAuth());
     this.store.dispatch(loadUsers());
+    this.store.dispatch(watchNavigation());
 
     Object.entries(navIconMap).map(([name, path]) =>
       iconRegistry.addSvgIcon(
