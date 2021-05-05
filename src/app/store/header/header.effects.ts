@@ -3,8 +3,10 @@ import { ActivationEnd, Router, UrlSegment } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, exhaustMap, filter, map, switchMap } from 'rxjs/operators';
-import { error } from 'selenium-webdriver';
 import {
+  backButtonClicked,
+  backClickFailure,
+  backClickSuccess,
   watchNavigation,
   watchNavigationFailure,
   watchNavigationSuccess,
@@ -18,6 +20,29 @@ export class HeaderEffects {
   defaultBackUrl: string;
 
   constructor(private actions$: Actions, private router: Router) {}
+
+  backButtonClicked$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(backButtonClicked),
+      exhaustMap(async _ => {
+        this.wasBackJustClicked = true;
+        if (this.previousUrls.length > 0) {
+          // We have some tracked navigation breadcrumbs. Pop the top of the stack and use it to go back.
+          const lastUrl = this.previousUrls.pop();
+          this.router.navigateByUrl(lastUrl);
+        } else if (!!this.defaultBackUrl) {
+          // Well, at least we have something to go to. Let's go there!
+          await this.router.navigateByUrl(this.defaultBackUrl);
+        } else {
+          throw new Error(
+            'There is noplace to navigate back to. Devs somehow made back arrow show anyway',
+          );
+        }
+        return backClickSuccess();
+      }),
+      catchError(error => of(backClickFailure(error))),
+    ),
+  );
 
   watchNavigation$ = createEffect(() =>
     this.actions$.pipe(

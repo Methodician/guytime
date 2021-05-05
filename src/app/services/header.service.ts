@@ -108,20 +108,6 @@ export class HeaderService {
     this.shouldShowBack$.next(shouldShowBack);
   };
 
-  onBackClicked = () => {
-    this.wasBackJustClicked = true;
-    if (this.previousUrls.length > 0) {
-      const lastUrl = this.previousUrls.pop();
-      this.router.navigateByUrl(lastUrl);
-    } else if (this.defaultUrl) {
-      this.router.navigateByUrl(this.defaultUrl);
-    } else {
-      throw new Error(
-        'Back can not be displayed without a default URL in the HeaderService',
-      );
-    }
-  };
-
   setHeaderText = (text: string) => this.headerText$.next(text);
 
   resetHeader = () => {

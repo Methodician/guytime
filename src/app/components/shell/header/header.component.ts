@@ -4,6 +4,7 @@ import { HeaderService, HeaderOptionMapT } from '@app/services/header.service';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { logout } from '@app/store/auth/auth.actions';
+import { backButtonClicked } from '@app/store/header/header.actions';
 
 @Component({
   selector: 'gtm-header',
@@ -40,7 +41,8 @@ export class HeaderComponent implements OnInit {
   }
 
   onBackClicked = () => {
-    this.headerSvc.onBackClicked();
+    // this.headerSvc.onBackClicked();
+    this.store.dispatch(backButtonClicked());
   };
 
   installPwa = () => this.promptEvent.prompt();
