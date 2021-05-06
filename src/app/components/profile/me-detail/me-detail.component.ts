@@ -5,7 +5,11 @@ import { HeaderService } from '@app/services/header.service';
 import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { loggedInUser } from '@app/store/user/user.selectors';
-import { resetHeader, setHeaderText } from '@app/store/header/header.actions';
+import {
+  addHeaderOptions,
+  resetHeader,
+  setHeaderText,
+} from '@app/store/header/header.actions';
 
 @Component({
   selector: 'gtm-me-detail',
@@ -35,19 +39,28 @@ export class MeDetailComponent implements OnInit, OnDestroy {
   }
 
   updateHeader = () => {
-    this.headerSvc.setHeaderOption('editDetails', {
-      iconName: 'edit',
-      optionText: 'Edit Details',
-      isDisabled: false,
-      onClick: this.onEditClicked,
-    });
+    const optionsToAdd = new Map([
+      [
+        'seePeople',
+        {
+          iconName: 'edit',
+          optionText: 'Edit Details',
+          isDisabled: false,
+          onClick: this.onEditClicked,
+        },
+      ],
+      [
+        'connections',
+        {
+          iconName: 'people',
+          optionText: 'Connections',
+          isDisabled: false,
+          onClick: this.onConnectionsClicked,
+        },
+      ],
+    ]);
 
-    this.headerSvc.setHeaderOption('connections', {
-      iconName: 'people',
-      optionText: 'Connections',
-      isDisabled: false,
-      onClick: this.onConnectionsClicked,
-    });
+    this.store.dispatch(addHeaderOptions({ optionsToAdd }));
 
     this.user$.pipe(takeUntil(this.unsubscribe$)).subscribe(user => {
       if (user && user.fName) {

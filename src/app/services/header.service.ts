@@ -70,11 +70,13 @@ export class HeaderService {
       });
   };
 
+  // migrated
   setHeaderOption = (name: string, option: HeaderOptionI) => {
     this.headerOptions.set(name, option);
     this.headerOptions$.next(this.headerOptions);
   };
 
+  // Partially Migrated
   disableHeaderOption = (name: string) => {
     const existingOption = this.headerOptions.get(name);
     const newOption = { ...existingOption, isDisabled: true };

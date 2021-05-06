@@ -54,7 +54,6 @@ export class ChatDetailComponent implements OnInit {
       }
     });
     this.messages$ = this.store.select(chatMessages);
-    this.store.select(headerOptions).subscribe(console.log);
   }
 
   ngAfterViewChecked() {
@@ -70,7 +69,6 @@ export class ChatDetailComponent implements OnInit {
   updateHeader = () => {
     setTimeout(() => delayedHeaderOperations());
 
-    // Delayed header options may no longer be needed with ngRx
     const delayedHeaderOperations = () => {
       this.store.dispatch(setHeaderText({ headerText: 'Messages' }));
 
@@ -87,13 +85,6 @@ export class ChatDetailComponent implements OnInit {
       ]);
 
       this.store.dispatch(addHeaderOptions({ optionsToAdd }));
-
-      // this.headerSvc.setHeaderOption('seePeople', {
-      //   iconName: 'people',
-      //   optionText: 'See and add participants',
-      //   isDisabled: false,
-      //   onClick: this.onPeopleClicked,
-      // });
     };
   };
 

@@ -3,12 +3,15 @@ import { combineLatest, from, Observable, Subject } from 'rxjs';
 import { UserI } from '@models/user';
 import { UserService } from '@services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HeaderService } from '@app/services/header.service';
 import { ChatService } from '@app/services/chat.service';
 import { switchMap, take, takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { loggedInUser, specificUser } from '@app/store/user/user.selectors';
-import { resetHeader, setHeaderText } from '@app/store/header/header.actions';
+import {
+  addHeaderOptions,
+  resetHeader,
+  setHeaderText,
+} from '@app/store/header/header.actions';
 
 @Component({
   selector: 'gtm-other-detail',
@@ -24,7 +27,6 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
     private userSvc: UserService,
     private route: ActivatedRoute,
     private router: Router,
-    private headerSvc: HeaderService,
     private chatSvc: ChatService,
   ) {}
 
@@ -48,7 +50,6 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
     setTimeout(() => delayedHeaderOperations());
 
     const delayedHeaderOperations = () => {
-      this.watchForConnection();
       this.user$.pipe(takeUntil(this.unsubscribe$)).subscribe(user => {
         if (user && user.fName) {
           this.store.dispatch(
@@ -57,45 +58,39 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
         }
       });
 
-      this.headerSvc.setHeaderOption('seeConnections', {
-        iconName: 'people',
-        optionText: 'See their contacts',
-        isDisabled: false,
-        onClick: this.onSeeConnectionsClicked,
-      });
-      this.headerSvc.setHeaderOption('addConnection', {
-        iconName: 'person_add',
-        optionText: 'Add them to contacts',
-        isDisabled: false,
-        onClick: this.onConnectClicked,
-      });
-      this.headerSvc.setHeaderOption('sendMessage', {
-        iconName: 'message',
-        optionText: 'Chat with them',
-        isDisabled: false,
-        onClick: this.onChatClicked,
-      });
-      this.headerSvc.setHeaderOption('removeContact', {
-        iconName: 'person_minus',
-        optionText: 'Remove contact',
-        isDisabled: false,
-        onClick: this.onDisconnectClicked,
-      });
+      const optionsToAdd = new Map([
+        [
+          'seeConnections',
+          {
+            iconName: 'people',
+            optionText: 'See their contacts',
+            isDisabled: false,
+            onClick: this.onSeeConnectionsClicked,
+          },
+        ],
+        [
+          'sendMessage',
+          {
+            iconName: 'message',
+            optionText: 'Chat with them',
+            isDisabled: false,
+            onClick: this.onChatClicked,
+          },
+        ],
+        [
+          'removeContact',
+          {
+            iconName: 'person_minus',
+            optionText: 'Remove contact',
+            isDisabled: false,
+            onClick: this.onDisconnectClicked,
+          },
+        ],
+      ]);
+
+      this.store.dispatch(addHeaderOptions({ optionsToAdd }));
     };
   };
-
-  watchForConnection = () =>
-    combineLatest([this.user$, this.store.select(loggedInUser)])
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(([user, loggedInUser]) => {
-        if (user && loggedInUser?.contacts?.[user.uid]) {
-          this.headerSvc.disableHeaderOption('addConnection');
-          this.headerSvc.enableHeaderOption('removeContact');
-        } else {
-          this.headerSvc.enableHeaderOption('addConnection');
-          this.headerSvc.disableHeaderOption('removeContact');
-        }
-      });
 
   onConnectClicked = () =>
     combineLatest([this.store.select(loggedInUser), this.user$])

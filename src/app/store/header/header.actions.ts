@@ -48,22 +48,22 @@ export const addHeaderOptionsFail = createAction(
 );
 
 // removeHeaderOption action
-export const removeHeaderOption = createAction(
-  '[Header] Remove and Option',
-  props<{ name: string }>(),
-);
+// export const removeHeaderOption = createAction(
+//   '[Header] Remove and Option',
+//   props<{ name: string }>(),
+// );
 
 // // clearHeaderOptions action
 // export const clearHeaderOptions = createAction('[Header] Clear All Options');
 
 // disableHeaderOption action
-export const disableHeaderOption = createAction(
-  '[Header] Disable an Option',
-  props<{ name: string }>(),
-);
+// export const disableHeaderOption = createAction(
+//   '[Header] Disable an Option',
+//   props<{ name: string }>(),
+// );
 
 // enableHeaderOption action
-export const enableHeaderOption = createAction(
-  '[Header] Enable an Option',
-  props<{ name: string }>(),
-);
+// export const enableHeaderOption = createAction(
+//   '[Header] Enable an Option',
+//   props<{ name: string }>(),
+// );
