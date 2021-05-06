@@ -14,3 +14,8 @@ export const headerText = createSelector(
   headerState,
   state => state.headerText,
 );
+
+export const headerOptions = createSelector(
+  headerState,
+  state => state.headerOptions,
+);

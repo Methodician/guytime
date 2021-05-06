@@ -1,18 +1,13 @@
+import { HeaderOptionI } from '@app/models/ui';
 import { Action, createReducer, on } from '@ngrx/store';
 import {
+  addHeaderOptionsSuccess,
   resetHeader,
   setHeaderText,
   watchNavigationSuccess,
 } from './header.actions';
 
 export const headerFeatureKey = 'header';
-
-export interface HeaderOptionI {
-  iconName: string;
-  optionText: string;
-  isDisabled: boolean;
-  onClick: Function;
-}
 
 export interface HeaderStateI {
   shouldShowBack: boolean;
@@ -39,6 +34,10 @@ export const headerReducer = createReducer(
   on(setHeaderText, (state, { headerText }) => ({
     ...state,
     headerText,
+  })),
+  on(addHeaderOptionsSuccess, (state, { options }) => ({
+    ...state,
+    headerOptions: options,
   })),
   on(resetHeader, () => initialState),
 );

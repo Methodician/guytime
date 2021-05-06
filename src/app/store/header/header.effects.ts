@@ -1,9 +1,21 @@
 import { Injectable } from '@angular/core';
 import { ActivationEnd, Router, UrlSegment } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import { catchError, exhaustMap, filter, map, switchMap } from 'rxjs/operators';
 import {
+  catchError,
+  exhaustMap,
+  filter,
+  map,
+  mergeMap,
+  switchMap,
+  take,
+} from 'rxjs/operators';
+import {
+  addHeaderOptions,
+  addHeaderOptionsFail,
+  addHeaderOptionsSuccess,
   backButtonClicked,
   backClickFailure,
   backClickSuccess,
@@ -11,6 +23,7 @@ import {
   watchNavigationFailure,
   watchNavigationSuccess,
 } from './header.actions';
+import { headerOptions } from './header.selectors';
 
 @Injectable()
 export class HeaderEffects {
@@ -19,7 +32,27 @@ export class HeaderEffects {
   currentUrl: string;
   defaultBackUrl: string;
 
-  constructor(private actions$: Actions, private router: Router) {}
+  constructor(
+    private actions$: Actions,
+    private router: Router,
+    private store: Store,
+  ) {}
+
+  addHeaderOptions$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(addHeaderOptions),
+      switchMap(({ optionsToAdd }) =>
+        this.store.select(headerOptions).pipe(
+          take(1),
+          map(
+            existingOptions => new Map([...existingOptions, ...optionsToAdd]),
+          ),
+          map(options => addHeaderOptionsSuccess({ options })),
+        ),
+      ),
+      catchError(error => of(addHeaderOptionsFail({ error }))),
+    ),
+  );
 
   backButtonClicked$ = createEffect(() =>
     this.actions$.pipe(

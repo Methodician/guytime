@@ -10,7 +10,12 @@ import { authUid } from '@app/store/auth/auth.selectors';
 import { take } from 'rxjs/operators';
 import { loadChatMessages } from '@app/store/chat/chat.actions';
 import { chatMessages } from '@app/store/chat/chat.selectors';
-import { resetHeader, setHeaderText } from '@app/store/header/header.actions';
+import {
+  addHeaderOptions,
+  resetHeader,
+  setHeaderText,
+} from '@app/store/header/header.actions';
+import { headerOptions } from '@app/store/header/header.selectors';
 
 @Component({
   selector: 'gtm-chat-detail',
@@ -49,6 +54,7 @@ export class ChatDetailComponent implements OnInit {
       }
     });
     this.messages$ = this.store.select(chatMessages);
+    this.store.select(headerOptions).subscribe(console.log);
   }
 
   ngAfterViewChecked() {
@@ -68,12 +74,26 @@ export class ChatDetailComponent implements OnInit {
     const delayedHeaderOperations = () => {
       this.store.dispatch(setHeaderText({ headerText: 'Messages' }));
 
-      this.headerSvc.setHeaderOption('seePeople', {
-        iconName: 'people',
-        optionText: 'See and add participants',
-        isDisabled: false,
-        onClick: this.onPeopleClicked,
-      });
+      const optionsToAdd = new Map([
+        [
+          'seePeople',
+          {
+            iconName: 'people',
+            optionText: 'See and add participants',
+            isDisabled: false,
+            onClick: this.onPeopleClicked,
+          },
+        ],
+      ]);
+
+      this.store.dispatch(addHeaderOptions({ optionsToAdd }));
+
+      // this.headerSvc.setHeaderOption('seePeople', {
+      //   iconName: 'people',
+      //   optionText: 'See and add participants',
+      //   isDisabled: false,
+      //   onClick: this.onPeopleClicked,
+      // });
     };
   };
 

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Router, ActivationEnd, UrlSegment } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { HeaderOptionI } from '@app/models/ui';
 
 @Injectable({
   providedIn: 'root',
@@ -98,6 +99,7 @@ export class HeaderService {
     this.headerOptions$.next(this.headerOptions);
   };
 
+  // migrated
   updateShouldShowBack = () => {
     const { defaultUrl, shouldShowBack } = this;
     if (!defaultUrl && shouldShowBack) {
@@ -107,6 +109,7 @@ export class HeaderService {
     }
   };
 
+  // migrated
   setHeaderText = (text: string) => this.headerText$.next(text);
 
   resetHeader = () => {
@@ -119,10 +122,3 @@ export class HeaderService {
 }
 
 export type HeaderOptionMapT = Map<string, HeaderOptionI>;
-
-export interface HeaderOptionI {
-  iconName: string;
-  optionText: string;
-  isDisabled: boolean;
-  onClick: Function;
-}
