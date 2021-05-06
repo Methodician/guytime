@@ -119,6 +119,7 @@ import { allEffects } from './app.effects';
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production,
+      serialize: true,
     }),
     EffectsModule.forRoot(allEffects),
     StoreModule.forRoot(reducers, { metaReducers }),
@@ -134,4 +135,14 @@ import { allEffects } from './app.effects';
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+  // Work-around so we can see ES6 map objects in Redux Devtools
+  // https://github.com/ngrx/store-devtools/issues/67
+  constructor() {
+    if (environment.production === false) {
+      (Map.prototype as any).toJSON = function () {
+        return JSON.parse(JSON.stringify([...this]));
+      };
+    }
+  }
+}
