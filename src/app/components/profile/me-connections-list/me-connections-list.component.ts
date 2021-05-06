@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { UserI } from '@app/models/user';
 import { takeUntil } from 'rxjs/operators';
-import { HeaderService } from '@app/services/header.service';
 import { Store } from '@ngrx/store';
 import { loggedInUser, userListByIdMap } from '@app/store/user/user.selectors';
+import { resetHeader, setHeaderText } from '@app/store/header/header.actions';
 
 @Component({
   selector: 'gtm-me-connections-list',
@@ -18,7 +18,7 @@ export class MeConnectionsListComponent implements OnInit {
   doesUserHaveContacts = false;
   wasUserReturned = false;
 
-  constructor(private store: Store, private headerSvc: HeaderService) {}
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.store
@@ -38,7 +38,7 @@ export class MeConnectionsListComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.headerSvc.resetHeader();
+    this.store.dispatch(resetHeader());
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
@@ -47,7 +47,7 @@ export class MeConnectionsListComponent implements OnInit {
     setTimeout(() => delayedHeaderOperations());
 
     const delayedHeaderOperations = () => {
-      this.headerSvc.setHeaderText('My connections');
+      this.store.dispatch(setHeaderText({ headerText: 'My Connections' }));
     };
   };
 }

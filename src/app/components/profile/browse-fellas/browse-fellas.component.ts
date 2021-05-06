@@ -3,12 +3,12 @@ import { Router } from '@angular/router';
 import { authUid } from '@app/store/auth/auth.selectors';
 import { ProfileImageSizeT, RelationshipStatusM } from '@app/models/user';
 import { ChatService } from '@app/services/chat.service';
-import { HeaderService } from '@app/services/header.service';
 import { Store } from '@ngrx/store';
 import { map, take } from 'rxjs/operators';
 import { selectedFella } from '@app/store/browse/browse.selectors';
 import { addFella, nextFella } from '@app/store/browse/browse.actions';
 import { combineLatest } from 'rxjs';
+import { resetHeader } from '@app/store/header/header.actions';
 
 @Component({
   selector: 'gtm-browse-fellas',
@@ -24,14 +24,13 @@ export class BrowseFellasComponent implements OnInit {
   constructor(
     private router: Router,
     private chatSvc: ChatService,
-    private headerSvc: HeaderService,
     private store: Store,
   ) {}
 
   ngOnInit(): void {}
 
   ngOnDestroy(): void {
-    this.headerSvc.resetHeader();
+    this.store.dispatch(resetHeader());
   }
 
   onCycleClicked = () => {

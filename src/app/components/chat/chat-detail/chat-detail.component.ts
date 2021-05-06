@@ -1,5 +1,4 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { HeaderService } from '@app/services/header.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { ChatService } from '@services/chat.service';
@@ -10,6 +9,11 @@ import { authUid } from '@app/store/auth/auth.selectors';
 import { take } from 'rxjs/operators';
 import { loadChatMessages } from '@app/store/chat/chat.actions';
 import { chatMessages } from '@app/store/chat/chat.selectors';
+import {
+  addHeaderOptions,
+  resetHeader,
+  setHeaderText,
+} from '@app/store/header/header.actions';
 
 @Component({
   selector: 'gtm-chat-detail',
@@ -24,7 +28,6 @@ export class ChatDetailComponent implements OnInit {
   messages$: Observable<ReadonlyArray<ChatMessageI>>;
 
   constructor(
-    private headerSvc: HeaderService,
     private route: ActivatedRoute,
     private router: Router,
     private chatSvc: ChatService,
@@ -33,7 +36,7 @@ export class ChatDetailComponent implements OnInit {
   ) {}
 
   ngOnDestroy(): void {
-    this.headerSvc.resetHeader();
+    this.store.dispatch(resetHeader());
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
@@ -64,14 +67,21 @@ export class ChatDetailComponent implements OnInit {
     setTimeout(() => delayedHeaderOperations());
 
     const delayedHeaderOperations = () => {
-      this.headerSvc.setHeaderText('Messages');
+      this.store.dispatch(setHeaderText({ headerText: 'Messages' }));
 
-      this.headerSvc.setHeaderOption('seePeople', {
-        iconName: 'people',
-        optionText: 'See and add participants',
-        isDisabled: false,
-        onClick: this.onPeopleClicked,
-      });
+      const optionsToAdd = new Map([
+        [
+          'seePeople',
+          {
+            iconName: 'people',
+            optionText: 'See and add participants',
+            isDisabled: false,
+            onClick: this.onPeopleClicked,
+          },
+        ],
+      ]);
+
+      this.store.dispatch(addHeaderOptions({ optionsToAdd }));
     };
   };
 

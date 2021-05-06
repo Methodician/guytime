@@ -1,10 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
-import { HeaderService } from '@app/services/header.service';
 import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { loggedInUser } from '@app/store/user/user.selectors';
+import {
+  addHeaderOptions,
+  resetHeader,
+  setHeaderText,
+} from '@app/store/header/header.actions';
 
 @Component({
   selector: 'gtm-me-detail',
@@ -17,40 +21,48 @@ export class MeDetailComponent implements OnInit, OnDestroy {
 
   promptEvent;
 
-  constructor(
-    private store: Store,
-    private router: Router,
-    private headerSvc: HeaderService,
-  ) {}
+  constructor(private store: Store, private router: Router) {}
 
   ngOnInit(): void {
     setTimeout(() => this.updateHeader());
   }
 
   ngOnDestroy(): void {
-    this.headerSvc.resetHeader();
+    this.store.dispatch(resetHeader());
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
   updateHeader = () => {
-    this.headerSvc.setHeaderOption('editDetails', {
-      iconName: 'edit',
-      optionText: 'Edit Details',
-      isDisabled: false,
-      onClick: this.onEditClicked,
-    });
+    const optionsToAdd = new Map([
+      [
+        'seePeople',
+        {
+          iconName: 'edit',
+          optionText: 'Edit Details',
+          isDisabled: false,
+          onClick: this.onEditClicked,
+        },
+      ],
+      [
+        'connections',
+        {
+          iconName: 'people',
+          optionText: 'Connections',
+          isDisabled: false,
+          onClick: this.onConnectionsClicked,
+        },
+      ],
+    ]);
 
-    this.headerSvc.setHeaderOption('connections', {
-      iconName: 'people',
-      optionText: 'Connections',
-      isDisabled: false,
-      onClick: this.onConnectionsClicked,
-    });
+    this.store.dispatch(addHeaderOptions({ optionsToAdd }));
 
     this.user$.pipe(takeUntil(this.unsubscribe$)).subscribe(user => {
-      if (user && user.fName)
-        this.headerSvc.setHeaderText(`About ${user.fName}`);
+      if (user && user.fName) {
+        this.store.dispatch(
+          setHeaderText({ headerText: `About ${user.fName}` }),
+        );
+      }
     });
   };
 

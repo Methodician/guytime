@@ -1,46 +1,44 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PwaService } from '@services/pwa.service';
-import { HeaderService, HeaderOptionMapT } from '@app/services/header.service';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { logout } from '@app/store/auth/auth.actions';
+import {
+  backButtonClicked,
+  resetHeader,
+} from '@app/store/header/header.actions';
+import {
+  headerOptions,
+  headerText,
+  shouldShowBack,
+} from '@app/store/header/header.selectors';
 
 @Component({
   selector: 'gtm-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnDestroy {
   private unsubscribe$: Subject<void> = new Subject();
 
-  options$: BehaviorSubject<HeaderOptionMapT> = new BehaviorSubject(new Map());
-  headerText$: BehaviorSubject<string> = new BehaviorSubject('Fellas');
-  shouldShowBack$ = new BehaviorSubject(false);
+  options$ = this.store.select(headerOptions);
+  headerText$ = this.store.select(headerText);
+  shouldShowBack$ = this.store.select(shouldShowBack);
 
   promptEvent;
 
-  constructor(
-    private store: Store,
-    private pwaSvc: PwaService,
-    private headerSvc: HeaderService,
-  ) {
+  constructor(private store: Store, private pwaSvc: PwaService) {
     this.pwaSvc.promptEvent$.subscribe(e => (this.promptEvent = e));
   }
 
-  ngOnInit(): void {
-    this.options$ = this.headerSvc.headerOptions$;
-    this.headerText$ = this.headerSvc.headerText$;
-    this.shouldShowBack$ = this.headerSvc.shouldShowBack$;
-  }
-
   ngOnDestroy(): void {
-    this.headerSvc.resetHeader();
+    this.store.dispatch(resetHeader());
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
   onBackClicked = () => {
-    this.headerSvc.onBackClicked();
+    this.store.dispatch(backButtonClicked());
   };
 
   installPwa = () => this.promptEvent.prompt();
