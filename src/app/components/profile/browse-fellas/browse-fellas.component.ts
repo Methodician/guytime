@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { authUid } from '@app/store/auth/auth.selectors';
 import { ProfileImageSizeT, RelationshipStatusM } from '@app/models/user';
 import { ChatService } from '@app/services/chat.service';
-import { HeaderService } from '@app/services/header.service';
 import { Store } from '@ngrx/store';
 import { map, take } from 'rxjs/operators';
 import { selectedFella } from '@app/store/browse/browse.selectors';
@@ -25,7 +24,6 @@ export class BrowseFellasComponent implements OnInit {
   constructor(
     private router: Router,
     private chatSvc: ChatService,
-    private headerSvc: HeaderService,
     private store: Store,
   ) {}
 

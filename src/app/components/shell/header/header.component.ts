@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PwaService } from '@services/pwa.service';
-import { HeaderService } from '@app/services/header.service';
 import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { logout } from '@app/store/auth/auth.actions';
@@ -28,11 +27,7 @@ export class HeaderComponent implements OnDestroy {
 
   promptEvent;
 
-  constructor(
-    private store: Store,
-    private pwaSvc: PwaService,
-    private headerSvc: HeaderService,
-  ) {
+  constructor(private store: Store, private pwaSvc: PwaService) {
     this.pwaSvc.promptEvent$.subscribe(e => (this.promptEvent = e));
   }
 

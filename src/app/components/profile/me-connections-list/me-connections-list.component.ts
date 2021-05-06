@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { UserI } from '@app/models/user';
 import { takeUntil } from 'rxjs/operators';
-import { HeaderService } from '@app/services/header.service';
 import { Store } from '@ngrx/store';
 import { loggedInUser, userListByIdMap } from '@app/store/user/user.selectors';
 import { resetHeader, setHeaderText } from '@app/store/header/header.actions';
@@ -19,7 +18,7 @@ export class MeConnectionsListComponent implements OnInit {
   doesUserHaveContacts = false;
   wasUserReturned = false;
 
-  constructor(private store: Store, private headerSvc: HeaderService) {}
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.store

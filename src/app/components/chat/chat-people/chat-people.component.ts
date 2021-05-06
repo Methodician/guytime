@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ChatGroupI } from '@app/models/chat-group';
 import { UserI } from '@app/models/user';
 import { ChatService } from '@app/services/chat.service';
-import { HeaderService } from '@app/services/header.service';
 import { UserService } from '@app/services/user.service';
 import { resetHeader, setHeaderText } from '@app/store/header/header.actions';
 import { Store } from '@ngrx/store';
@@ -24,7 +23,6 @@ export class ChatPeopleComponent implements OnInit {
 
   constructor(
     private store: Store,
-    private headerSvc: HeaderService,
     private chatSvc: ChatService,
     private userSvc: UserService,
     private route: ActivatedRoute,

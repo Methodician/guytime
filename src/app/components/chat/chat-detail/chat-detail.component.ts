@@ -1,5 +1,4 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { HeaderService } from '@app/services/header.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { ChatService } from '@services/chat.service';
@@ -15,7 +14,6 @@ import {
   resetHeader,
   setHeaderText,
 } from '@app/store/header/header.actions';
-import { headerOptions } from '@app/store/header/header.selectors';
 
 @Component({
   selector: 'gtm-chat-detail',
@@ -30,7 +28,6 @@ export class ChatDetailComponent implements OnInit {
   messages$: Observable<ReadonlyArray<ChatMessageI>>;
 
   constructor(
-    private headerSvc: HeaderService,
     private route: ActivatedRoute,
     private router: Router,
     private chatSvc: ChatService,

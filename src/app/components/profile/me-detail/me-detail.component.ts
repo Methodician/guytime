@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
-import { HeaderService } from '@app/services/header.service';
 import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { loggedInUser } from '@app/store/user/user.selectors';
@@ -22,11 +21,7 @@ export class MeDetailComponent implements OnInit, OnDestroy {
 
   promptEvent;
 
-  constructor(
-    private store: Store,
-    private router: Router,
-    private headerSvc: HeaderService,
-  ) {}
+  constructor(private store: Store, private router: Router) {}
 
   ngOnInit(): void {
     setTimeout(() => this.updateHeader());
