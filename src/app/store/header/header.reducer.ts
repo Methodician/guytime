@@ -11,11 +11,7 @@ export const headerFeatureKey = 'header';
 
 export interface HeaderStateI {
   shouldShowBack: boolean;
-  // defaultBackUrl: string;
   headerText: string;
-  // previousUrls: ReadonlyArray<string>;
-  // currentUrl: string;
-  // defaultUrl: string;
   headerOptions: Map<string, HeaderOptionI>;
 }
 
