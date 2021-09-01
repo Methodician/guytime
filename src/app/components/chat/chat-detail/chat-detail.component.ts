@@ -6,9 +6,9 @@ import { ChatMessageI } from '@models/message';
 import { FirebaseService } from '@app/services/firebase.service';
 import { Store } from '@ngrx/store';
 import { authUid } from '@app/store/auth/auth.selectors';
-import { take } from 'rxjs/operators';
-import { loadChatMessages } from '@app/store/chat/chat.actions';
-import { chatMessages } from '@app/store/chat/chat.selectors';
+import { take }                                from 'rxjs/operators';
+import { clearChatMessages, loadChatMessages } from '@app/store/chat/chat.actions';
+import { chatMessages }                        from '@app/store/chat/chat.selectors';
 import {
   addHeaderOptions,
   resetHeader,
@@ -36,6 +36,7 @@ export class ChatDetailComponent implements OnInit {
   ) {}
 
   ngOnDestroy(): void {
+    this.store.dispatch(clearChatMessages())
     this.store.dispatch(resetHeader());
     this.unsubscribe$.next();
     this.unsubscribe$.complete();

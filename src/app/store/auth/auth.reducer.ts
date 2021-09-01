@@ -1,6 +1,6 @@
 import { AuthInfoI } from '@app/models/auth-info';
-import { createReducer, on } from '@ngrx/store';
-import { loadAuthSuccess, loginFailure } from './auth.actions';
+import { createReducer, on }                            from '@ngrx/store';
+import { loadAuthSuccess, loginFailure, logoutSuccess } from './auth.actions';
 
 const NULL_USER: AuthInfoI = { uid: null };
 
@@ -23,4 +23,5 @@ export const authReducer = createReducer(
     authError: null,
   })),
   on(loginFailure, (state, action) => ({ ...state, authError: action.error })),
+  on(logoutSuccess, ( state, ) => ({ ...state, authInfo: null })),
 );

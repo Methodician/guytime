@@ -21,7 +21,7 @@ export const createUnreadMessageCountMapSuccess = createAction(
 );
 
 export const loadUserUnreadMessages = createAction(
-  "[Chat] Load logged in user's unread messages",
+  '[Chat] Load logged in user\'s unread messages',
 );
 
 export const loadUserUnreadMessagesSuccess = createAction(
@@ -37,6 +37,10 @@ export const loadUserUnreadMessagesFailure = createAction(
 export const loadChatMessages = createAction(
   '[Chat] Load Chat Messages',
   props<{ chatGroupId: string }>(),
+);
+
+export const clearChatMessages = createAction(
+  '[Chat] Clear Chat Messages',
 );
 
 export const loadChatMessagesSuccess = createAction(

@@ -1,13 +1,15 @@
-import { ChatGroupI } from '@app/models/chat-group';
-import { ChatMessageI } from '@app/models/message';
+import { ChatGroupI }        from '@app/models/chat-group';
+import { ChatMessageI }      from '@app/models/message';
 import { createReducer, on } from '@ngrx/store';
-import { KeyMapI } from '../../../../functions/src';
+import { KeyMapI }           from '../../../../functions/src';
 import {
+  clearChatMessages,
   createUnreadMessageCountMapSuccess,
   loadChatGroupsSuccess,
   loadChatMessagesSuccess,
   loadUserUnreadMessagesSuccess,
-} from './chat.actions';
+}                            from './chat.actions';
+import { logoutSuccess }     from '@app/store/auth/auth.actions';
 
 export const chatFeatureKey = 'chat';
 
@@ -45,5 +47,16 @@ export const chatReducer = createReducer(
   on(loadChatMessagesSuccess, (state, { chatMessages }) => ({
     ...state,
     chatMessages,
+  })),
+  on(clearChatMessages, ( state, { } ) => ({
+    ...state,
+    chatMessages: [],
+  })),
+  on(logoutSuccess, ( state, {} ) => ({
+    ...state,
+    chatMessages: [],
+    chatGroups: [],
+    unreadMessages: {},
+    unreadMessageCountMap: {}
   })),
 );

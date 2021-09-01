@@ -25,5 +25,17 @@
         ]
       }
     }
+  ],
+  "dataGroups": [
+    {
+      "name": "profileImages",
+      "urls": [
+        "https://firebasestorage.googleapis.com/v0/b/guy-time.appspot.com/**"
+      ],
+      "cacheConfig": {
+        "maxSize": 250,
+        "maxAge": "7d"
+      }
+    }
   ]
 }
