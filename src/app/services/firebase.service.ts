@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
+import firebase from 'firebase/compat/app';
+import undefined from 'firebase/compat/firestore';
 
 @Injectable({
   providedIn: 'root',

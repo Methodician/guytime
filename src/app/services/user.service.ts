@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { UserI } from '@models/user';
 import { BehaviorSubject } from 'rxjs';
-import { AngularFireStorage } from '@angular/fire/storage';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FirebaseService } from './firebase.service';
 import { Store } from '@ngrx/store';
 import { authUid } from '@app/store/auth/auth.selectors';

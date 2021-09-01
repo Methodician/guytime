@@ -10,9 +10,9 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { HttpClientModule } from '@angular/common/http';
 
 // ANGULAR FIRE
-import { AngularFireModule } from '@angular/fire';
-import { AngularFirestoreModule, SETTINGS } from '@angular/fire/firestore';
-// import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFirestoreModule, SETTINGS } from '@angular/fire/compat/firestore';
+// import { AngularFireAnalyticsModule } from '@angular/fire/compat/analytics';
 
 // ANGULAR MATERIAL
 import { MatCardModule } from '@angular/material/card';

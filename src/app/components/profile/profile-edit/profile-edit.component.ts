@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AngularFireUploadTask } from '@angular/fire/storage';
+import { AngularFireUploadTask } from '@angular/fire/compat/storage';
 import {
   RelationshipStatusM,
   ActivityTypeM,
