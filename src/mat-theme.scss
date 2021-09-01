@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,500;0,700;1,300;1,500;1,700&display=swap');
 //font-family: 'Poppins', sans-serif;
 
@@ -6,11 +7,11 @@
 
 @import 'app/styles/vars.scss';
 
-$fellas-primary: mat-palette($fellas-teal);
-$fellas-accent: mat-palette($fellas-yellow, 500, A100, A400);
-$fellas-warn: mat-palette($fellas-gray, A200);
+$fellas-primary: mat.define-palette($fellas-teal);
+$fellas-accent: mat.define-palette($fellas-yellow, 500, A100, A400);
+$fellas-warn: mat.define-palette($fellas-gray, A200);
 
-$fellas-theme: mat-light-theme(
+$fellas-theme: mat.define-light-theme(
   (
     color: (
       primary: $fellas-primary,
@@ -22,11 +23,11 @@ $fellas-theme: mat-light-theme(
 
 // 👇 3. Define a custom heading typography config
 $heading-font-family: "'Poppins', sans-serif";
-$typography: mat-typography-config(
-  $display-4: mat-typography-level(112px, $font-family: $heading-font-family),
-  $display-3: mat-typography-level(56px, $font-family: $heading-font-family),
-  $display-2: mat-typography-level(45px, $font-family: $heading-font-family),
-  $display-1: mat-typography-level(34px, $font-family: $heading-font-family),
-  $headline: mat-typography-level(24px, $font-family: $heading-font-family),
-  $title: mat-typography-level(20px, $font-family: $heading-font-family),
+$typography: mat.define-typography-config(
+  $display-4: mat.define-typography-level(112px, $font-family: $heading-font-family),
+  $display-3: mat.define-typography-level(56px, $font-family: $heading-font-family),
+  $display-2: mat.define-typography-level(45px, $font-family: $heading-font-family),
+  $display-1: mat.define-typography-level(34px, $font-family: $heading-font-family),
+  $headline: mat.define-typography-level(24px, $font-family: $heading-font-family),
+  $title: mat.define-typography-level(20px, $font-family: $heading-font-family),
 );
