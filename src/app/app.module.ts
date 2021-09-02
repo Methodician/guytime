@@ -112,10 +112,6 @@ import { allEffects } from './app.effects';
     MatListModule,
     MatSelectModule,
     MatCheckboxModule,
-    ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: environment.production,
-      registrationStrategy: 'registerImmediately',
-    }),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production,
@@ -124,6 +120,10 @@ import { allEffects } from './app.effects';
     EffectsModule.forRoot(allEffects),
     StoreModule.forRoot(reducers, { metaReducers }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
+    ServiceWorkerModule.register('/ngsw-worker.js', {
+      enabled: environment.production,
+      registrationStrategy: 'registerImmediately',
+    }),
   ],
   providers: [
     {
