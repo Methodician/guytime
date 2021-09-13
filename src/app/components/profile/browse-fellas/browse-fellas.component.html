@@ -1,5 +1,4 @@
 <main *ngIf="selectedFella$ | async as selectedFella">
-  <div class="branded_backdrop"></div>
   <section class="body">
     <article class="info">
       <gtm-avatar
@@ -10,56 +9,70 @@
 
       <section class="summary">
         <div class="words">
-          <b class="name"
-            >{{ selectedFella.fName }} {{ selectedFella.lName }}</b
+          <span class="name mat-headline"
+            >{{ selectedFella.fName }} {{ selectedFella.lName }}</span
           >
-          <p class="age_relationship">
-            Age: {{ selectedFella.age }} -
-            {{
-              relationshipStatusMap.get(selectedFella.relationshipStatus)
-                .displayName
-            }}
-          </p>
+          <span class="age_relationship mat-subheading-1">
+            {{ selectedFella.age }} years old
+          </span>
         </div>
-        <gtm-activities-span
-          [selectedActivities]="selectedFella.activityTypes"
-        ></gtm-activities-span>
+        <mat-chip-list class='interests-container'>
+          <mat-chip color='primary'>Gaming</mat-chip>
+          <mat-chip color='accent'>Outdoors</mat-chip>
+          <mat-chip>Community Service</mat-chip>
+        </mat-chip-list>
       </section>
     </article>
     <mat-card>{{ selectedFella.bio }}</mat-card>
-  </section>
-  <button
-    class="browse_btn next_fella"
-    color=""
-    (click)="onCycleClicked()"
-    mat-mini-fab
-  >
-    <mat-icon svgIcon="nextFella"></mat-icon>
-  </button>
+    <div class='action_buttons_container'>
+      <button
+        class='nav_button nav_button_left'
+        color=''
+        (click)='onChatClicked()'
+        mat-mini-fab
+      >
+        <mat-icon>arrow_back_ios_new</mat-icon>
+      </button>
+      <button
+        class='nav_button nav_button_right'
+        color=''
+        (click)='onChatClicked()'
+        mat-mini-fab
+      >
+        <mat-icon>arrow_forward_ios_new</mat-icon>
+      </button>
+      <button
+        class='send_message'
+        color='primary'
+        (click)='onChatClicked()'
+        mat-fab
+      >
+        <mat-icon>chat</mat-icon>
+      </button>
 
-  <button
-    class="browse_btn add_contact"
-    color=""
-    (click)="onConnectClicked()"
-    mat-mini-fab
-  >
-    <mat-icon svgIcon="buttonHandshake"></mat-icon>
-  </button>
+
+    </div>
+  </section>
+<!--  <button-->
+<!--    class="browse_btn next_fella"-->
+<!--    color=""-->
+<!--    (click)="onCycleClicked()"-->
+<!--    mat-mini-fab-->
+<!--  >-->
+<!--    <mat-icon svgIcon="nextFella"></mat-icon>-->
+<!--  </button>-->
+
+<!--  <button-->
+<!--    class="browse_btn add_contact"-->
+<!--    color="primary"-->
+<!--    (click)="onConnectClicked()"-->
+<!--    mat-mini-fab-->
+<!--  >-->
+<!--    <mat-icon></mat-icon>-->
+<!--  </button>-->
 
   <!-- prolly right way -->
-  <!-- <button
-    class="browse_btn send_message"
-    color=""
-    (click)="onChatClicked()"
-    mat-mini-fab
-  >
-    <mat-icon svgIcon="message"></mat-icon>
-  </button> -->
 
-  <!-- tempfix -->
-  <mat-icon
-    class="browse_btn send_message"
-    (click)="onChatClicked()"
-    svgIcon="message"
-  ></mat-icon>
+
+
 </main>

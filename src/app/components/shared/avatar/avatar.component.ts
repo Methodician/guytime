@@ -52,11 +52,11 @@ export class AvatarComponent implements OnChanges {
   imageSizePx = () => {
     switch (this.imageSize) {
       case '90x90':
-        return '90px';
+        return '80px';
       case '45x45':
-        return '45px';
+        return '48px';
       case 'fullSize':
-        return '150px';
+        return '320px';
       default:
         return '90px';
     }

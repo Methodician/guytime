@@ -1,26 +1,27 @@
-<main>
-  <nav mat-tab-nav-bar>
-    <a
-      mat-tab-link
-      (click)="onNavClicked('guys')"
-      [active]="(currentSelection$ | async) === 'guys'"
-      ><mat-icon class="browse-icon" svgIcon="profile"></mat-icon
-    ></a>
-    <a
-      mat-tab-link
-      (click)="onNavClicked('chat')"
-      [active]="(currentSelection$ | async) === 'chat'"
-      ><mat-icon
-        svgIcon="messaging"
-        [matBadge]="unreadMessagesCount$ | async"
-        [matBadgeHidden]="(unreadMessagesCount$ | async) === 0"
-      ></mat-icon
-    ></a>
-    <a
-      mat-tab-link
-      (click)="onNavClicked('me')"
-      [active]="(currentSelection$ | async) === 'me'"
-      ><mat-icon svgIcon="settings"></mat-icon
-    ></a>
-  </nav>
-</main>
+<nav
+  id='navbar'
+  mat-tab-nav-bar
+>
+  <a
+    mat-tab-link
+    (click)="onNavClicked('guys')"
+    [active]="(currentSelection$ | async) === 'guys'"
+    ><mat-icon class="browse-icon">person_search</mat-icon
+  ></a>
+  <a
+    mat-tab-link
+    (click)="onNavClicked('chat')"
+    [active]="(currentSelection$ | async) === 'chat'"
+    ><mat-icon
+      svgIcon="messaging"
+      [matBadge]="unreadMessagesCount$ | async"
+      [matBadgeHidden]="(unreadMessagesCount$ | async) === 0"
+    ></mat-icon
+  ></a>
+  <a
+    mat-tab-link
+    (click)="onNavClicked('me')"
+    [active]="(currentSelection$ | async) === 'me'"
+    ><mat-icon svgIcon="settings"></mat-icon
+  ></a>
+</nav>

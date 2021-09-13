@@ -1,22 +1,17 @@
+@use '~@angular/material' as mat;
 @import 'app/styles/vars.scss';
 
-main {
-  display: grid;
-  grid-template-columns: 30px auto 30px;
-  border: 3px solid $bc_dusty_blue_reduced;
-  color: $bc_dusty_blue;
-  position: fixed;
-  width: 100vw;
-  z-index: 10000;
-  height: $header-height;
-  align-content: center;
-  background-color: #FFFFFF;
+#toolbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: $bc_deep_teal;
+  @include mat.elevation(2);
 
-  .page_title {
-    justify-self: center;
-    align-self: center;
-  }
-  .menu_button {
-    padding-right: 10px;
+  .topnav-brand-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 }

@@ -1,4 +1,5 @@
 export const navIconMap = {
+  logo: 'assets/icons/square_icon.svg',
   messaging: 'assets/icons/bottom_nav_messaging.svg',
   settings: 'assets/icons/bottom_nav_settings.svg',
   fistBump: 'assets/icons/fist_bump.svg',

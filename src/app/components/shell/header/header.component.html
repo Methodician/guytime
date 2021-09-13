@@ -1,15 +1,19 @@
-<main *ngIf="(options$ | async) && (headerText$ | async)">
-  <div *ngIf="!(shouldShowBack$ | async)" id="btn-placeholder"></div>
-  <button
-    *ngIf="shouldShowBack$ | async"
-    (click)="onBackClicked()"
-    class="back_button"
-    mat-icon-button
-    aria-label="Back Button"
-  >
-    <mat-icon>arrow_back</mat-icon>
-  </button>
-  <b class="page_title">{{ headerText$ | async }}</b>
+<mat-toolbar id='toolbar' color='primary' *ngIf="(options$ | async) && (headerText$ | async)">
+  <div class='topnav-brand-container'>
+    <div *ngIf="!(shouldShowBack$ | async)" id="btn-placeholder"></div>
+    <button
+      *ngIf="shouldShowBack$ | async"
+      (click)="onBackClicked()"
+      class="back_button"
+      mat-icon-button
+      aria-label="Back Button"
+    >
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <mat-icon color='#fff' svgIcon='logo'></mat-icon>
+    <span class="page_title">{{ headerText$ | async }}</span>
+
+  </div>
 
   <div class="menu">
     <button
@@ -43,4 +47,4 @@
       </button>
     </mat-menu>
   </div>
-</main>
+</mat-toolbar>

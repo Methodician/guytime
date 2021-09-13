@@ -27,6 +27,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 // LOCAL IMPORTS
 import { environment } from '@env/environment';
@@ -107,6 +108,7 @@ import { allEffects } from './app.effects';
     MatTabsModule,
     MatIconModule,
     MatChipsModule,
+    MatToolbarModule,
     MatBadgeModule,
     MatMenuModule,
     MatListModule,
