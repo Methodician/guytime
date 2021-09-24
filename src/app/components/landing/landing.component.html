@@ -88,23 +88,11 @@
       </g>
     </svg>
   </div>
-  <section *ngIf="activeSection === 'none'" class="why">
-    <h3>Why Fellas?</h3>
-    <ul>
-      <li>I want to make friends outside of work.</li>
-      <li>New to town and want to meet new people.</li>
-      <li>Recently divorced and want to find new friends.</li>
-      <li>Find others who share your hobbies and/or interests.</li>
-      <li>Expand your existing circle of friends.</li>
-    </ul>
-  </section>
 
   <!-- Registration Component -->
   <section class="actions-span" *ngIf="activeSection === 'register'">
-    <mat-card class="actions-form">
+    <div class="actions-form">
       <form [formGroup]="registerForm">
-        <h1>Register</h1>
-
         <mat-form-field class="full-width-input">
           <input
             matInput
@@ -143,91 +131,99 @@
           Please make sure both password fields match
         </mat-error>
       </form>
-    </mat-card>
-
-    <div class="actions-wrapper">
-      <button (click)="activeSection = 'none'" mat-raised-button color="warn">
-        Back
-      </button>
-      <button (click)="onRegister()" mat-raised-button color="accent">
-        Register
-      </button>
     </div>
-  </section>
 
-  <!-- Login Component -->
-  <section class="actions-span" *ngIf="activeSection === 'login'">
-    <mat-card class="actions-form">
-      <form [formGroup]="loginForm">
-        <h1>Sign In</h1>
-        <mat-error *ngIf="wasWrongPasswordEntered()"
-          >You entered the wrong password.</mat-error
-        >
-        <mat-error *ngIf="wasWrongEmailEntered()"
-          >There is no account associated with that email.</mat-error
-        >
-
-        <mat-form-field class="full-width-input">
-          <input
-            matInput
-            type="email"
-            placeholder="Email"
-            formControlName="email"
-            required
-          />
-          <mat-error> Please provide a valid email address </mat-error>
-        </mat-form-field>
-        <mat-form-field class="full-width-input">
-          <input
-            matInput
-            type="password"
-            placeholder="Password"
-            formControlName="password"
-            required
-          />
-          <mat-error> Please provide a valid password </mat-error>
-        </mat-form-field>
-
-        <mat-error>{{ (authError$ | async)?.message }}</mat-error>
-      </form>
-    </mat-card>
-
-    <div class="actions-wrapper">
-      <button (click)="activeSection = 'none'" mat-raised-button color="warn">
-        Back
-      </button>
+    <div class='actions-wrapper'>
       <button
-        (click)="onLogin()"
-        [disabled]="!loginForm.valid"
-        mat-raised-button
-        color="accent"
+        (click)='onRegister()'
+        [disabled]='!registerForm.valid'
+        mat-stroked-button
+        class='primary-action-btn'
       >
-        Sign In
+        Sign up
+      </button>
+
+      <div class='secondary-action'>
+        <span>Already have an account?</span>
+
+        <button
+          (click)="activeSection = 'none'"
+          mat-button
+        >
+          Login
+        </button>
+      </div>
+      <button mat-button class='login-help'>
+        <span>Need help?</span>
       </button>
     </div>
+
   </section>
 
   <!-- Landing Actions -->
   <section class="actions-span" *ngIf="activeSection === 'none'">
+    <div class='actions-form'>
+      <form [formGroup]='loginForm'>
+        <mat-error *ngIf='wasWrongPasswordEntered()'
+        >You entered the wrong password.
+        </mat-error
+        >
+        <mat-error *ngIf='wasWrongEmailEntered()'
+        >There is no account associated with that email.
+        </mat-error
+        >
+
+        <mat-form-field class='full-width-input'>
+          <input
+            matInput
+            type='email'
+            placeholder='Email'
+            formControlName='email'
+            required
+          />
+          <mat-error> Please provide a valid email address</mat-error>
+        </mat-form-field>
+        <mat-form-field class='full-width-input'>
+          <input
+            matInput
+            type='password'
+            placeholder='Password'
+            formControlName='password'
+            required
+          />
+          <mat-error> Please provide a valid password</mat-error>
+        </mat-form-field>
+
+        <mat-error>{{ (authError$ | async)?.message }}</mat-error>
+      </form>
+    </div>
+
     <div class="actions-wrapper">
       <button
-        (click)="activeSection = 'register'"
-        mat-raised-button
-        color="accent"
+        (click)='onLogin()'
+        [disabled]='!loginForm.valid'
+        mat-stroked-button
+        class='primary-action-btn'
       >
-        Register
+        Login
       </button>
-      <button
-        (click)="activeSection = 'login'"
-        mat-raised-button
-        color="accent"
-      >
-        Sign In
+
+      <div class='secondary-action' *ngIf="activeSection === 'none'">
+        <span>Don't have an account?</span>
+
+        <button
+          (click)="activeSection = 'register'"
+          mat-button
+        >
+          Sign up
+        </button>
+      </div>
+      <button mat-button class='login-help'>
+        <span>Need help?</span>
       </button>
     </div>
   </section>
   <footer>
-    <button mat-button color="accent">Privacy Policy</button
-    ><button mat-button color="accent">What's Fellas?</button>
+    <button mat-button>Privacy Policy</button>
   </footer>
 </main>

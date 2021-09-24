@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AngularFireUploadTask } from '@angular/fire/compat/storage';
 import {
   RelationshipStatusM,
+  IcebreakerQuestionM,
   ActivityTypeM,
   UserI,
   ProfileImageSizeT,
@@ -24,6 +25,7 @@ import { resetHeader, setHeaderText } from '@app/store/header/header.actions';
 export class ProfileEditComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<void> = new Subject();
   relationshipStatusMap = RelationshipStatusM;
+  icebreakerQuestionMap = IcebreakerQuestionM;
   activityTypeMap = ActivityTypeM;
 
   form: FormGroup;

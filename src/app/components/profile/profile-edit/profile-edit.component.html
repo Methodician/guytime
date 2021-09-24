@@ -1,115 +1,111 @@
-<main>
-  <form *ngIf="form" [formGroup]="form" class="body">
-    <article class="basics">
-      <section class="avatar_input_group">
-        <div class="avatarWrapper">
-          <gtm-avatar
-            [fileName]="avatarFileName$ | async"
-            [imageSize]="avatarSize"
-            [avatarFileUrl]="avatarUrl$ | async"
-          ></gtm-avatar>
-        </div>
+<div>
+  <form *ngIf="form" [formGroup]="form" class="profile-edit">
+    <div class='avatar-edit-container'>
+      <div class='avatarWrapper'>
+        <gtm-avatar
+          [fileName]='avatarFileName$ | async'
+          [imageSize]='avatarSize'
+          [avatarFileUrl]='avatarUrl$ | async'
+        ></gtm-avatar>
+      </div>
+      <input
+        #avatarInput
+        hidden='true'
+        type='file'
+        accept='image/*'
+        (change)='onSelectAvatar($event)'
+      />
+      <button
+        (click)='avatarInput.click()'
+        class='avatar_button'
+        mat-raised-button
+        color='primary'
+      >
+        Pick Image
+      </button>
+    </div>
+    <div class='names'>
+      <mat-form-field class='first_name'>
+        <mat-label>First name</mat-label>
         <input
-          #avatarInput
-          hidden="true"
-          type="file"
-          accept="image/*"
-          (change)="onSelectAvatar($event)"
-        />
-        <button
-          (click)="avatarInput.click()"
-          class="avatar_button"
-          mat-raised-button
-          color="primary"
-        >
-          Pick Image
-        </button>
-      </section>
-      <section class="summary">
-        <div class="stats">
-          <div class="names">
-            <mat-form-field>
-              <mat-label>first Name</mat-label>
-              <input
-                matInput
-                placeholder="first name"
-                class="first_name"
-                type="text"
-                formControlName="fName"
-                (blur)="trimInput('fName')"
-              />
-            </mat-form-field>
-            <mat-form-field>
-              <mat-label>last Name</mat-label>
-              <input
-                matInput
-                placeholder="last name"
-                class="last_name"
-                type="text"
-                formControlName="lName"
-                (blur)="trimInput('lName')"
-              />
-            </mat-form-field>
-          </div>
-          <div class="age_relationship">
-            <mat-form-field class="age">
-              <mat-label>Age</mat-label>
-              <input
-                matInput
-                placeholder="age"
-                type="number"
-                formControlName="age"
-              />
-            </mat-form-field>
-            -
-            <mat-form-field class="relationship">
-              <mat-label>Relationship Status</mat-label>
-              <mat-select formControlName="relationshipStatus">
-                <mat-option
-                  *ngFor="let relEntry of relationshipStatusMap | keyvalue"
-                  [value]="relEntry.key"
-                  >{{ relEntry.value.displayName }}</mat-option
-                >
-              </mat-select>
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="interests">
-          <div
-            class="interest_icon_wrapper"
-            *ngFor="let entry of activityTypeMap | keyvalue"
-            (click)="onActivityTypeClicked(entry.key)"
-          >
-            <gtm-toggle-icon
-              [deselected]="!isActivityTypeSelected(entry.key)"
-              [iconName]="entry.value.iconName"
-              [iconType]="entry.value.iconType"
-            ></gtm-toggle-icon>
-          </div>
-        </div>
-      </section>
-    </article>
-    <mat-card class="bio">
-      <mat-form-field class="bio_input">
-        <mat-label>Bio</mat-label>
-        <textarea
-          cdkTextareaAutosize
-          formControlName="bio"
-          name="bioInput"
           matInput
-          placeholder="Ex. I enjoy my rock climbing hobby, fishing, and video games. I've been wanting to start a garden."
-        ></textarea>
+          placeholder='First name'
+          type='text'
+          formControlName='fName'
+          (blur)="trimInput('fName')"
+        />
       </mat-form-field>
-    </mat-card>
-  </form>
-  <gtm-bottom-ghost-banner>
+      <mat-form-field class='last_name'>
+        <mat-label>Last name</mat-label>
+        <input
+          matInput
+          placeholder='Last name'
+          type='text'
+          formControlName='lName'
+          (blur)="trimInput('lName')"
+        />
+      </mat-form-field>
+
+    </div>
+<!--    <mat-form-field appearance='fill'>-->
+<!--      <mat-label>Birthdate</mat-label>-->
+<!--      <input matInput [matDatepicker]='picker'>-->
+<!--      <mat-datepicker-toggle matSuffix [for]='picker'></mat-datepicker-toggle>-->
+<!--      <mat-datepicker #picker></mat-datepicker>-->
+<!--    </mat-form-field>-->
+    <div class='profile-row'>
+      <mat-form-field class='age'>
+        <mat-label>Age</mat-label>
+        <input
+          matInput
+          placeholder='age'
+          type='number'
+          formControlName='age'
+        />
+      </mat-form-field>
+    </div>
+    <div class='profile-row'>
+      <mat-form-field class='relationship'>
+        <mat-label>Relationship status</mat-label>
+        <mat-select formControlName='relationshipStatus'>
+          <mat-option
+            *ngFor='let relEntry of relationshipStatusMap | keyvalue'
+            [value]='relEntry.key'
+          >{{ relEntry.value.displayName }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <mat-form-field class='icebreaker-question'>
+      <mat-label>Icebreaker question</mat-label>
+      <mat-select formControlName='icebreakerQuestion'>
+        <mat-option
+          *ngFor='let questionEntry of icebreakerQuestionMap | keyvalue'
+          [value]='questionEntry.key'
+        >{{ questionEntry.value.displayName }}</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class='icebreaker-answer'>
+      <mat-label>Icebreaker answer</mat-label>
+      <textarea
+        cdkTextareaAutosize
+        formControlName='bio'
+        name='bioInput'
+        matInput
+        placeholder="Answer the question you selected above here."
+        rows='3'
+      ></textarea>
+    </mat-form-field>
     <button
-      (click)="onSaveClicked()"
-      class="save_button"
+      (click)='onSaveClicked()'
       mat-button
-      color="white"
+      mat-raised-button
+      class='profile-save'
+      color='primary'
     >
       Save
     </button>
-  </gtm-bottom-ghost-banner>
-</main>
+  </form>
+
+</div>

@@ -8,6 +8,7 @@
   justify-content: space-between;
   background-color: $bc_deep_teal;
   @include mat.elevation(2);
+  height: $header_height;
 
   .topnav-brand-container {
     display: flex;

@@ -1,8 +1,10 @@
 // GLOBAL OFFSETS
-$header_height: 40px;
+$header_height: 56px;
 $footer_height: 64px;
 $body_buffer_height: $footer_height + $header_height;
 $body_height: calc(100vh - #{$body_buffer_height});
+
+$background-color: #F3F4F6;
 
 // KEY BRANDING COLORS
 $bc_dark_gray: #2c2c2c;

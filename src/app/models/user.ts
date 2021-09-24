@@ -76,6 +76,17 @@ export const RelationshipStatusM = new Map<RelationshipStatusT, DisplayNameI>([
   ['UNSPECIFIED', { displayName: 'Unspecified' }],
 ]);
 
+export type IcebreakerQuestionT =
+  | 'ONE'
+  | 'TWO'
+  | 'THREE';
+
+export const IcebreakerQuestionM = new Map<IcebreakerQuestionT, DisplayNameI>([
+  [ 'ONE', { displayName: 'What\'s something most people don\'t know about you?' } ],
+  [ 'TWO', { displayName: 'Some other question?' } ],
+  [ 'THREE', { displayName: 'Yet another question?' } ],
+]);
+
 // export type ActivityTypeT =
 //   | 'OUTDOOR'
 //   | 'SPORTS'

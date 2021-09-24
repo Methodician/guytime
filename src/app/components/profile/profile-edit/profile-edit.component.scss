@@ -1,67 +1,66 @@
 @import 'app/styles/vars.scss';
 
-main {
-  .body {
-    height: $body_height;
-    width: 100vw;
-    display: grid;
-    grid-template-rows: 145px auto;
-    padding: 15px;
+:host {
+  overflow-y: scroll;
+}
 
-    .basics {
-      display: grid;
-      grid-template-columns: 100px calc(100vw - 140px);
+.profile-edit {
+  width: 100vw;
+  padding: 40px 16px;
+  margin-bottom: 32px;
 
-      .avatar_input_group {
-        .avatar_button {
-          width: 90px;
-          padding: 0;
-          text-align: center;
-        }
-      }
+  .avatar-edit-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 8px;
 
-      .summary {
-        .stats {
-          display: flex;
-          flex-direction: column;
-
-          .names {
-            display: grid;
-            grid-template-columns: 50% 50%;
-            grid-gap: 10px;
-
-            .first_name,
-            .last_name {
-              font-weight: bold;
-            }
-          }
-          .age_relationship {
-            display: inline;
-            .age {
-              width: 30px;
-            }
-            .relationship {
-              width: 100px;
-            }
-          }
-        }
-        .interests {
-          display: flex;
-          justify-content: center;
-
-          .interest_icon_wrapper {
-            margin: 0 5px;
-          }
-        }
-      }
-    }
-    .bio {
-      .bio_input {
-        width: 100%;
-        textarea {
-          max-height: calc(100vh - #{$body_buffer_height} - 245px);
-        }
-      }
+    .avatar_button {
+      margin-left: 16px;
     }
   }
+
+  .names {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+
+    .first_name {
+      width: 45%;
+    }
+
+    .last_name {
+      width: 45%;
+    }
+  }
+
+  .profile-row {
+    margin-bottom: 8px;
+    width: 100%;
+  }
+
+  .age {
+    width: 45%;
+  }
+
+  .relationship {
+    width: 45%;
+  }
+
+  .icebreaker-question {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  .icebreaker-answer {
+    width: 100%;
+  }
+
+  .profile-save {
+    width: 100%;
+    margin-top: 24px;
+  }
+
 }
