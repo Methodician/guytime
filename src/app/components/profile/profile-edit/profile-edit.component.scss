@@ -9,6 +9,13 @@
   padding: 40px 16px;
   margin-bottom: 32px;
 
+  .button-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: end;
+  }
+
   .avatar-edit-container {
     display: flex;
     flex-direction: row;

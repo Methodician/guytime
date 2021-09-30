@@ -1,31 +1,27 @@
 <main>
   <section class="body" *ngIf="userInfo">
-    <article class="header">
+    <article class="info">
       <gtm-avatar
         [fileName]="avatarFileName()"
         [imageHash]="avatarFileHash()"
         [imageSize]="avatarSize"
       ></gtm-avatar>
 
-      <section class="summary">
-        <div class="stats">
-          <b class="name">{{ userInfo.fName }} {{ userInfo.lName }}</b>
-          <p class="age_relationship">
-            {{ userInfo.age }} -
-            {{
-              relationshipStatusMap.get(userInfo.relationshipStatus).displayName
-            }}
-          </p>
+      <section class='summary'>
+        <div class='words'>
+          <span class='name mat-headline'
+          >{{ userInfo.fName }} {{ userInfo.lName }}</span
+          >
+          <span class='age_relationship mat-subheading-1'>
+            {{ userInfo.age }} years old
+          </span>
         </div>
-
-        <gtm-activities-span
-          [selectedActivities]="userInfo.activityTypes"
-        ></gtm-activities-span>
+        <mat-chip-list class='interests-container'>
+          <mat-chip color='primary'>Gaming</mat-chip>
+          <mat-chip color='accent'>Outdoors</mat-chip>
+          <mat-chip>Community Service</mat-chip>
+        </mat-chip-list>
       </section>
     </article>
-
-    <mat-card class="bio">
-      {{ userInfo.bio }}
-    </mat-card>
   </section>
 </main>

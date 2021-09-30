@@ -26,6 +26,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
+import { MatStepperModule } from '@angular/material/stepper';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
@@ -112,6 +113,7 @@ import { allEffects } from './app.effects';
     MatBadgeModule,
     MatMenuModule,
     MatListModule,
+    MatStepperModule,
     MatSelectModule,
     MatCheckboxModule,
     StoreDevtoolsModule.instrument({

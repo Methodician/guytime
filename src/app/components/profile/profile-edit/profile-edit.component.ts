@@ -16,6 +16,12 @@ import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { avatarFileName, loggedInUser } from '@app/store/user/user.selectors';
 import { resetHeader, setHeaderText } from '@app/store/header/header.actions';
+import { MatChipInputEvent} from '@angular/material/chips';
+import { COMMA, ENTER} from '@angular/cdk/keycodes';
+
+export interface ProfileTag {
+  name: string;
+}
 
 @Component({
   selector: 'gtm-profile-edit',
@@ -35,6 +41,16 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   avatarFile: File;
   imageUploadTask: AngularFireUploadTask;
   avatarUrl$: BehaviorSubject<string | ArrayBuffer> = new BehaviorSubject(null);
+
+  removable                   = true;
+  addOnBlur                   = true;
+  readonly separatorKeysCodes = [ ENTER, COMMA ] as const;
+  tagsAreSelectable = true;
+  tags: ProfileTag[] = [
+    { name: 'Chess' },
+    { name: 'Video Games' },
+    { name: 'Basketball' },
+  ];
 
   constructor(
     private store: Store,
@@ -86,7 +102,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   };
 
   onSelectAvatar = ($e: HtmlInputEventI) => {
-    if ($e.target.files.length === 0) return;
+    if ($e.target.files.length === 0) {
+      return;
+    }
 
     const reader = new FileReader();
     reader.onload = () => {
@@ -96,7 +114,27 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     const file = $e.target.files[0];
     reader.readAsDataURL(file);
     this.avatarFile = file;
-  };
+  }
+
+  add( event: MatChipInputEvent ): void {
+    const value = (event.value || '').trim();
+
+    // Add our fruit
+    if ( value ) {
+      this.tags.push({ name: value });
+    }
+
+    // Clear the input value
+    event.chipInput!.clear();
+  }
+
+  remove( fruit: ProfileTag ): void {
+    const index = this.tags.indexOf(fruit);
+
+    if ( index >= 0 ) {
+      this.tags.splice(index, 1);
+    }
+  }
 
   isActivityTypeSelected = (activityType: string) =>
     this.form.value.activityTypes.includes(activityType);

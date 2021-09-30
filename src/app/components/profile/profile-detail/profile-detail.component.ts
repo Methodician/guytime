@@ -13,7 +13,7 @@ import {
 export class ProfileDetailComponent {
   @Input() userInfo: UserI;
 
-  avatarSize: ProfileImageSizeT = '90x90';
+  avatarSize: ProfileImageSizeT = 'fullSize';
 
   relationshipStatusMap = RelationshipStatusM;
 

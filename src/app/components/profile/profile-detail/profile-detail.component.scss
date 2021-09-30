@@ -2,45 +2,47 @@
 
 main {
   .body {
-    position: absolute;
-    height: $body_height;
+    position: relative;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    display: grid;
-    padding: 15px;
+    padding: 40px 16px 16px;
+    height: $body_height;
 
-    .header {
-      display: grid;
-      grid-template-columns: 100px auto;
+    .info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
 
       .summary {
-        .stats {
-          display: grid;
+        padding-top: 16px;
+
+        .words {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          .name {
+            text-align: center;
+          }
+
+          .age_relationship {
+            text-align: center;
+          }
+        }
+
+        .interests-container {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
           justify-content: center;
-        }
-
-        .name {
-          text-align: center;
-          font-size: 1.68rem;
-        }
-
-        .age_relationship {
-          text-align: center;
-          font-size: 1.3rem;
-          font-weight: 500;
-          color: rgb(65, 64, 64);
         }
       }
     }
 
-    .bio {
-      overflow: scroll;
-      width: 100%;
-      height: calc(100vh - #{$body_buffer_height} - 125px);
-      margin-top: 10px;
-      white-space: pre-wrap;
-      .bio_title {
-        margin-bottom: 5px;
-      }
+    mat-card {
+      margin-top: 24px;
     }
   }
 }

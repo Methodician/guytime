@@ -1,102 +1,143 @@
 <div>
   <form *ngIf="form" [formGroup]="form" class="profile-edit">
-    <div class='avatar-edit-container'>
-      <div class='avatarWrapper'>
-        <gtm-avatar
-          [fileName]='avatarFileName$ | async'
-          [imageSize]='avatarSize'
-          [avatarFileUrl]='avatarUrl$ | async'
-        ></gtm-avatar>
-      </div>
-      <input
-        #avatarInput
-        hidden='true'
-        type='file'
-        accept='image/*'
-        (change)='onSelectAvatar($event)'
-      />
-      <button
-        (click)='avatarInput.click()'
-        class='avatar_button'
-        mat-raised-button
-        color='primary'
-      >
-        Pick Image
-      </button>
-    </div>
-    <div class='names'>
-      <mat-form-field class='first_name'>
-        <mat-label>First name</mat-label>
-        <input
-          matInput
-          placeholder='First name'
-          type='text'
-          formControlName='fName'
-          (blur)="trimInput('fName')"
-        />
-      </mat-form-field>
-      <mat-form-field class='last_name'>
-        <mat-label>Last name</mat-label>
-        <input
-          matInput
-          placeholder='Last name'
-          type='text'
-          formControlName='lName'
-          (blur)="trimInput('lName')"
-        />
-      </mat-form-field>
+      <mat-stepper orientation='vertical' linear disableRipple color='primary'>
+        <mat-step label='Personal Info'>
+          <div class='avatar-edit-container'>
+            <div class='avatarWrapper'>
+              <gtm-avatar
+                [fileName]='avatarFileName$ | async'
+                [imageSize]='avatarSize'
+                [avatarFileUrl]='avatarUrl$ | async'
+              ></gtm-avatar>
+            </div>
+            <input
+              #avatarInput
+              hidden='true'
+              type='file'
+              accept='image/*'
+              (change)='onSelectAvatar($event)'
+            />
+            <button
+              (click)='avatarInput.click()'
+              class='avatar_button'
+              mat-stroked-button
+              color='primary'
+            >
+              Pick Image
+            </button>
 
-    </div>
+          </div>
+          <div class='names'>
+            <mat-form-field class='first_name'>
+              <mat-label>First name</mat-label>
+              <input
+                matInput
+                placeholder='First name'
+                type='text'
+                formControlName='fName'
+                (blur)="trimInput('fName')"
+              />
+            </mat-form-field>
+            <mat-form-field class='last_name'>
+              <mat-label>Last name</mat-label>
+              <input
+                matInput
+                placeholder='Last name'
+                type='text'
+                formControlName='lName'
+                (blur)="trimInput('lName')"
+              />
+            </mat-form-field>
+
+          </div>
+          <div class='profile-row'>
+            <mat-form-field class='age'>
+              <mat-label>Age</mat-label>
+              <input
+                matInput
+                placeholder='age'
+                type='number'
+                formControlName='age'
+              />
+            </mat-form-field>
+          </div>
+          <div class='profile-row'>
+            <mat-form-field class='relationship'>
+              <mat-label>Relationship status</mat-label>
+              <mat-select formControlName='relationshipStatus'>
+                <mat-option
+                  *ngFor='let relEntry of relationshipStatusMap | keyvalue'
+                  [value]='relEntry.key'
+                >{{ relEntry.value.displayName }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class='button-row'>
+            <button mat-raised-button matStepperNext type='button' color='primary'>Next</button>
+          </div>
+        </mat-step>
+        <mat-step class='step' label='Interests'>
+          <mat-form-field class='example-chip-list' appearance='fill'>
+            <mat-label>Interests</mat-label>
+            <mat-chip-list #chipList aria-label='Interests selection'>
+              <mat-chip *ngFor='let tag of tags' [selectable]='tagsAreSelectable'
+                        [removable]='removable' (removed)='remove(tag)'>
+                {{tag.name}}
+                <button matChipRemove *ngIf='removable'>
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip>
+              <input placeholder='New interest...'
+                     [matChipInputFor]='chipList'
+                     [matChipInputSeparatorKeyCodes]='separatorKeysCodes'
+                     [matChipInputAddOnBlur]='addOnBlur'
+                     (matChipInputTokenEnd)='add($event)'>
+            </mat-chip-list>
+          </mat-form-field>
+
+          <div class='button-row'>
+            <button mat-button matStepperPrevious type='button'>Back</button>
+            <button mat-button matStepperNext type='button'>Next</button>
+          </div>
+        </mat-step>
+        <mat-step class='step' label='Icebreaker'>
+          <mat-form-field class='icebreaker-question'>
+            <mat-label>Icebreaker question</mat-label>
+            <mat-select formControlName='icebreakerQuestion'>
+              <mat-option
+                *ngFor='let questionEntry of icebreakerQuestionMap | keyvalue'
+                [value]='questionEntry.key'
+              >{{ questionEntry.value.displayName }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class='icebreaker-answer'>
+            <mat-label>Icebreaker answer</mat-label>
+            <textarea
+              cdkTextareaAutosize
+              formControlName='bio'
+              name='bioInput'
+              matInput
+              placeholder='Answer the question you selected above here.'
+              rows='3'
+            ></textarea>
+          </mat-form-field>
+          <div>
+            <button mat-button matStepperPrevious type='button'>Back</button>
+            <button mat-button matStepperNext type='button'>Next</button>
+          </div>
+        </mat-step>
+      </mat-stepper>
+
 <!--    <mat-form-field appearance='fill'>-->
 <!--      <mat-label>Birthdate</mat-label>-->
 <!--      <input matInput [matDatepicker]='picker'>-->
 <!--      <mat-datepicker-toggle matSuffix [for]='picker'></mat-datepicker-toggle>-->
 <!--      <mat-datepicker #picker></mat-datepicker>-->
 <!--    </mat-form-field>-->
-    <div class='profile-row'>
-      <mat-form-field class='age'>
-        <mat-label>Age</mat-label>
-        <input
-          matInput
-          placeholder='age'
-          type='number'
-          formControlName='age'
-        />
-      </mat-form-field>
-    </div>
-    <div class='profile-row'>
-      <mat-form-field class='relationship'>
-        <mat-label>Relationship status</mat-label>
-        <mat-select formControlName='relationshipStatus'>
-          <mat-option
-            *ngFor='let relEntry of relationshipStatusMap | keyvalue'
-            [value]='relEntry.key'
-          >{{ relEntry.value.displayName }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <mat-form-field class='icebreaker-question'>
-      <mat-label>Icebreaker question</mat-label>
-      <mat-select formControlName='icebreakerQuestion'>
-        <mat-option
-          *ngFor='let questionEntry of icebreakerQuestionMap | keyvalue'
-          [value]='questionEntry.key'
-        >{{ questionEntry.value.displayName }}</mat-option
-        >
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field class='icebreaker-answer'>
-      <mat-label>Icebreaker answer</mat-label>
-      <textarea
-        cdkTextareaAutosize
-        formControlName='bio'
-        name='bioInput'
-        matInput
-        placeholder="Answer the question you selected above here."
-        rows='3'
-      ></textarea>
-    </mat-form-field>
+
+
     <button
       (click)='onSaveClicked()'
       mat-button
