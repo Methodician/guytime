@@ -5,14 +5,17 @@ $button_height_1: 70px;
 $button_height_2: 115px;
 
 main {
+  padding-top: 56px;
+  overflow-y: scroll;
 
   .body {
     position: relative;
-    z-index: 100;
+    z-index: 0;
     display: flex;
     flex-direction: column;
     width: 100%;
     padding: 40px 16px 16px;
+    margin-bottom: 96px;
     height: $body_height;
 
     .info {
@@ -59,8 +62,8 @@ main {
   }
 
   .action_buttons_container {
-    position: absolute;
-    bottom: 16px;
+    position: fixed;
+    bottom: 88px;
     right: 16px;
     display: flex;
     flex-direction: row;

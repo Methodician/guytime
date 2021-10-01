@@ -1,27 +1,25 @@
-<main>
-  <section class="body" *ngIf="userInfo">
-    <article class="info">
-      <gtm-avatar
-        [fileName]="avatarFileName()"
-        [imageHash]="avatarFileHash()"
-        [imageSize]="avatarSize"
-      ></gtm-avatar>
+<section class="body" *ngIf="userInfo">
+  <article class="info">
+    <gtm-avatar
+      [fileName]="avatarFileName()"
+      [imageHash]="avatarFileHash()"
+      [imageSize]="avatarSize"
+    ></gtm-avatar>
 
-      <section class='summary'>
-        <div class='words'>
-          <span class='name mat-headline'
-          >{{ userInfo.fName }} {{ userInfo.lName }}</span
-          >
-          <span class='age_relationship mat-subheading-1'>
-            {{ userInfo.age }} years old
-          </span>
-        </div>
-        <mat-chip-list class='interests-container'>
-          <mat-chip color='primary'>Gaming</mat-chip>
-          <mat-chip color='accent'>Outdoors</mat-chip>
-          <mat-chip>Community Service</mat-chip>
-        </mat-chip-list>
-      </section>
-    </article>
-  </section>
-</main>
+    <section class='summary'>
+      <div class='words'>
+        <span class='name mat-headline'
+        >{{ userInfo.fName }} {{ userInfo.lName }}</span
+        >
+        <span class='age_relationship mat-subheading-1'>
+          {{ userInfo.age }} years old
+        </span>
+      </div>
+      <mat-chip-list class='interests-container'>
+        <mat-chip color='primary'>Gaming</mat-chip>
+        <mat-chip color='accent'>Outdoors</mat-chip>
+        <mat-chip>Community Service</mat-chip>
+      </mat-chip-list>
+    </section>
+  </article>
+</section>

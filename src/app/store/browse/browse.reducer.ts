@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { nextFellaSuccess } from './browse.actions';
+import { nextFellaSuccess, previousFellaSuccess, } from './browse.actions';
 
 export const browseFeatureKey = 'browse';
 
@@ -16,5 +16,9 @@ export const browseReducer = createReducer(
   on(nextFellaSuccess, (state, action) => {
     const { newIndex } = action;
     return { ...state, browseIndex: newIndex };
+  }),
+  on(previousFellaSuccess, (state, action) => {
+    const {newIndex} = action;
+    return {...state, browseIndex: newIndex};
   }),
 );

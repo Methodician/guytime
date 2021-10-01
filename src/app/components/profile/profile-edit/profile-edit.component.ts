@@ -34,7 +34,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   icebreakerQuestionMap = IcebreakerQuestionM;
   activityTypeMap = ActivityTypeM;
 
-  form: FormGroup;
+  stepOne: FormGroup;
+  stepTwo: FormGroup;
+  stepThree: FormGroup;
 
   avatarSize: ProfileImageSizeT = '90x90';
   avatarFileName$: Observable<String>;
@@ -47,9 +49,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   readonly separatorKeysCodes = [ ENTER, COMMA ] as const;
   tagsAreSelectable = true;
   tags: ProfileTag[] = [
-    { name: 'Chess' },
-    { name: 'Video Games' },
-    { name: 'Basketball' },
   ];
 
   constructor(
@@ -60,13 +59,18 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.form = this.fb.group({
+    this.stepOne = this.fb.group({
       fName: ['', Validators.required],
       lName: ['', Validators.required],
       age: [0, Validators.required],
       relationshipStatus: [null, Validators.required],
-      activityTypes: [[]],
-      bio: ['', Validators.required],
+    });
+    this.stepTwo = this.fb.group({
+      tags: ['', Validators.required],
+    });
+    this.stepThree = this.fb.group({
+      icebreakerQuestion: ['', Validators.required],
+      icebreakerAnswer: ['', Validators.required],
     });
     this.watchLoggedInUser();
     this.updateHeader();
@@ -97,7 +101,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
           avatarFileName(user.uid, '90x90'),
         );
 
-        this.form.patchValue(user);
+        this.stepOne.patchValue(user);
       });
   };
 
@@ -136,28 +140,28 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  isActivityTypeSelected = (activityType: string) =>
-    this.form.value.activityTypes.includes(activityType);
-
-  onActivityTypeClicked = (activityType: string) => {
-    const activityTypes = [...(this.form.value.activityTypes as Array<string>)];
-    const activityTypeIndex = activityTypes.indexOf(activityType);
-    if (activityTypeIndex === -1) {
-      activityTypes.push(activityType);
-    } else {
-      activityTypes.splice(activityTypeIndex, 1);
-    }
-    this.form.patchValue({ activityTypes: activityTypes });
-  };
+  // isActivityTypeSelected = (activityType: string) =>
+  //   this.form.value.activityTypes.includes(activityType);
+  //
+  // onActivityTypeClicked = (activityType: string) => {
+  //   const activityTypes = [...(this.form.value.activityTypes as Array<string>)];
+  //   const activityTypeIndex = activityTypes.indexOf(activityType);
+  //   if (activityTypeIndex === -1) {
+  //     activityTypes.push(activityType);
+  //   } else {
+  //     activityTypes.splice(activityTypeIndex, 1);
+  //   }
+  //   this.form.patchValue({ activityTypes: activityTypes });
+  // };
 
   trimInput = formControlName => {
-    this.form.patchValue({
-      [formControlName]: this.form.value[formControlName].trim(),
+    this.stepOne.patchValue({
+      [formControlName]: this.stepOne.value[formControlName].trim(),
     });
   };
 
   onSaveClicked = () => {
-    if (!this.form.valid) {
+    if (!this.stepOne.valid) {
       alert('Please make sure all required fields are filled before saving');
       return;
     }
@@ -181,7 +185,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
         if (!isComplete) return;
 
         try {
-          const formVal: UserI = this.form.value;
+          const formVal: UserI = this.stepOne.value;
           await this.userSvc.updateUser(formVal);
           this.router.navigate(['/me']);
         } catch (error) {

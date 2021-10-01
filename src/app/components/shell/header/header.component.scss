@@ -4,6 +4,8 @@
 #toolbar {
   display: flex;
   flex-direction: row;
+  position: fixed;
+  z-index: 10;
   align-items: center;
   justify-content: space-between;
   background-color: $bc_deep_teal;

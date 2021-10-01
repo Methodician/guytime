@@ -1,48 +1,47 @@
 @import 'app/styles/vars.scss';
 
-main {
-  .body {
-    position: relative;
-    z-index: 100;
+
+.body {
+  position: relative;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 96px 16px 0px 16px;
+
+
+  .info {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    padding: 40px 16px 16px;
-    height: $body_height;
+    align-items: center;
 
-    .info {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    .summary {
+      padding-top: 16px;
 
-      .summary {
-        padding-top: 16px;
+      .words {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
 
-        .words {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-
-          .name {
-            text-align: center;
-          }
-
-          .age_relationship {
-            text-align: center;
-          }
+        .name {
+          text-align: center;
         }
 
-        .interests-container {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: center;
+        .age_relationship {
+          text-align: center;
         }
       }
-    }
 
-    mat-card {
-      margin-top: 24px;
+      .interests-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+      }
     }
+  }
+
+  mat-card {
+    margin-top: 24px;
   }
 }

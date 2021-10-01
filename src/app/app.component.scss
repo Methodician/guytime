@@ -2,19 +2,5 @@
 
 main {
   background-color: $background-color;
-}
-
-.logged-in {
-  overflow: hidden;
-  display: grid;
-  grid-template-rows: $header_height 0px $body_height $footer_height;
-  grid-template-areas:
-    'header'
-    'outlet'
-    'body'
-    'footer';
-
-  router-outlet {
-    grid-area: unset;
-  }
+  height: 100%;
 }

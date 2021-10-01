@@ -13,7 +13,26 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: end;
+    justify-content: flex-end;
+
+    button {
+      margin-left: 16px;
+    }
+  }
+
+  .interests-chip-list {
+    button {
+      padding: 0;
+      border: none;
+
+      mat-icon {
+        height: 18px;
+        width: 18px;
+        font-size: 18px;
+      }
+    }
+
+
   }
 
   .avatar-edit-container {

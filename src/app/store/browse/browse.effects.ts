@@ -10,6 +10,8 @@ import {
   addFellaSuccess,
   nextFella,
   nextFellaSuccess,
+  previousFella,
+  previousFellaSuccess,
 } from './browse.actions';
 import { browseIndex, maxBrowseIndex } from './browse.selectors';
 
@@ -51,13 +53,25 @@ export class BrowseEffects {
           map(([maxIndex, currentIndex]) =>
             currentIndex >= maxIndex ? 0 : currentIndex + 1,
           ),
-          tap(newIndex => {
-            if (newIndex === 0)
-              alert(
-                "That's everyone in the app. Please invite your friends to join! In the mean time, we'll start back from the beginning.",
-              );
-          }),
           map(newIndex => nextFellaSuccess({ newIndex })),
+        ),
+      ),
+    ),
+  );
+
+  previousFella$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(previousFella),
+      exhaustMap(_ =>
+        combineLatest([
+          this.store.select(maxBrowseIndex),
+          this.store.select(browseIndex),
+        ]).pipe(
+          take(1),
+          map(([maxIndex, currentIndex]) =>
+            currentIndex === 0 ? maxIndex : currentIndex - 1,
+          ),
+          map(newIndex => previousFellaSuccess({newIndex})),
         ),
       ),
     ),

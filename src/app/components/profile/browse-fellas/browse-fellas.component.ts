@@ -6,7 +6,7 @@ import { ChatService } from '@app/services/chat.service';
 import { Store } from '@ngrx/store';
 import { map, take } from 'rxjs/operators';
 import { selectedFella } from '@app/store/browse/browse.selectors';
-import { addFella, nextFella } from '@app/store/browse/browse.actions';
+import {addFella, nextFella, previousFella} from '@app/store/browse/browse.actions';
 import { combineLatest } from 'rxjs';
 import { resetHeader } from '@app/store/header/header.actions';
 
@@ -33,7 +33,11 @@ export class BrowseFellasComponent implements OnInit {
     this.store.dispatch(resetHeader());
   }
 
-  onCycleClicked = () => {
+  onPreviousClicked = () => {
+    this.store.dispatch(previousFella());
+  };
+
+  onNextClicked = () => {
     this.store.dispatch(nextFella());
   };
 

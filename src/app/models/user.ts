@@ -79,12 +79,20 @@ export const RelationshipStatusM = new Map<RelationshipStatusT, DisplayNameI>([
 export type IcebreakerQuestionT =
   | 'ONE'
   | 'TWO'
-  | 'THREE';
+  | 'THREE'
+  | 'FOUR'
+  | 'FIVE'
+  | 'SIX'
+  | 'SEVEN';
 
 export const IcebreakerQuestionM = new Map<IcebreakerQuestionT, DisplayNameI>([
-  [ 'ONE', { displayName: 'What\'s something most people don\'t know about you?' } ],
-  [ 'TWO', { displayName: 'Some other question?' } ],
-  [ 'THREE', { displayName: 'Yet another question?' } ],
+  [ 'ONE', { displayName: 'Motto you live by?' } ],
+  [ 'TWO', { displayName: 'All time favorite athlete?' } ],
+  [ 'THREE', { displayName: 'First thing you would buy if you won a million bucks?' } ],
+  [ 'FOUR', { displayName: 'Small or big dog and why?' } ],
+  [ 'FIVE', { displayName: 'What is your go-to meal that you actually cook?' } ],
+  [ 'SIX', { displayName: 'All time favorite movie line?' } ],
+  [ 'SEVEN', { displayName: 'Number one pet peeve?' } ],
 ]);
 
 // export type ActivityTypeT =

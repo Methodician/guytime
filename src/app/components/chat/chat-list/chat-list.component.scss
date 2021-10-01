@@ -2,6 +2,7 @@
 
 main {
   overflow: auto;
+  padding-top: 56px;
   .mat-list {
     height: $body_height;
     overflow: scroll;

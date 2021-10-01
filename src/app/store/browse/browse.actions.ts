@@ -1,9 +1,15 @@
 import { createAction, props } from '@ngrx/store';
 
 export const nextFella = createAction('[Browse] Next Fella');
+export const previousFella = createAction('[Browse] Previous Fella');
 
 export const nextFellaSuccess = createAction(
   '[Browse] Successfully cycled to next fella',
+  props<{ newIndex: number }>(),
+);
+
+export const previousFellaSuccess = createAction(
+  '[Browse] Successfully cycled to previoius fella',
   props<{ newIndex: number }>(),
 );
 

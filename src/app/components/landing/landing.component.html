@@ -130,6 +130,7 @@
         <mat-error *ngIf="registerForm.hasError('passwordMissmatch')">
           Please make sure both password fields match
         </mat-error>
+        <mat-error>{{ (authError$ | async)?.message }}</mat-error>
       </form>
     </div>
 
