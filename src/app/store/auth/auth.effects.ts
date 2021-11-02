@@ -21,8 +21,6 @@ import {
   registerFailure,
 } from './auth.actions';
 
-// TODO: stop duplicating this object
-const NULL_USER: AuthInfoI = { uid: null };
 
 @Injectable()
 export class AuthEffects {
@@ -93,12 +91,15 @@ export class AuthEffects {
     this.actions$.pipe(
       ofType(loadAuth),
       exhaustMap(_ => this.afAuth.user),
-      map(user =>
-        user
-          ? loadAuthSuccess({
+      map(user => {
+          console.log('user:');
+          console.log(user);
+          return user && user.uid && user.email
+            ? loadAuthSuccess({
               authInfo: { uid: user.uid, email: user.email },
             })
-          : loadAuthSuccess({ authInfo: NULL_USER }),
+            : loadAuthSuccess({ authInfo: null })
+        }
       ),
       catchError(error => of(loadAuthFailure({ error }))),
     ),

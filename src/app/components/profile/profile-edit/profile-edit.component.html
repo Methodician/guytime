@@ -64,18 +64,6 @@
                 />
               </mat-form-field>
             </div>
-            <div class='profile-row'>
-              <mat-form-field class='relationship'>
-                <mat-label>Relationship status</mat-label>
-                <mat-select required formControlName='relationshipStatus'>
-                  <mat-option
-                    *ngFor='let relEntry of relationshipStatusMap | keyvalue'
-                    [value]='relEntry.key'
-                  >{{ relEntry.value.displayName }}</mat-option
-                  >
-                </mat-select>
-              </mat-form-field>
-            </div>
           </form>
           <div class='button-row'>
             <button mat-raised-button matStepperNext type='button' color='primary'>Next</button>
@@ -84,24 +72,23 @@
         <mat-step class='step' label='Interests' [completed]="stepTwo.valid">
           <form *ngIf="stepTwo" [formGroup]="stepTwo">
             <mat-form-field class='interests-chip-list' appearance='fill'>
-            <mat-label>Interests</mat-label>
-            <mat-chip-list #chipList aria-label='Interests selection'>
-              <mat-chip *ngFor='let tag of tags' [selectable]='tagsAreSelectable'
-                        [removable]='removable' (removed)='remove(tag)'>
-                {{tag.name}}
-                <button matChipRemove *ngIf='removable'>
-                  <mat-icon>cancel</mat-icon>
-                </button>
-              </mat-chip>
-              <input placeholder='New interest...'
-                     formControlName="tags"
-                     required
-                     [matChipInputFor]='chipList'
-                     [matChipInputSeparatorKeyCodes]='separatorKeysCodes'
-                     [matChipInputAddOnBlur]='addOnBlur'
-                     (matChipInputTokenEnd)='add($event)'>
-            </mat-chip-list>
-          </mat-form-field>
+              <mat-label>Interests</mat-label>
+              <mat-chip-list #chipList aria-label='Interests selection' formArrayName='tags'>
+                <mat-chip *ngFor='let tag of tags' [selectable]='tagsAreSelectable'
+                          [removable]='removable' (removed)='remove(tag)'>
+                  {{tag.name}}
+                  <button matChipRemove *ngIf='removable'>
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </mat-chip>
+                <input placeholder='New interest...'
+                       required
+                       [matChipInputFor]='chipList'
+                       [matChipInputSeparatorKeyCodes]='separatorKeysCodes'
+                       [matChipInputAddOnBlur]='addOnBlur'
+                       (matChipInputTokenEnd)='add($event)'>
+              </mat-chip-list>
+            </mat-form-field>
 
           </form>
           <div class='button-row'>
@@ -113,11 +100,17 @@
           <form *ngIf="stepThree" [formGroup]="stepThree">
             <mat-form-field class='icebreaker-question'>
               <mat-label>Icebreaker question</mat-label>
-              <mat-select formControlName='icebreakerQuestion'>
+              <mat-select
+                formControlName='icebreakerId'
+                required
+                [(value)]='icebreaker'
+              >
                 <mat-option
-                  *ngFor='let questionEntry of icebreakerQuestionMap | keyvalue'
-                  [value]='questionEntry.key'
-                >{{ questionEntry.value.displayName }}</mat-option
+                  *ngFor='let icebreaker of icebreakers'
+                  [value]='icebreaker.id'
+                >
+                  {{ icebreaker.text }}
+                </mat-option
                 >
               </mat-select>
             </mat-form-field>
@@ -126,8 +119,7 @@
               <textarea
                 required
                 cdkTextareaAutosize
-                formControlName='bio'
-                name='bioInput'
+                formControlName='icebreakerAnswerText'
                 matInput
                 placeholder='Answer the question you selected above here.'
                 rows='3'

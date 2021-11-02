@@ -1,14 +1,17 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
-import { Router } from '@angular/router';
-import { takeUntil } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
-import { loggedInUser } from '@app/store/user/user.selectors';
+import { Subject }           from 'rxjs';
+import { Router }            from '@angular/router';
+import { takeUntil }         from 'rxjs/operators';
+import { Store }             from '@ngrx/store';
+import { loggedInUser }      from '@app/store/user/user.selectors';
 import {
   addHeaderOptions,
   resetHeader,
   setHeaderText,
-} from '@app/store/header/header.actions';
+}                            from '@app/store/header/header.actions';
+import { TagI }              from '@models/tag';
+import { loadTagsForUserId } from '@app/store/tag/tag.actions';
+import { tagsForUser }       from '@app/store/tag/tag.selectors';
 
 @Component({
   selector: 'gtm-me-detail',
@@ -18,8 +21,6 @@ import {
 export class MeDetailComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<void> = new Subject();
   user$ = this.store.select(loggedInUser);
-
-  promptEvent;
 
   constructor(private store: Store, private router: Router) {}
 
@@ -60,11 +61,11 @@ export class MeDetailComponent implements OnInit, OnDestroy {
     this.user$.pipe(takeUntil(this.unsubscribe$)).subscribe(user => {
       if (user && user.fName) {
         this.store.dispatch(
-          setHeaderText({ headerText: `About ${user.fName}` }),
+          setHeaderText({ headerText: `Your profile` }),
         );
       }
     });
-  };
+  }
 
   onEditClicked = () => this.router.navigate(['/me/edit']);
   onConnectionsClicked = () => this.router.navigate(['/me/connections']);

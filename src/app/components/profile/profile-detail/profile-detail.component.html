@@ -16,10 +16,14 @@
         </span>
       </div>
       <mat-chip-list class='interests-container'>
-        <mat-chip color='primary'>Gaming</mat-chip>
-        <mat-chip color='accent'>Outdoors</mat-chip>
-        <mat-chip>Community Service</mat-chip>
+        <mat-chip *ngFor='let tag of tags'>
+          {{tag.name}}
+        </mat-chip>
       </mat-chip-list>
+      <mat-card *ngIf='icebreaker && icebreakerAnswer'>
+        <span class='mat-h3 icebreaker-question'>{{icebreaker.text}}</span>
+        <p>{{ icebreakerAnswer.text }}</p>
+      </mat-card>
     </section>
   </article>
 </section>

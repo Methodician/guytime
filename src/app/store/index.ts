@@ -16,11 +16,17 @@ import {
   BrowseStateI,
 } from './browse/browse.reducer';
 import { chatFeatureKey, chatReducer, ChatStateI } from './chat/chat.reducer';
+import { tagFeatureKey, tagReducer, TagStateI, } from './tag/tag.reducer';
 import {
   headerFeatureKey,
   headerReducer,
   HeaderStateI,
 } from './header/header.reducer';
+import {
+  icebreakerFeatureKey,
+  icebreakerReducer,
+  IcebreakerStateI,
+} from './icebreaker/icebreaker.reducer';
 
 export interface StateI {
   [authFeatureKey]: AuthStateI;
@@ -28,6 +34,8 @@ export interface StateI {
   [browseFeatureKey]: BrowseStateI;
   [chatFeatureKey]: ChatStateI;
   [headerFeatureKey]: HeaderStateI;
+  [tagFeatureKey]: TagStateI;
+  [icebreakerFeatureKey]: IcebreakerStateI;
 }
 
 export const reducers: ActionReducerMap<StateI> = {
@@ -36,6 +44,8 @@ export const reducers: ActionReducerMap<StateI> = {
   [browseFeatureKey]: browseReducer,
   [chatFeatureKey]: chatReducer,
   [headerFeatureKey]: headerReducer,
+  [tagFeatureKey]: tagReducer,
+  [icebreakerFeatureKey]: icebreakerReducer,
 };
 
 export const metaReducers: MetaReducer<StateI>[] = !environment.production

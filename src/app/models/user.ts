@@ -1,5 +1,7 @@
 // import { Timestamp } from '@google-cloud/firestore';
 import { DisplayNameI, KeyMapI } from './shared';
+import { TagI }                           from '@models/tag';
+import { IcebreakerAnswerI, IcebreakerI } from '@models/icebreaker';
 
 // export interface UserI {
 //   uid?: string;
@@ -41,6 +43,9 @@ export interface UserI {
   age: number;
   relationshipStatus: RelationshipStatusT;
   bio: string;
+  tags: TagI[];
+  icebreakerId?: string;
+  icebreakerAnswerText?: string;
   activityTypes: ActivityTypeT[];
   connectionIds: string[];
   uploadedProfileImageMap?: ProfileImageNameMapI;
@@ -74,25 +79,6 @@ export const RelationshipStatusM = new Map<RelationshipStatusT, DisplayNameI>([
   ['DATING', { displayName: 'Dating' }],
   ['OTHER', { displayName: 'Other' }],
   ['UNSPECIFIED', { displayName: 'Unspecified' }],
-]);
-
-export type IcebreakerQuestionT =
-  | 'ONE'
-  | 'TWO'
-  | 'THREE'
-  | 'FOUR'
-  | 'FIVE'
-  | 'SIX'
-  | 'SEVEN';
-
-export const IcebreakerQuestionM = new Map<IcebreakerQuestionT, DisplayNameI>([
-  [ 'ONE', { displayName: 'Motto you live by?' } ],
-  [ 'TWO', { displayName: 'All time favorite athlete?' } ],
-  [ 'THREE', { displayName: 'First thing you would buy if you won a million bucks?' } ],
-  [ 'FOUR', { displayName: 'Small or big dog and why?' } ],
-  [ 'FIVE', { displayName: 'What is your go-to meal that you actually cook?' } ],
-  [ 'SIX', { displayName: 'All time favorite movie line?' } ],
-  [ 'SEVEN', { displayName: 'Number one pet peeve?' } ],
 ]);
 
 // export type ActivityTypeT =

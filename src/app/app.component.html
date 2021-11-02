@@ -1,7 +1,7 @@
-<main [ngClass]="{ 'logged-in': !!(isLoggedIn$ | async) }">
-  <gtm-header *ngIf="isLoggedIn$ | async"></gtm-header>
+<main [ngClass]="{ 'logged-in': loggedIn }">
+  <gtm-header *ngIf="loggedIn"></gtm-header>
   <!-- <div *ngIf="!(isLoggedIn$ | async)"></div> -->
   <router-outlet></router-outlet>
   <!-- <div *ngIf="!(isLoggedIn$ | async)"></div> -->
-  <gtm-navbar *ngIf="isLoggedIn$ | async"></gtm-navbar>
+  <gtm-navbar *ngIf="loggedIn"></gtm-navbar>
 </main>

@@ -1,14 +1,13 @@
 @import 'app/styles/vars.scss';
 
-main {
-  display: grid;
-  grid-template-columns: 60px auto;
-  grid-template-areas: 'left right';
-  margin: 8px;
+.message-container {
+  display: flex;
+  flex-direction: row;
+  margin: 16px 16px;
 
   .avatar-wrapper {
-    justify-self: center;
-    align-self: top;
+    width: 56px;
+    margin-right: 8px;
   }
 
   .mat-card {
@@ -20,9 +19,18 @@ main {
     background-color: $bc_yellow_pop_reduced;
   }
 
-  mat-card-content {
-    margin-bottom: 0.7rem;
-    white-space: pre-wrap;
+  .message-body {
+    background-color: #FFFFFF;
+    padding: 16px 16px;
+    width: 100%;
+    margin-right: 54px;
+    border-radius: .75rem;
+    border-top-left-radius: 0;
+
+    p {
+      margin-bottom: 0;
+      white-space: pre-wrap;
+    }
   }
 
   mat-card-footer {
@@ -35,17 +43,28 @@ main {
 }
 
 .owned_chat {
-  grid-template-columns: auto 60px;
+  display: flex;
+  flex-direction: row-reverse;
+
+  .avatar-wrapper {
+    display: none;
+  }
+
+  .message-body {
+    margin-left: 108px;
+    margin-right: 0;
+    background-color: $bc_deep_teal;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: .75rem;
+
+    p {
+      color: #FFFFFF;
+    }
+  }
+
   .mat-card {
     background-color: $bc_lime_green_faint;
     color: $bc_dusty_blue;
   }
 
-  .avatar-wrapper {
-    grid-area: right;
-  }
-
-  .message-body {
-    grid-area: left;
-  }
 }

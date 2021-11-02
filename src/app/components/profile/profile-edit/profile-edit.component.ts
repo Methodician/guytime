@@ -1,27 +1,25 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AngularFireUploadTask } from '@angular/fire/compat/storage';
+import { Component, OnInit, OnDestroy }                               from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
+import { AngularFireUploadTask }                                      from '@angular/fire/compat/storage';
 import {
-  RelationshipStatusM,
-  IcebreakerQuestionM,
-  ActivityTypeM,
-  UserI,
   ProfileImageSizeT,
-} from '@models/user';
-import { HtmlInputEventI } from '@models/shared';
-import { UserService } from '@services/user.service';
+}                                               from '@models/user';
+import { HtmlInputEventI }                      from '@models/shared';
+import { UserService }                          from '@services/user.service';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { Router } from '@angular/router';
-import { takeUntil } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
-import { avatarFileName, loggedInUser } from '@app/store/user/user.selectors';
-import { resetHeader, setHeaderText } from '@app/store/header/header.actions';
-import { MatChipInputEvent} from '@angular/material/chips';
-import { COMMA, ENTER} from '@angular/cdk/keycodes';
-
-export interface ProfileTag {
-  name: string;
-}
+import { Router }                         from '@angular/router';
+import { takeUntil }                      from 'rxjs/operators';
+import { Store }                          from '@ngrx/store';
+import { avatarFileName, loggedInUser }   from '@app/store/user/user.selectors';
+import { resetHeader, setHeaderText }     from '@app/store/header/header.actions';
+import { MatChipInputEvent}               from '@angular/material/chips';
+import { COMMA, ENTER}                    from '@angular/cdk/keycodes';
+import { TagI }                           from '@models/tag';
+import { loadTagsForUserId }              from '@app/store/tag/tag.actions';
+import { tagsForUser }                    from '@app/store/tag/tag.selectors';
+import { IcebreakerAnswerI, IcebreakerI }       from '@models/icebreaker';
+import { icebreakerAnswerForUser, icebreakers as selectIcebreakers } from '@app/store/icebreaker/icebreaker.selectors';
+import { loadIcebreakerAnswerForUserId, loadIcebreakers }            from '@app/store/icebreaker/icebreaker.actions';
 
 @Component({
   selector: 'gtm-profile-edit',
@@ -30,9 +28,6 @@ export interface ProfileTag {
 })
 export class ProfileEditComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<void> = new Subject();
-  relationshipStatusMap = RelationshipStatusM;
-  icebreakerQuestionMap = IcebreakerQuestionM;
-  activityTypeMap = ActivityTypeM;
 
   stepOne: FormGroup;
   stepTwo: FormGroup;
@@ -48,8 +43,11 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   addOnBlur                   = true;
   readonly separatorKeysCodes = [ ENTER, COMMA ] as const;
   tagsAreSelectable = true;
-  tags: ProfileTag[] = [
-  ];
+  tags: TagI[] = [];
+  icebreakers: IcebreakerI[] = [];
+  icebreakerAnswer: IcebreakerAnswerI;
+  icebreaker = null;
+
 
   constructor(
     private store: Store,
@@ -63,17 +61,20 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
       fName: ['', Validators.required],
       lName: ['', Validators.required],
       age: [0, Validators.required],
-      relationshipStatus: [null, Validators.required],
     });
     this.stepTwo = this.fb.group({
-      tags: ['', Validators.required],
+      tags: this.fb.array(this.tags),
     });
     this.stepThree = this.fb.group({
-      icebreakerQuestion: ['', Validators.required],
-      icebreakerAnswer: ['', Validators.required],
+      icebreakerId: ['', Validators.required],
+      icebreakerAnswerText: ['', Validators.required],
     });
     this.watchLoggedInUser();
+    this.watchLoggedInUserTags();
+    this.watchIcebreakers();
+    this.watchLoggedInUserIcebreakerAnswer();
     this.updateHeader();
+    this.store.dispatch(loadIcebreakers());
   }
 
   ngOnDestroy(): void {
@@ -88,7 +89,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     const delayedHeaderOperations = () => {
       this.store.dispatch(setHeaderText({ headerText: 'Update Your Info' }));
     };
-  };
+  }
 
   watchLoggedInUser = () => {
     this.store
@@ -102,8 +103,46 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
         );
 
         this.stepOne.patchValue(user);
+        this.store.dispatch(loadTagsForUserId({ userId: user.uid }));
+        this.store.dispatch(loadIcebreakerAnswerForUserId({ userId: user.uid }));
       });
-  };
+  }
+
+  watchLoggedInUserTags = () => {
+    this.store
+      .select(tagsForUser)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(tags => {
+        this.tags = tags;
+      });
+  }
+
+  watchLoggedInUserIcebreakerAnswer = () => {
+    this.store
+      .select(icebreakerAnswerForUser)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(icebreakerAnswer => {
+        if (icebreakerAnswer) {
+          console.log(icebreakerAnswer);
+          this.icebreakerAnswer = icebreakerAnswer;
+          console.log(this.stepThree.value);
+          this.stepThree.patchValue({
+            icebreakerAnswerText: icebreakerAnswer.text,
+            icebreakerId: icebreakerAnswer.icebreakerId,
+          });
+        }
+      });
+  }
+
+  watchIcebreakers = () => {
+    this.store
+      .select(selectIcebreakers)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(icebreakers => {
+        console.log(icebreakers);
+        this.icebreakers = icebreakers;
+      });
+  }
 
   onSelectAvatar = ($e: HtmlInputEventI) => {
     if ($e.target.files.length === 0) {
@@ -120,51 +159,50 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     this.avatarFile = file;
   }
 
-  add( event: MatChipInputEvent ): void {
+  add( event: MatChipInputEvent, ): void {
     const value = (event.value || '').trim();
 
-    // Add our fruit
+    // Add our tag
     if ( value ) {
-      this.tags.push({ name: value });
+      const newArray = Array.from(this.tags);
+      newArray.push({ name: value, type: 'profile' });
+      this.tags = newArray;
+
     }
 
     // Clear the input value
-    event.chipInput!.clear();
+    event.chipInput.clear();
   }
 
-  remove( fruit: ProfileTag ): void {
-    const index = this.tags.indexOf(fruit);
+  remove( tag: TagI ): void {
+    const index = this.tags.indexOf(tag);
 
     if ( index >= 0 ) {
-      this.tags.splice(index, 1);
+      const newArray = Array.from(this.tags);
+      newArray.splice(index, 1);
+      this.tags = newArray;
     }
   }
-
-  // isActivityTypeSelected = (activityType: string) =>
-  //   this.form.value.activityTypes.includes(activityType);
-  //
-  // onActivityTypeClicked = (activityType: string) => {
-  //   const activityTypes = [...(this.form.value.activityTypes as Array<string>)];
-  //   const activityTypeIndex = activityTypes.indexOf(activityType);
-  //   if (activityTypeIndex === -1) {
-  //     activityTypes.push(activityType);
-  //   } else {
-  //     activityTypes.splice(activityTypeIndex, 1);
-  //   }
-  //   this.form.patchValue({ activityTypes: activityTypes });
-  // };
 
   trimInput = formControlName => {
     this.stepOne.patchValue({
       [formControlName]: this.stepOne.value[formControlName].trim(),
     });
-  };
+  }
 
   onSaveClicked = () => {
-    if (!this.stepOne.valid) {
+    if (!this.stepThree.valid) {
       alert('Please make sure all required fields are filled before saving');
       return;
     }
+
+    const formValues = {
+      ...this.stepOne.value,
+      ...this.stepThree.value,
+      tags: this.tags,
+    };
+
+    console.log(formValues);
 
     const saveProfileImage = () => {
       const isComplete$ = new BehaviorSubject(false);
@@ -185,8 +223,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
         if (!isComplete) return;
 
         try {
-          const formVal: UserI = this.stepOne.value;
-          await this.userSvc.updateUser(formVal);
+          await this.userSvc.updateUser(formValues);
           this.router.navigate(['/me']);
         } catch (error) {
           console.error(error);
@@ -195,7 +232,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
           return;
         }
       });
-  };
+  }
 
-  logClicked = () => console.log('clicked');
 }

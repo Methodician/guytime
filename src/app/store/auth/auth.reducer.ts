@@ -1,8 +1,6 @@
 import { AuthInfoI } from '@app/models/auth-info';
-import { createReducer, on }                            from '@ngrx/store';
-import { loadAuthSuccess, loginFailure, logoutSuccess } from './auth.actions';
-
-const NULL_USER: AuthInfoI = { uid: null };
+import { createReducer, on }                                             from '@ngrx/store';
+import { loadAuthSuccess, loginFailure, logoutSuccess, registerFailure } from './auth.actions';
 
 export const authFeatureKey = 'auth';
 
@@ -12,7 +10,7 @@ export interface AuthStateI {
 }
 
 export const initialState: AuthStateI = {
-  authInfo: NULL_USER,
+  authInfo: null,
   authError: null,
 };
 
@@ -23,5 +21,6 @@ export const authReducer = createReducer(
     authError: null,
   })),
   on(loginFailure, (state, action) => ({ ...state, authError: action.error })),
+  on(registerFailure, (state, action) => ({ ...state, authError: action.error })),
   on(logoutSuccess, ( state, ) => ({ ...state, authInfo: null })),
 );

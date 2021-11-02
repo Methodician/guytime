@@ -1,13 +1,16 @@
-import { Injectable } from '@angular/core';
-import { UserI } from '@models/user';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable }         from '@angular/core';
+import { UserI }              from '@models/user';
+import { BehaviorSubject }    from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { FirebaseService } from './firebase.service';
-import { Store } from '@ngrx/store';
-import { authUid } from '@app/store/auth/auth.selectors';
-import { take } from 'rxjs/operators';
-import { KeyMapI } from '../../../functions/src';
+import { AngularFirestore }   from '@angular/fire/compat/firestore';
+import { FirebaseService }    from './firebase.service';
+import { TagService }         from './tag.service';
+import { Store }              from '@ngrx/store';
+import { authUid }            from '@app/store/auth/auth.selectors';
+import { take }               from 'rxjs/operators';
+import { KeyMapI }            from '../../../functions/src';
+import { TagI, UserTagI }     from '@models/tag';
+import { IcebreakerService }  from '@services/icebreaker.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +20,8 @@ export class UserService {
     private afStorage: AngularFireStorage,
     private afs: AngularFirestore,
     private fbSvc: FirebaseService,
+    private tagSvc: TagService,
+    private icebreakerSvc: IcebreakerService,
     private store: Store,
   ) {}
 
@@ -27,15 +32,77 @@ export class UserService {
       return this.userRef(uid).set(user);
     }
     return;
-  };
+  }
 
   updateUser = async (user: UserI) => {
     const uid = await this.getLoggedinUid();
     if (uid) {
+      // Check for tags
+      if (user.tags) {
+        const existingUserTags = await this.tagSvc.userTagsByUserIdWithJoinedTags(uid);
+
+        if (user.tags.length === 0) {
+          // Delete all userTags
+        }
+
+        if (user.tags.length > 0 && existingUserTags.length === 0) {
+          // Create all userTags
+          await Promise.all(user.tags.map(async ( tag ) => {
+            const newTag = await this.tagSvc.getOrCreateTag(tag);
+            await this.tagSvc.createUserTag(newTag.id, uid);
+          }));
+        }
+
+        if (user.tags.length > 0 && existingUserTags.length > 0) {
+          console.log('existingUserTags:');
+          console.log(existingUserTags);
+          await Promise.all(existingUserTags.map(async ( userTag ) => {
+            const matchingSubmittedTag = user.tags.find((t) => t.name.toLowerCase() === userTag.tag.name && t.type === userTag.tag.type);
+            if (!matchingSubmittedTag) {
+              await this.afs.collection<UserTagI>('userTags').doc(userTag.id).delete();
+            }
+          }));
+          await Promise.all(user.tags.map(async ( tag ) => {
+            const matchingExistingTag = existingUserTags.find((ut) => ut.tag.name === tag.name && ut.tag.type === 'profile');
+            if ( !matchingExistingTag ) {
+              const newTag = await this.tagSvc.getOrCreateTag(tag);
+              await this.tagSvc.createUserTag(newTag.id, uid);
+            }
+          }));
+        }
+
+
+      }
+
+      if (user.icebreakerId && user.icebreakerAnswerText) {
+        console.log(user.icebreakerId);
+        console.log(user.icebreakerAnswerText);
+        const existingAnswer = await this.icebreakerSvc.icebreakerAnswerForUserId(uid);
+        console.log('existingAnswer:');
+        console.log(existingAnswer);
+        if (existingAnswer) {
+          existingAnswer.text = user.icebreakerAnswerText;
+          existingAnswer.icebreakerId = user.icebreakerId;
+          await this.icebreakerSvc.updateIcebreakerAnswer(existingAnswer);
+        }
+        if (!existingAnswer) {
+          await this.icebreakerSvc.createIcebreakerAnswer({
+            userId: uid,
+            icebreakerId: user.icebreakerId,
+            text: user.icebreakerAnswerText,
+            createdAt: this.fbSvc.fsTimestamp(),
+          });
+        }
+      }
+
+      delete user.tags;
+      delete user.icebreakerId;
+      delete user.icebreakerAnswerText;
+
       return this.userRef(uid).update(user);
     }
     return;
-  };
+  }
 
   uploadProfileImage = async (image: File) => {
     const { name, type } = image;
@@ -97,6 +164,11 @@ export class UserService {
   allUsersRef = () => this.afs.collection<UserI>('users');
   userRef = (uid: string) => this.allUsersRef().doc<UserI>(uid);
 
+  userTagsRef = ( uid: string ) => this.afs.collection<UserTagI>('userTags', (ref) => {
+    return ref.where('userId', '==', uid);
+  })
+
+
   unreadMessagesDoc = (uid: string) =>
     this.userRef(uid)
       .collection('meta')
@@ -109,15 +181,11 @@ export class UserService {
       user.fName !== '' &&
       !!user.lName &&
       user.lName !== '' &&
-      !!user.age &&
-      !!user.relationshipStatus &&
-      !!user.activityTypes &&
-      !!user.bio &&
-      user.bio !== '';
+      !!user.age;
     // !!user.connectionIds;
 
     return isValid;
-  };
+  }
 
   // Should we bother with this kind of thing? Can it be centralized?
   getLoggedinUid = () => this.store.select(authUid).pipe(take(1)).toPromise();

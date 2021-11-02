@@ -22,6 +22,7 @@ import {
 })
 export class ChatDetailComponent implements OnInit {
   @ViewChild('chatList') private chatListEl: ElementRef;
+  @ViewChild('chatInput') private chatInputEl: ElementRef;
   private unsubscribe$: Subject<void> = new Subject();
   msgInput = '';
   chatGroupId = '';
@@ -36,7 +37,7 @@ export class ChatDetailComponent implements OnInit {
   ) {}
 
   ngOnDestroy(): void {
-    this.store.dispatch(clearChatMessages())
+    this.store.dispatch(clearChatMessages());
     this.store.dispatch(resetHeader());
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
@@ -84,13 +85,13 @@ export class ChatDetailComponent implements OnInit {
 
       this.store.dispatch(addHeaderOptions({ optionsToAdd }));
     };
-  };
+  }
 
   onPeopleClicked = () =>
     this.router.navigateByUrl(`chat/${this.chatGroupId}/people`);
 
   onSendMessage = async () => {
-    // Could be put in effects in theory, but unclear what the advangage would
+    // Could be put in effects in theory, but unclear what the advantage would
     // be other than a cleaner component code and separation of concerns
     // (which is not a trivial advantage, but maybe not worth the refactor)
     const uid = await this.store.select(authUid).pipe(take(1)).toPromise(),
@@ -110,4 +111,17 @@ export class ChatDetailComponent implements OnInit {
   trackMessageBy = (_, item: any): number => {
     return item.id;
   };
+
+  onTextareaChange = () => {
+    const scrollHeight = this.chatInputEl.nativeElement.scrollHeight;
+    const height = this.chatInputEl.nativeElement.offsetHeight;
+    const numOfLines = this.chatInputEl.nativeElement.value.split('\n').length;
+    if (scrollHeight > height) {
+      let style = `height: ${scrollHeight}px;`;
+      if (scrollHeight > 40) {
+        style += 'border-radius: .75rem;';
+      }
+      this.chatInputEl.nativeElement.setAttribute('style', style);
+    }
+  }
 }

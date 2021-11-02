@@ -1,4 +1,4 @@
-<main
+<div class='message-container'
   *ngIf="user$ | async as sender; else loading"
   [ngClass]="{ owned_chat: sender.uid === loggedInUid }"
 >
@@ -9,15 +9,15 @@
     ></gtm-avatar>
   </div>
 
-  <mat-card [ngClass]="{ unread: !wasMessageSeen() }" class="message-body">
-    <mat-card-content>{{ chatMessage.content }}</mat-card-content>
+  <div [ngClass]="{ unread: !wasMessageSeen() }" class="message-body">
+    <p>{{ chatMessage.content }}</p>
 
-    <mat-card-footer>
-      <p class="date" *ngIf="chatMessage.createdAt">
-        {{ chatMessage.createdAt.toDate() | timeElapsed }}
-      </p>
-      <p class="sender">{{ sender.fName }}</p>
-    </mat-card-footer>
-  </mat-card>
-</main>
+<!--    <mat-card-footer>-->
+<!--      <p class="date" *ngIf="chatMessage.createdAt">-->
+<!--        {{ chatMessage.createdAt.toDate() | timeElapsed }}-->
+<!--      </p>-->
+<!--      <p class="sender">{{ sender.fName }}</p>-->
+<!--    </mat-card-footer>-->
+  </div>
+</div>
 <ng-template #loading>Loading ...</ng-template>

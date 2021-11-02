@@ -6,8 +6,12 @@
 
 .profile-edit {
   width: 100vw;
-  padding: 40px 16px;
+  padding: 96px 16px 40px 16px;
   margin-bottom: 32px;
+
+  .mat-step-header[aria-selected="true"] {
+    background-color: red;
+  }
 
   .button-row {
     display: flex;
@@ -21,6 +25,9 @@
   }
 
   .interests-chip-list {
+    padding-top: 16px;
+    width: 100%;
+
     button {
       padding: 0;
       border: none;

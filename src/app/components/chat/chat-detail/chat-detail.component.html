@@ -9,17 +9,19 @@
   <section class="chat_input_wrapper">
     <form action="submit">
       <textarea
-        placeholder="Say something..."
-        class="chat_input"
-        name="msgInput"
-        [(ngModel)]="msgInput"
-        [ngClass]="{ chat_input_has_text: msgInput.length > 0 }"
+        #chatInput
+        class='chat_input mat-body'
+        name='msgInput'
+        (input)='onTextareaChange()'
+        placeholder='Say something...'
+        [(ngModel)]='msgInput'
+        [ngClass]='{ chat_input_has_text: msgInput.length > 0 }'
       ></textarea>
     </form>
     <button
-      *ngIf="msgInput.length > 0"
       aria-label="Send Message"
-      mat-icon-button
+      mat-mini-fab
+      color='primary'
       class="send_button"
       (click)="onSendMessage()"
     >

@@ -46,14 +46,14 @@ export class LandingComponent implements OnInit {
     const password = this.loginForm.get('password').value;
 
     return this.store.dispatch(login({ email, password }));
-  };
+  }
 
   onRegister = () => {
     const email = this.registerForm.get('email').value;
     const password = this.registerForm.get('password').value;
 
     return this.store.dispatch(register({ email, password }));
-  };
+  }
 
   wasWrongPasswordEntered = () =>
     !!this.loginError &&

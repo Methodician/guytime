@@ -1,12 +1,15 @@
-import { Component } from '@angular/core';
+import { Component }                                  from '@angular/core';
 import { navIconMap, activityIconMap, buttonIconMap } from './models/icon-maps';
-import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
-import { select, Store } from '@ngrx/store';
-import { loadAuth } from '@app/store/auth/auth.actions';
-import { isLoggedIn } from '@app/store/auth/auth.selectors';
-import { loadUsers } from './store/user/user.actions';
-import { watchNavigation } from './store/header/header.actions';
+import { MatIconRegistry }                            from '@angular/material/icon';
+import { DomSanitizer }                 from '@angular/platform-browser';
+import { select, Store }                from '@ngrx/store';
+import { loadAuth }                     from '@app/store/auth/auth.actions';
+import { isLoggedIn }                   from '@app/store/auth/auth.selectors';
+import { loadUsers }                    from './store/user/user.actions';
+import { watchNavigation }              from './store/header/header.actions';
+import { loggedInUser } from '@app/store/user/user.selectors';
+import { takeUntil }                    from 'rxjs/operators';
+import { Subject }                      from 'rxjs';
 
 @Component({
   selector: 'gtm-root',
@@ -14,7 +17,8 @@ import { watchNavigation } from './store/header/header.actions';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  isLoggedIn$ = this.store.pipe(select(isLoggedIn));
+  private unsubscribe$: Subject<void> = new Subject();
+  loggedIn = false;
 
   constructor(
     private store: Store,
@@ -45,5 +49,23 @@ export class AppComponent {
         sanitizer.bypassSecurityTrustResourceUrl(path),
       ),
     );
+  }
+
+  ngOnInit(): void {
+    this.watchLoggedInUser();
+  }
+
+  watchLoggedInUser = () => {
+    this.store
+      .select(loggedInUser)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(user => {
+        if ( !user || !user.uid ) {
+          this.loggedIn = false;
+        }
+        if (user && user.uid) {
+          this.loggedIn = true;
+        }
+      });
   }
 }

@@ -17,6 +17,7 @@
 
     .summary {
       padding-top: 16px;
+      width: 100%;
 
       .words {
         display: flex;
@@ -43,5 +44,12 @@
 
   mat-card {
     margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+
+    .icebreaker-question {
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
   }
 }
