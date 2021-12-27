@@ -39,7 +39,7 @@ export class HeaderComponent implements OnDestroy {
 
   onBackClicked = () => {
     this.store.dispatch(backButtonClicked());
-  };
+  }
 
   installPwa = () => this.promptEvent.prompt();
 

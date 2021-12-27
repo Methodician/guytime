@@ -1,9 +1,10 @@
 @import 'app/styles/vars.scss';
 
+
 .message-container {
   display: flex;
   flex-direction: row;
-  margin: 16px 16px;
+  margin: 16px;
 
   .avatar-wrapper {
     width: 56px;
@@ -33,13 +34,6 @@
     }
   }
 
-  mat-card-footer {
-    font-size: 0.75rem;
-    display: flex;
-    justify-content: space-between;
-    height: 2rem;
-    padding: 4px;
-  }
 }
 
 .owned_chat {
@@ -51,7 +45,7 @@
   }
 
   .message-body {
-    margin-left: 108px;
+    margin-left: 33%;
     margin-right: 0;
     background-color: $bc_deep_teal;
     border-bottom-right-radius: 0;

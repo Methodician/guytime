@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router }       from '@angular/router';
 import { ChatGroupI } from '@app/models/chat-group';
 import { UserI } from '@app/models/user';
 import { ChatService } from '@app/services/chat.service';
@@ -15,7 +15,7 @@ import { takeUntil } from 'rxjs/operators';
   templateUrl: './add-people.component.html',
   styleUrls: ['./add-people.component.scss'],
 })
-export class AddPeopleComponent implements OnInit {
+export class ChatCreateComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<void> = new Subject();
 
   chatGroup$: BehaviorSubject<ChatGroupI> = new BehaviorSubject(null);
@@ -75,12 +75,12 @@ export class AddPeopleComponent implements OnInit {
       return;
     }
     return this.createNewChat(uids);
-  }
+  };
 
   createNewChat = async (uids: string[]) => {
     const groupId = await this.chatSvc.createGroupChat(uids);
     return this.router.navigateByUrl(`/chat/${groupId}`);
-  }
+  };
 
   onExpandGroupClicked = () => this.expandChatGroup();
 

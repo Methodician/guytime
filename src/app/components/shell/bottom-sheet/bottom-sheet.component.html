@@ -1,0 +1,64 @@
+<div id='bottom-sheet' #bottomSheet>
+  <div id='bottom-sheet-top'>
+    <button
+      mat-button
+      (click)='onCancelClick()'
+    >
+      Cancel
+    </button>
+    <span class='mat-title'>New Chat</span>
+    <button mat-button color='primary'>Create</button>
+  </div>
+  <div id='bottom-sheet-body'>
+    <form>
+      <mat-form-field class='group_name'>
+        <mat-label>Group name (optional)</mat-label>
+        <input
+          matInput
+          placeholder='Group name (optional)'
+          type='text'
+          formControlName='groupName'
+        />
+      </mat-form-field>
+    </form>
+    <div
+      class='search-box'
+    >
+      <mat-icon>search</mat-icon>
+      <form>
+        <input
+          placeholder='Search'
+        />
+      </form>
+    </div>
+    <div class='create-chat-edit-members'>
+      <div class='added-member'>
+        <mat-icon>add_circle</mat-icon>
+        <span>Add users</span>
+      </div>
+    </div>
+    <div class='friends-list-header'>
+      <span class='mat-subheading-2'>Friends</span>
+    </div>
+    <div class='friends-list-container'>
+      <mat-list>
+        <mat-list-item *ngFor='let user of users$ | async'>
+          <div
+            class='friends-list-item'
+          >
+            <gtm-avatar
+              imageSize='45x45'
+              [fileName]='user.uploadedProfileImageMap["45x45"].fileName'
+            ></gtm-avatar>
+            <span class='friends-list-item-name'>{{user.fName}} {{user.lName}}</span>
+            <mat-icon>radio_button_unchecked</mat-icon>
+          </div>
+        </mat-list-item>
+
+      </mat-list>
+    </div>
+  </div>
+  <div id='bottom-sheet-bottom'>
+
+  </div>
+</div>

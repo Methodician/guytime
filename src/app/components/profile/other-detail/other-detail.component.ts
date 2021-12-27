@@ -1,17 +1,21 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { combineLatest, from, Observable, Subject } from 'rxjs';
 import { UserI } from '@models/user';
-import { UserService } from '@services/user.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ChatService } from '@app/services/chat.service';
-import { switchMap, take, takeUntil } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
-import { loggedInUser, specificUser } from '@app/store/user/user.selectors';
+import { UserService }                                               from '@services/user.service';
+import { ActivatedRoute, Router }                                    from '@angular/router';
+import { ChatService }                                               from '@app/services/chat.service';
+import { switchMap, take, takeUntil }                                from 'rxjs/operators';
+import { Store }                                                     from '@ngrx/store';
+import { loggedInUser, specificUser }                                from '@app/store/user/user.selectors';
 import {
   addHeaderOptions,
   resetHeader,
   setHeaderText,
-} from '@app/store/header/header.actions';
+}                                                                    from '@app/store/header/header.actions';
+import { tagsForUser }                                               from '@app/store/tag/tag.selectors';
+import { icebreakerAnswerForUser, icebreakers as selectIcebreakers } from '@app/store/icebreaker/icebreaker.selectors';
+import { TagI }                                                      from '@models/tag';
+import { IcebreakerAnswerI, IcebreakerI }                            from '@models/icebreaker';
 
 @Component({
   selector: 'gtm-other-detail',
@@ -21,6 +25,10 @@ import {
 export class OtherDetailComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<void> = new Subject();
   user$: Observable<UserI>;
+  tags: TagI[]                               = [];
+  icebreakers: IcebreakerI[]                 = [];
+  icebreakerAnswer: IcebreakerAnswerI | null = null;
+  icebreaker: IcebreakerI | null             = null;
 
   constructor(
     private store: Store,
@@ -120,4 +128,5 @@ export class OtherDetailComponent implements OnInit, OnDestroy {
         ),
       )
       .subscribe(chatId => this.router.navigateByUrl(`/chat/${chatId}`));
+
 }

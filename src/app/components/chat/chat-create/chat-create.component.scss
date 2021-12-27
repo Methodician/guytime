@@ -1,0 +1,11 @@
+@import 'app/styles/vars.scss';
+
+main {
+  mat-list {
+    height: $body_height;
+    overflow: scroll;
+    mat-list-item {
+      height: 5.2rem;
+    }
+  }
+}

@@ -4,17 +4,18 @@ import {
   ProfileImageSizeT,
 }                                                                    from '@app/models/user';
 import { TagI }                                                      from '@models/tag';
-import { Store }                                                     from '@ngrx/store';
-import { loadTagsForUserId }                                         from '@app/store/tag/tag.actions';
-import { tagsForUser }                                               from '@app/store/tag/tag.selectors';
-import { takeUntil }                                                 from 'rxjs/operators';
-import { Subject }                                                   from 'rxjs';
+import { Store }                                          from '@ngrx/store';
+import { loadTagsForUserId }                              from '@app/store/tag/tag.actions';
+import { tagsForUser }                                    from '@app/store/tag/tag.selectors';
+import { takeUntil }                                      from 'rxjs/operators';
+import { Subject }                                        from 'rxjs';
 import {
   icebreakerAnswerForUser,
   icebreakers as selectIcebreakers,
-} from '@app/store/icebreaker/icebreaker.selectors';
-import { loadIcebreakerAnswerForUserId, loadIcebreakers }            from '@app/store/icebreaker/icebreaker.actions';
-import { IcebreakerAnswerI, IcebreakerI }                            from '@models/icebreaker';
+}                                                         from '@app/store/icebreaker/icebreaker.selectors';
+import { loadIcebreakerAnswerForUserId, loadIcebreakers } from '@app/store/icebreaker/icebreaker.actions';
+import { IcebreakerAnswerI, IcebreakerI }                 from '@models/icebreaker';
+import { resetHeader }                                    from '@app/store/header/header.actions';
 
 @Component({
   selector: 'gtm-profile-detail',
@@ -45,6 +46,12 @@ export class ProfileDetailComponent {
     this.store.dispatch(loadTagsForUserId({userId: this.userInfo.uid}));
     this.store.dispatch(loadIcebreakers());
     this.store.dispatch(loadIcebreakerAnswerForUserId({userId: this.userInfo.uid}));
+  }
+
+  ngOnDestroy(): void {
+    this.store.dispatch(resetHeader());
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   avatarFileName = () =>

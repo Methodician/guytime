@@ -1,19 +1,22 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router }                          from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { ChatService } from '@services/chat.service';
 import { ChatMessageI } from '@models/message';
-import { FirebaseService } from '@app/services/firebase.service';
-import { Store } from '@ngrx/store';
-import { authUid } from '@app/store/auth/auth.selectors';
-import { take }                                from 'rxjs/operators';
-import { clearChatMessages, loadChatMessages } from '@app/store/chat/chat.actions';
-import { chatMessages }                        from '@app/store/chat/chat.selectors';
+import { FirebaseService }                     from '@app/services/firebase.service';
+import { Store }                               from '@ngrx/store';
+import { authUid }                             from '@app/store/auth/auth.selectors';
+import { map, take, takeUntil }                                from 'rxjs/operators';
+import { clearChatMessages, loadChatGroups, loadChatMessages } from '@app/store/chat/chat.actions';
+import { chatMessages }                                        from '@app/store/chat/chat.selectors';
 import {
   addHeaderOptions,
   resetHeader,
   setHeaderText,
-} from '@app/store/header/header.actions';
+}                                              from '@app/store/header/header.actions';
+import { UserI }                               from '@models/user';
+import { userListByIdMap }                     from '@app/store/user/user.selectors';
+import { ChatGroupI }                          from '@models/chat-group';
 
 @Component({
   selector: 'gtm-chat-detail',
@@ -27,6 +30,9 @@ export class ChatDetailComponent implements OnInit {
   msgInput = '';
   chatGroupId = '';
   messages$: Observable<ReadonlyArray<ChatMessageI>>;
+  users$: Observable<UserI[]>;
+  @Input() group: ChatGroupI;
+  firstNames: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -53,10 +59,29 @@ export class ChatDetailComponent implements OnInit {
       }
     });
     this.messages$ = this.store.select(chatMessages);
+    this.watchChatUsers();
+    this.store.dispatch(loadChatGroups());
   }
 
   ngAfterViewChecked() {
     this.scrollToBottom();
+  }
+
+  watchChatUsers = async () => {
+    const users$ = this.store.select(
+      userListByIdMap(this.group.participantsMap),
+    );
+    this.users$  = users$;
+
+    users$
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        map(users => users.map(user => user.fName)),
+      )
+      .subscribe(names => {
+        this.firstNames = names.join(', ');
+        this.store.dispatch(setHeaderText({ headerText: this.firstNames }));
+      });
   }
 
   scrollToBottom() {
@@ -69,7 +94,7 @@ export class ChatDetailComponent implements OnInit {
     setTimeout(() => delayedHeaderOperations());
 
     const delayedHeaderOperations = () => {
-      this.store.dispatch(setHeaderText({ headerText: 'Messages' }));
+      this.store.dispatch(setHeaderText({ headerText: 'Chat' }));
 
       const optionsToAdd = new Map([
         [
@@ -94,8 +119,8 @@ export class ChatDetailComponent implements OnInit {
     // Could be put in effects in theory, but unclear what the advantage would
     // be other than a cleaner component code and separation of concerns
     // (which is not a trivial advantage, but maybe not worth the refactor)
-    const uid = await this.store.select(authUid).pipe(take(1)).toPromise(),
-      { chatGroupId, msgInput } = this;
+    const uid = await this.store.select(authUid).pipe(take(1)).toPromise();
+    const { chatGroupId, msgInput } = this;
 
     const messageData: ChatMessageI = {
       chatGroupId,
@@ -110,7 +135,7 @@ export class ChatDetailComponent implements OnInit {
 
   trackMessageBy = (_, item: any): number => {
     return item.id;
-  };
+  }
 
   onTextareaChange = () => {
     const scrollHeight = this.chatInputEl.nativeElement.scrollHeight;

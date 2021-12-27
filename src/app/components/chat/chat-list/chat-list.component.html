@@ -1,17 +1,19 @@
-<main>
+<div class='chat-list-container'>
   <mat-list>
     <mat-list-item *ngFor="let chat of chatGroupList$ | async">
-      <mat-card
+      <gtm-chat-group
+        [group]='chat'
         [routerLink]="['/chat', chat.id]"
-        [matBadge]="unreadMessageCountByChatGroup$(chat.id) | async"
-        [matBadgeHidden]="
-          (unreadMessageCountByChatGroup$(chat.id) | async) === 0
-        "
-        matBadgePosition="before"
-        matBadgeSize="small"
-      >
-        <gtm-chat-group [group]="chat"></gtm-chat-group>
-      </mat-card>
+      ></gtm-chat-group>
     </mat-list-item>
   </mat-list>
-</main>
+  <button
+    class='new-chat-message'
+    color='primary'
+    (click)='onNewChatClicked()'
+    mat-fab
+  >
+    <mat-icon>add</mat-icon>
+  </button>
+
+</div>

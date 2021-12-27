@@ -1,6 +1,6 @@
 @import 'app/styles/vars.scss';
 
-main {
+.chat-list-container {
   overflow: auto;
   padding-top: 56px;
   .mat-list {
@@ -10,13 +10,13 @@ main {
       margin-bottom: 6px;
       height: 100px;
       width: 100vw;
-      .mat-card {
-        width: stretch;
-        display: grid;
-        grid-template-rows: 60px 20px;
-        padding: 5px 8px;
-        height: 90px;
-      }
+      border-bottom: 1px map-get($fellas-gray, 100) solid;
     }
+  }
+
+  .new-chat-message {
+    position: absolute;
+    right: 16px;
+    bottom: 88px;
   }
 }

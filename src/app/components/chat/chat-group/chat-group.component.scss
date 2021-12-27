@@ -1,46 +1,71 @@
-main {
-  max-width: calc(100vw - 48px);
+@import 'app/styles/vars.scss';
 
-  .people {
-    position: absolute;
-    right: 0;
-    width: 100%;
-    height: 66px;
+:host {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  cursor: pointer;
 
-    .avatar-row {
-      position: absolute;
-      right: 0;
-      display: flex;
-      overflow: scroll;
-      max-width: 100%;
-      padding-right: 22px;
-    }
+  .avatar-container {
+    width: 20%;
+  }
 
-    .avatar-wrapper {
-      width: 30px;
+  .info-container {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    color: map-get($fellas-gray, 600);
 
-      .avatar-border {
-        width: 51px;
-        border-radius: 50%;
-        border: 3px solid white;
-      }
-    }
+    .latest-message {
+      margin-top: 2px;
+      color: map-get($fellas-gray, 400);
 
-    .names-wrapper {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      text-align: right;
-      overflow: scroll;
-
-      .first-names {
-        margin-right: 0.8rem;
-        margin-left: 0.8rem;
-        white-space: nowrap;
-        font-size: 0.8rem;
+      em {
+        color: map-get($fellas-gray, 400);
       }
     }
   }
+
+  //.people {
+  //  position: absolute;
+  //  right: 0;
+  //  width: 100%;
+  //  height: 66px;
+  //
+  //  .avatar-row {
+  //    position: absolute;
+  //    right: 0;
+  //    display: flex;
+  //    overflow: scroll;
+  //    max-width: 100%;
+  //    padding-right: 22px;
+  //  }
+  //
+  //  .avatar-wrapper {
+  //    width: 30px;
+  //
+  //    .avatar-border {
+  //      width: 51px;
+  //      border-radius: 50%;
+  //      border: 3px solid white;
+  //    }
+  //  }
+  //
+  //  .names-wrapper {
+  //    position: absolute;
+  //    bottom: 0;
+  //    width: 100%;
+  //    text-align: right;
+  //    overflow: scroll;
+  //
+  //    .first-names {
+  //      margin-right: 0.8rem;
+  //      margin-left: 0.8rem;
+  //      white-space: nowrap;
+  //      font-size: 0.8rem;
+  //    }
+  //  }
+  //}
 
   .latest_message {
     font-size: 0.75rem;

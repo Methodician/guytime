@@ -1,0 +1,113 @@
+@import 'app/styles/vars.scss';
+
+:host {
+  display: block;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  border-radius: 20px;
+  z-index: 11;
+  padding: 16px;
+  transition: bottom .15s ease-in;
+
+  .mat-title {
+    margin-bottom: 0;
+  }
+
+  .group_name {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  .search-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 5px;
+    background-color: map-get($fellas-gray, 50);
+    width: 100%;
+    height: 3em;
+    padding: 0px 8px;
+
+    mat-icon {
+      color: map-get($fellas-gray, 200);
+      margin-right: 8px;
+    }
+
+    input {
+      background-color: transparent;
+      border: none;
+      outline: none;
+
+      :focus {
+        border: none;
+        outline: none;
+      }
+    }
+  }
+
+  .create-chat-edit-members {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+
+    .added-member {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-right: 16px;
+      width: 70px;
+      height: 86px;
+      color: map-get($fellas-gray, 200);
+    }
+  }
+
+  .friends-list-header {
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .friends-list-container {
+    padding-top: 8px;
+
+
+    .friends-list-item {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-bottom: 8px;
+      padding: 8px 0px;
+      border-bottom: 1px solid map-get($fellas-gray, 100);
+      cursor: pointer;
+
+      .friends-list-item-name {
+        font-weight: bold;
+        font-size: 18px;
+        margin-left: 16px;
+      }
+
+      mat-icon {
+        margin-left: auto;
+      }
+    }
+
+
+
+  }
+}
+
+#bottom-sheet-top {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 8px;
+}
+
+.mat-list-base .mat-list-item .mat-list-item-content {
+  padding: 0 !important;
+}

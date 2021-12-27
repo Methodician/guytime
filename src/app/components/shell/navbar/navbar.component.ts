@@ -33,5 +33,5 @@ export class NavbarComponent implements OnInit {
 
   onNavClicked = (route: string) => {
     this.router.navigateByUrl(`/${route}`);
-  };
+  }
 }

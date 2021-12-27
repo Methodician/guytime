@@ -51,6 +51,13 @@ main {
 
     mat-card {
       margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+
+      .icebreaker-question {
+        margin-bottom: 8px;
+        font-weight: bold;
+      }
     }
   }
 

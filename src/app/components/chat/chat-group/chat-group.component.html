@@ -1,27 +1,43 @@
-<main>
-  <section class="people">
-    <div class="avatar-row">
-      <div class="avatar-wrapper" *ngFor="let user of users$ | async">
-        <div class="avatar-border">
-          <gtm-avatar
-            [fileName]="avatarFileName$(user.uid) | async"
-            imageSize="45x45"
-          ></gtm-avatar>
-        </div>
-      </div>
-    </div>
-    <div class="names-wrapper">
-      <b class="first-names">
-        {{ firstNames }}
-      </b>
-    </div>
-  </section>
+<div class='avatar-container' *ngFor='let user of users$ | async; let indexOfelement=index;'>
+  <gtm-avatar *ngIf='indexOfelement === 0'
+    [fileName]="avatarFileName$(user.uid) | async"
+    imageSize="45x45"
+  ></gtm-avatar>
 
-  <p class="latest_message" *ngIf="!!group && !!group.latestMessage">
-    <b>{{ group.latestMessage.fName }} {{ group.latestMessage.lName }}:</b>
-    {{ group.latestMessage.content }}
+</div>
+<div class='info-container'>
+  <strong>{{ firstNames }}</strong>
+  <p *ngIf='!!group && !!group.latestMessage'
+     class='latest-message'
+  >
+    {{group.latestMessage.content}}
   </p>
-  <p class="latest_message" *ngIf="!!group && !group.latestMessage">
-    No messages yet in this group
+  <p class='latest-message' *ngIf="!!group && !group.latestMessage">
+    <em>No messages yet in this group</em>
   </p>
-</main>
+</div>
+<!--  <section class="people">-->
+<!--    <div class="avatar-row">-->
+<!--      <div class="avatar-wrapper" *ngFor="let user of users$ | async">-->
+<!--        <div class="avatar-border">-->
+<!--          <gtm-avatar-->
+<!--            [fileName]="avatarFileName$(user.uid) | async"-->
+<!--            imageSize="45x45"-->
+<!--          ></gtm-avatar>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="names-wrapper">-->
+<!--      <b class="first-names">-->
+<!--        {{ firstNames }}-->
+<!--      </b>-->
+<!--    </div>-->
+<!--  </section>-->
+
+<!--  <p class="latest_message" *ngIf="!!group && !!group.latestMessage">-->
+<!--    <b>{{ group.latestMessage.fName }} {{ group.latestMessage.lName }}:</b>-->
+<!--    {{ group.latestMessage.content }}-->
+<!--  </p>-->
+<!--  <p class="latest_message" *ngIf="!!group && !group.latestMessage">-->
+<!--    No messages yet in this group-->
+<!--  </p>-->

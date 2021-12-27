@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ChatGroupI } from '@app/models/chat-group';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChatGroupI }                          from '@app/models/chat-group';
 import { UserI } from '@app/models/user';
 import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
@@ -14,7 +14,7 @@ import {
   templateUrl: './chat-group.component.html',
   styleUrls: ['./chat-group.component.scss'],
 })
-export class ChatGroupComponent implements OnInit {
+export class ChatGroupComponent implements OnInit, OnDestroy {
   @Input() group: ChatGroupI;
 
   private unsubscribe$: Subject<void> = new Subject();
@@ -45,9 +45,9 @@ export class ChatGroupComponent implements OnInit {
         map(users => users.map(user => user.fName)),
       )
       .subscribe(names => (this.firstNames = names.join(', ')));
-  };
+  }
 
   // Helpers
   avatarFileName$ = (uid: string) =>
-    this.store.select(avatarFileName(uid, '45x45'));
+    this.store.select(avatarFileName(uid, '45x45'))
 }

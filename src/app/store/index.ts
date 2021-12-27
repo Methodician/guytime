@@ -21,12 +21,17 @@ import {
   headerFeatureKey,
   headerReducer,
   HeaderStateI,
-} from './header/header.reducer';
+}                                                from './header/header.reducer';
 import {
   icebreakerFeatureKey,
   icebreakerReducer,
   IcebreakerStateI,
-} from './icebreaker/icebreaker.reducer';
+}                                                   from './icebreaker/icebreaker.reducer';
+import {
+  bottomSheetFeatureKey,
+  bottomSheetReducer,
+  BottomSheetStateI,
+} from '@app/store/bottom-sheet/bottom-sheet.reducer';
 
 export interface StateI {
   [authFeatureKey]: AuthStateI;
@@ -36,6 +41,7 @@ export interface StateI {
   [headerFeatureKey]: HeaderStateI;
   [tagFeatureKey]: TagStateI;
   [icebreakerFeatureKey]: IcebreakerStateI;
+  [bottomSheetFeatureKey]: BottomSheetStateI;
 }
 
 export const reducers: ActionReducerMap<StateI> = {
@@ -46,6 +52,7 @@ export const reducers: ActionReducerMap<StateI> = {
   [headerFeatureKey]: headerReducer,
   [tagFeatureKey]: tagReducer,
   [icebreakerFeatureKey]: icebreakerReducer,
+  [bottomSheetFeatureKey]: bottomSheetReducer,
 };
 
 export const metaReducers: MetaReducer<StateI>[] = !environment.production

@@ -1,31 +1,29 @@
-<main>
-  <section class="chat_list" #chatList>
-    <gtm-chat-message
-      *ngFor="let message of messages$ | async; trackBy: trackMessageBy"
-      [chatMessage]="message"
-    >
-    </gtm-chat-message>
-  </section>
-  <section class="chat_input_wrapper">
-    <form action="submit">
-      <textarea
-        #chatInput
-        class='chat_input mat-body'
-        name='msgInput'
-        (input)='onTextareaChange()'
-        placeholder='Say something...'
-        [(ngModel)]='msgInput'
-        [ngClass]='{ chat_input_has_text: msgInput.length > 0 }'
-      ></textarea>
-    </form>
-    <button
-      aria-label="Send Message"
-      mat-mini-fab
-      color='primary'
-      class="send_button"
-      (click)="onSendMessage()"
-    >
-      <mat-icon>send</mat-icon>
-    </button>
-  </section>
-</main>
+<section class="chat_list" #chatList>
+  <gtm-chat-message
+    *ngFor="let message of messages$ | async; trackBy: trackMessageBy"
+    [chatMessage]="message"
+  >
+  </gtm-chat-message>
+</section>
+<section class="chat_input_wrapper">
+  <form action="submit">
+    <textarea
+      #chatInput
+      class='chat_input mat-body'
+      name='msgInput'
+      (input)='onTextareaChange()'
+      placeholder='Say something...'
+      [(ngModel)]='msgInput'
+      [ngClass]='{ chat_input_has_text: msgInput.length > 0 }'
+    ></textarea>
+  </form>
+  <button
+    aria-label="Send Message"
+    mat-mini-fab
+    color='primary'
+    class="send_button"
+    (click)="onSendMessage()"
+  >
+    <mat-icon>send</mat-icon>
+  </button>
+</section>

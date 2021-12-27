@@ -57,10 +57,11 @@ export class ChatService {
   };
 
   createGroupChat = async (uids: string[]) => {
-    if (!uids || uids.length < 3)
+    if (!uids || uids.length < 3) {
       throw new Error(
         'You can only create group chats with an array of 3 or more userIds. To create a pair chat, call createPairChat.',
       );
+    }
     const participantsMap = uids.reduce((obj, item) => {
       return { ...obj, [item]: true };
     }, {});
@@ -73,7 +74,7 @@ export class ChatService {
     };
     const { id } = await this.chatGroupsCol().add(chatGroup);
     return id;
-  };
+  }
 
   watchChatsByUser$ = (uid: string) => {
     const chatsCol = this.chatGroupsByUserQuery(uid);
@@ -87,7 +88,7 @@ export class ChatService {
         });
       }),
     );
-  };
+  }
 
   chatGroupsCol = () => this.afs.collection<ChatGroupI>('chatGroups');
   chatGroupDoc = (chatGroupId: string) =>

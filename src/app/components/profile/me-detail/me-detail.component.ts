@@ -9,9 +9,6 @@ import {
   resetHeader,
   setHeaderText,
 }                            from '@app/store/header/header.actions';
-import { TagI }              from '@models/tag';
-import { loadTagsForUserId } from '@app/store/tag/tag.actions';
-import { tagsForUser }       from '@app/store/tag/tag.selectors';
 
 @Component({
   selector: 'gtm-me-detail',

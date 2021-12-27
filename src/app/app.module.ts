@@ -57,17 +57,22 @@ import { AddPeopleComponent } from './components/chat/add-people/add-people.comp
 import { AvatarComponent } from './components/shared/avatar/avatar.component';
 
 // pipes
-import { TimeElapsedPipe } from './pipes/time-elapsed.pipe';
-import { BrowseFellasComponent } from './components/profile/browse-fellas/browse-fellas.component';
-import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { EffectsModule } from '@ngrx/effects';
-import { reducers, metaReducers } from './store';
-import { allEffects } from './app.effects';
+import { TimeElapsedPipe }                  from './pipes/time-elapsed.pipe';
+import { BrowseFellasComponent }            from './components/profile/browse-fellas/browse-fellas.component';
+import { StoreModule }                      from '@ngrx/store';
+import { StoreDevtoolsModule }              from '@ngrx/store-devtools';
+import { EffectsModule }                    from '@ngrx/effects';
+import { reducers, metaReducers }           from './store';
+import { allEffects }                       from './app.effects';
+import { MAT_BOTTOM_SHEET_DEFAULT_OPTIONS } from '@angular/material/bottom-sheet';
+import { BottomSheetComponent }             from '@components/shell/bottom-sheet/bottom-sheet.component';
+import { OpacityOverlayComponent }          from '@components/shell/opacity-overlay/opacity-overlay.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    BottomSheetComponent,
+    OpacityOverlayComponent,
     NgGuideComponent,
     ProfileListComponent,
     ProfileDetailComponent,
@@ -136,6 +141,7 @@ import { allEffects } from './app.effects';
         ? { host: 'localhost:8080', ssl: false }
         : undefined,
     },
+    { provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS, useValue: { hasBackdrop: false } }
   ],
   bootstrap: [AppComponent],
 })
@@ -144,7 +150,7 @@ export class AppModule {
   // https://github.com/ngrx/store-devtools/issues/67
   constructor() {
     if (environment.production === false) {
-      (Map.prototype as any).toJSON = function () {
+      (Map.prototype as any).toJSON = function() {
         return JSON.parse(JSON.stringify([...this]));
       };
     }
