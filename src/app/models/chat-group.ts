@@ -14,4 +14,9 @@ export interface LatestGroupMessageI {
   fName: string;
   lName: string;
   content: string;
+  messageId: string;
+  createdAt: {
+    seconds: number;
+    nanoseconds: number;
+  };
 }

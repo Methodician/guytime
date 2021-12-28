@@ -9,7 +9,7 @@ import {
 } from '@app/store/header/header.actions';
 import {
   headerOptions,
-  headerText,
+  headerText, shouldHide,
   shouldShowBack,
 } from '@app/store/header/header.selectors';
 
@@ -24,6 +24,7 @@ export class HeaderComponent implements OnDestroy {
   options$ = this.store.select(headerOptions);
   headerText$ = this.store.select(headerText);
   shouldShowBack$ = this.store.select(shouldShowBack);
+  shouldHide$ = this.store.select(shouldHide);
 
   promptEvent;
 

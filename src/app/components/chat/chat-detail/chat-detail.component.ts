@@ -1,5 +1,5 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router }                          from '@angular/router';
+import { AfterViewChecked, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router }                                                       from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { ChatService } from '@services/chat.service';
 import { ChatMessageI } from '@models/message';
@@ -8,22 +8,22 @@ import { Store }                               from '@ngrx/store';
 import { authUid }                             from '@app/store/auth/auth.selectors';
 import { map, take, takeUntil }                                from 'rxjs/operators';
 import { clearChatMessages, loadChatGroups, loadChatMessages } from '@app/store/chat/chat.actions';
-import { chatMessages }                                        from '@app/store/chat/chat.selectors';
+import { chatGroupById, chatMessages }                         from '@app/store/chat/chat.selectors';
 import {
-  addHeaderOptions,
+  addHeaderOptions, backButtonClicked,
   resetHeader,
   setHeaderText,
-}                                              from '@app/store/header/header.actions';
-import { UserI }                               from '@models/user';
-import { userListByIdMap }                     from '@app/store/user/user.selectors';
-import { ChatGroupI }                          from '@models/chat-group';
+} from '@app/store/header/header.actions';
+import { UserI }                           from '@models/user';
+import { avatarFileName, userListByIdMap } from '@app/store/user/user.selectors';
+import { ChatGroupI }                      from '@models/chat-group';
 
 @Component({
   selector: 'gtm-chat-detail',
   templateUrl: './chat-detail.component.html',
   styleUrls: ['./chat-detail.component.scss'],
 })
-export class ChatDetailComponent implements OnInit {
+export class ChatDetailComponent implements OnInit, OnDestroy, AfterViewChecked {
   @ViewChild('chatList') private chatListEl: ElementRef;
   @ViewChild('chatInput') private chatInputEl: ElementRef;
   private unsubscribe$: Subject<void> = new Subject();
@@ -31,7 +31,9 @@ export class ChatDetailComponent implements OnInit {
   chatGroupId = '';
   messages$: Observable<ReadonlyArray<ChatMessageI>>;
   users$: Observable<UserI[]>;
-  @Input() group: ChatGroupI;
+  group$: Observable<ChatGroupI>;
+  group: ChatGroupI | undefined | null;
+
   firstNames: string;
 
   constructor(
@@ -55,11 +57,15 @@ export class ChatDetailComponent implements OnInit {
         const { id } = params;
         this.chatGroupId = id;
         this.store.dispatch(loadChatMessages({ chatGroupId: id }));
-        this.updateHeader();
+        // this.updateHeader();
+        if (!this.group$) {
+          this.group$ = this.store.select(chatGroupById(id));
+          this.watchChatGroup();
+        }
       }
     });
     this.messages$ = this.store.select(chatMessages);
-    this.watchChatUsers();
+    // this.watchChatUsers();
     this.store.dispatch(loadChatGroups());
   }
 
@@ -67,21 +73,28 @@ export class ChatDetailComponent implements OnInit {
     this.scrollToBottom();
   }
 
-  watchChatUsers = async () => {
-    const users$ = this.store.select(
-      userListByIdMap(this.group.participantsMap),
-    );
-    this.users$  = users$;
+  watchChatGroup = () => {
+    this.group$.subscribe((group) => {
+      this.group = group;
+      this.watchChatUsers();
+    });
+  }
 
-    users$
-      .pipe(
-        takeUntil(this.unsubscribe$),
-        map(users => users.map(user => user.fName)),
-      )
-      .subscribe(names => {
-        this.firstNames = names.join(', ');
-        this.store.dispatch(setHeaderText({ headerText: this.firstNames }));
-      });
+  watchChatUsers = () => {
+    if (this.group && !this.users$) {
+      this.users$  = this.store.select(
+        userListByIdMap(this.group.participantsMap),
+      );
+
+      this.users$
+        .pipe(
+          takeUntil(this.unsubscribe$),
+          map(users => users.map(user => user.fName)),
+        )
+        .subscribe(names => {
+          this.firstNames = names.join(', ');
+        });
+    }
   }
 
   scrollToBottom() {
@@ -90,30 +103,12 @@ export class ChatDetailComponent implements OnInit {
     } catch (error) {}
   }
 
-  updateHeader = () => {
-    setTimeout(() => delayedHeaderOperations());
-
-    const delayedHeaderOperations = () => {
-      this.store.dispatch(setHeaderText({ headerText: 'Chat' }));
-
-      const optionsToAdd = new Map([
-        [
-          'seePeople',
-          {
-            iconName: 'people',
-            optionText: 'See and add participants',
-            isDisabled: false,
-            onClick: this.onPeopleClicked,
-          },
-        ],
-      ]);
-
-      this.store.dispatch(addHeaderOptions({ optionsToAdd }));
-    };
-  }
-
   onPeopleClicked = () =>
     this.router.navigateByUrl(`chat/${this.chatGroupId}/people`);
+
+  onBackClicked = () => {
+    this.store.dispatch(backButtonClicked());
+  }
 
   onSendMessage = async () => {
     // Could be put in effects in theory, but unclear what the advantage would
@@ -131,22 +126,34 @@ export class ChatDetailComponent implements OnInit {
     };
     this.chatSvc.createChatMessage(messageData);
     this.msgInput = '';
-  };
+    this.chatInputEl.nativeElement.setAttribute('style', 'height:44px;');
+  }
 
   trackMessageBy = (_, item: any): number => {
     return item.id;
   }
 
   onTextareaChange = () => {
-    const scrollHeight = this.chatInputEl.nativeElement.scrollHeight;
-    const height = this.chatInputEl.nativeElement.offsetHeight;
-    const numOfLines = this.chatInputEl.nativeElement.value.split('\n').length;
-    if (scrollHeight > height) {
-      let style = `height: ${scrollHeight}px;`;
-      if (scrollHeight > 40) {
+    const inputEl = this.chatInputEl.nativeElement;
+    const height = inputEl.offsetHeight;
+    const clonedTextarea = inputEl.cloneNode();
+    clonedTextarea.value = '';
+    clonedTextarea.setAttribute('style', 'height:44px;');
+    const parentEl = inputEl.parentNode;
+    parentEl.appendChild(clonedTextarea);
+    clonedTextarea.value = inputEl.value;
+    const cloneHeight = clonedTextarea.scrollHeight;
+    parentEl.removeChild(clonedTextarea);
+    if (cloneHeight !== height) {
+      let style = `height: ${cloneHeight}px;`;
+      if ( cloneHeight > 44 ) {
         style += 'border-radius: .75rem;';
       }
-      this.chatInputEl.nativeElement.setAttribute('style', style);
+      inputEl.setAttribute('style', style);
     }
   }
+
+  // Helpers
+  avatarFileName$ = ( uid: string ) =>
+    this.store.select(avatarFileName(uid, '45x45'))
 }

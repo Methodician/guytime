@@ -54,15 +54,16 @@ export class ChatCreateComponent implements OnInit, OnDestroy {
 
   watchChatGroup = () => {
     this.chatGroup$.subscribe(group => {
-      console.log(group);
-      if (!group) return;
+      if (!group) {
+        return;
+      }
       const { participantsMap } = group;
       const participantIds = Object.keys(participantsMap);
       for (let uid of participantIds) {
         this.selectedUsers[uid] = true;
       }
     });
-  };
+  }
 
   onCreateGroupClicked = () => {
     const uids = Object.entries(this.selectedUsers)

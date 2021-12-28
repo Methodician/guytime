@@ -94,6 +94,17 @@ export class HeaderEffects {
         url.pop();
         this.defaultBackUrl = urlSegmentArrayToUrl(url);
 
+        console.log(`targetUrl: ${targetUrl}`);
+
+        let shouldHide = false;
+
+        if (targetUrl.includes('/chat/')) {
+          const remainder = targetUrl.replace('/chat/', '');
+          if (remainder.length === 20) {
+            shouldHide = true;
+          }
+        }
+
         if (!this.wasBackJustClicked) {
           if (!!this.currentUrl) {
             // If user did not just click back and there is a current URL stored, add that to breadcrumb trail before moving on
@@ -124,7 +135,7 @@ export class HeaderEffects {
           );
         }
 
-        return watchNavigationSuccess({ shouldShowBack });
+        return watchNavigationSuccess({ shouldShowBack, shouldHide, });
       }),
       catchError(error => of(watchNavigationFailure({ error }))),
     ),

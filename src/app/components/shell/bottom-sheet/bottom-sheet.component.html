@@ -7,7 +7,12 @@
       Cancel
     </button>
     <span class='mat-title'>New Chat</span>
-    <button mat-button color='primary'>Create</button>
+    <button
+      mat-button color='primary'
+      (click)='handleCreateClick()'
+    >
+      Create
+    </button>
   </div>
   <div id='bottom-sheet-body'>
     <form>
@@ -32,17 +37,19 @@
       </form>
     </div>
     <div class='create-chat-edit-members'>
-      <div class='added-member'>
-        <mat-icon>add_circle</mat-icon>
-        <span>Add users</span>
-      </div>
+<!--      <div class='added-member'>-->
+<!--        <mat-icon>add_circle</mat-icon>-->
+<!--        <span>Add users</span>-->
+<!--      </div>-->
     </div>
     <div class='friends-list-header'>
-      <span class='mat-subheading-2'>Friends</span>
+      <span>Connections</span>
     </div>
     <div class='friends-list-container'>
       <mat-list>
-        <mat-list-item *ngFor='let user of users$ | async'>
+        <mat-list-item *ngFor='let user of users$ | async'
+          (click)='toggleSelectedUser(user.uid)'
+        >
           <div
             class='friends-list-item'
           >
@@ -51,7 +58,9 @@
               [fileName]='user.uploadedProfileImageMap["45x45"].fileName'
             ></gtm-avatar>
             <span class='friends-list-item-name'>{{user.fName}} {{user.lName}}</span>
-            <mat-icon>radio_button_unchecked</mat-icon>
+
+            <mat-icon *ngIf='!selectedUsers[user.uid]'>radio_button_unchecked</mat-icon>
+            <mat-icon *ngIf='selectedUsers[user.uid]' class='radio-button-icon-checked'>radio_button_checked</mat-icon>
           </div>
         </mat-list-item>
 

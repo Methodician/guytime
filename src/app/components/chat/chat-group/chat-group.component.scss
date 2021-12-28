@@ -5,23 +5,56 @@
   flex-direction: row;
   width: 100%;
   cursor: pointer;
+  height: 100%;
 
   .avatar-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
     width: 20%;
+
+    .first-avatar {
+      z-index: 10;
+    }
+
+    .additional-avatar {
+      position: absolute;
+      z-index: 9;
+    }
   }
 
   .info-container {
     display: flex;
     flex-direction: column;
     width: 80%;
+    height: 100%;
     color: map-get($fellas-gray, 600);
+    border-bottom: 1px map-get($fellas-gray, 100) solid;
+    padding-top: 8px;
+
+    .info-container-header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      span {
+        margin-left: auto;
+        color: map-get($fellas-gray, 200);
+      }
+
+      mat-icon {
+        color: map-get($fellas-gray, 200);
+      }
+    }
 
     .latest-message {
       margin-top: 2px;
-      color: map-get($fellas-gray, 400);
+      color: map-get($fellas-gray, 200);
 
       em {
-        color: map-get($fellas-gray, 400);
+        color: map-get($fellas-gray, 200);
       }
     }
   }

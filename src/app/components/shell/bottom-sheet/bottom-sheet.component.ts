@@ -9,8 +9,8 @@ import { loggedInUser, userListByIdMap }                                      fr
 import { takeUntil }                                                          from 'rxjs/operators';
 import { ChatGroupI }                                                         from '@models/chat-group';
 import { UserI }                                                              from '@models/user';
-import { ChatService }                                                        from '@services/chat.service';
-import { ActivatedRoute }                                                     from '@angular/router';
+import { ChatService }            from '@services/chat.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'gtm-bottom-sheet',
@@ -35,6 +35,7 @@ export class BottomSheetComponent implements OnDestroy, AfterViewInit {
     private elementRef: ElementRef,
     private chatSvc: ChatService,
     private route: ActivatedRoute,
+    private router: Router,
   ) {
     this.isOpenSubscription = this.isBottomSheetOpen$.subscribe((isOpen) => {
       if (isOpen) {
@@ -88,7 +89,6 @@ export class BottomSheetComponent implements OnDestroy, AfterViewInit {
 
   watchChatGroup = () => {
     this.chatGroup$.subscribe(group => {
-      console.log(group);
       if ( !group ) {
         return;
       }
@@ -119,6 +119,27 @@ export class BottomSheetComponent implements OnDestroy, AfterViewInit {
             });
         }
       });
+  }
+
+  toggleSelectedUser = (uid: string) => {
+    const userSelected = !!this.selectedUsers[uid];
+
+    if (userSelected) {
+      delete this.selectedUsers[uid];
+    }
+
+    if (!userSelected) {
+      this.selectedUsers[uid] = true;
+    }
+  }
+
+  handleCreateClick = async ( ) => {
+    const uids = Object.entries(this.selectedUsers)
+      .filter(( [ _, isSelected ] ) => !!isSelected)
+      .map(( [ uid, _ ] ) => uid);
+    const groupId = await this.chatSvc.createGroupChat(uids);
+    this.store.dispatch(closeBottomSheet());
+    return this.router.navigateByUrl(`/chat/${groupId}`);
   }
 
 }

@@ -123,9 +123,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(icebreakerAnswer => {
         if (icebreakerAnswer) {
-          console.log(icebreakerAnswer);
           this.icebreakerAnswer = icebreakerAnswer;
-          console.log(this.stepThree.value);
           this.stepThree.patchValue({
             icebreakerAnswerText: icebreakerAnswer.text,
             icebreakerId: icebreakerAnswer.icebreakerId,
@@ -139,7 +137,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
       .select(selectIcebreakers)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(icebreakers => {
-        console.log(icebreakers);
         this.icebreakers = icebreakers;
       });
   }
@@ -201,8 +198,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
       ...this.stepThree.value,
       tags: this.tags,
     };
-
-    console.log(formValues);
 
     const saveProfileImage = () => {
       const isComplete$ = new BehaviorSubject(false);

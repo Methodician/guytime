@@ -8,6 +8,10 @@ import {
   avatarFileName,
   userListByIdMap,
 } from '@app/store/user/user.selectors';
+import * as dayjs from 'dayjs';
+import * as relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
 
 @Component({
   selector: 'gtm-chat-group',
@@ -21,11 +25,15 @@ export class ChatGroupComponent implements OnInit, OnDestroy {
 
   users$: Observable<UserI[]>;
   firstNames: string;
+  latestMessageCreatedAtString = '';
 
   constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.watchChatUsers();
+    if (this.group && this.group.latestMessage && this.group.latestMessage && this.group.latestMessage.createdAt) {
+      this.latestMessageCreatedAtString = dayjs((this.group.latestMessage.createdAt.seconds * 1000)).format('MM/DD/YY');
+    }
   }
 
   ngOnDestroy(): void {

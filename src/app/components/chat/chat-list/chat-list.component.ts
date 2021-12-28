@@ -60,7 +60,6 @@ export class ChatListComponent implements OnInit, OnDestroy {
   }
 
   onNewChatClicked = () => {
-    console.log('new chat');
     this.store.dispatch(openBottomSheet());
   }
 }

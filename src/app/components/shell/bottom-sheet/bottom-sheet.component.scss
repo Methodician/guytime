@@ -66,13 +66,21 @@
   }
 
   .friends-list-header {
-    text-transform: uppercase;
-    margin-bottom: 8px;
+    margin: 16px 0;
+
+    span {
+      font-weight: bold;
+      color: map-get($fellas-gray, 400);
+    }
   }
 
   .friends-list-container {
     padding-top: 8px;
 
+    .mat-list-item {
+      padding: 0;
+      height: 70px;
+    }
 
     .friends-list-item {
       width: 100%;
@@ -92,6 +100,11 @@
 
       mat-icon {
         margin-left: auto;
+        color: map-get($fellas-gray, 200);
+      }
+
+      mat-icon.radio-button-icon-checked {
+        color: map-get($fellas-blue, A700);
       }
     }
 
@@ -106,8 +119,4 @@
   align-items: center;
   justify-content: space-between;
   padding-top: 8px;
-}
-
-.mat-list-base .mat-list-item .mat-list-item-content {
-  padding: 0 !important;
 }

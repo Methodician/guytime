@@ -1,12 +1,19 @@
-<div class='avatar-container' *ngFor='let user of users$ | async; let indexOfelement=index;'>
-  <gtm-avatar *ngIf='indexOfelement === 0'
+<div class='avatar-container'>
+  <gtm-avatar *ngFor='let user of users$ | async; let indexOfelement=index;'
     [fileName]="avatarFileName$(user.uid) | async"
     imageSize="45x45"
+    [class]='indexOfelement > 0 ? "additional-avatar": "first-avatar"'
   ></gtm-avatar>
 
 </div>
 <div class='info-container'>
-  <strong>{{ firstNames }}</strong>
+  <div class='info-container-header'>
+    <strong>{{ firstNames }}</strong>
+    <span>
+      {{ latestMessageCreatedAtString }}
+    </span>
+    <mat-icon>chevron_right</mat-icon>
+  </div>
   <p *ngIf='!!group && !!group.latestMessage'
      class='latest-message'
   >

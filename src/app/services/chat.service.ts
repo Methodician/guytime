@@ -15,13 +15,13 @@ export class ChatService {
     const messageDocRef = this.chatMessageDoc(messageId);
     const messageDocUpdate = { seenBy: { [uid]: true } };
     return messageDocRef.update(messageDocUpdate);
-  };
+  }
 
   createChatMessage = async (message: ChatMessageI) => {
     const messageDocRef = await this.chatMessagesCol().add(message);
     const { id } = messageDocRef;
     return id;
-  };
+  }
 
   createPairChat = async (uid1: string, uid2: string) => {
     const existingChats = await this.getPairChat(uid1, uid2);
@@ -42,7 +42,7 @@ export class ChatService {
     };
     const { id } = await this.chatGroupsCol().add(chatGroup);
     return id;
-  };
+  }
 
   getPairChat = async (uid1: string, uid2: string): Promise<ChatGroupI[]> => {
     const chatsRef = this.pairChatColQuery(uid1, uid2);
@@ -54,7 +54,7 @@ export class ChatService {
       return chatGroup;
     });
     return chatGroups;
-  };
+  }
 
   createGroupChat = async (uids: string[]) => {
     if (!uids || uids.length < 3) {
@@ -102,14 +102,14 @@ export class ChatService {
         .where('isPairChat', '==', true),
     );
     return chatsCol;
-  };
+  }
 
   chatGroupsByUserQuery = (uid: string) => {
     const chatsCol = this.afs.collection<ChatGroupI>('chatGroups', ref =>
       ref.where(`participantsMap.${uid}`, '==', true),
     );
     return chatsCol;
-  };
+  }
 
   chatMessagesCol = () => this.afs.collection<ChatMessageI>('chatMessages');
   chatMessageDoc = (messageId: string) => this.chatMessagesCol().doc(messageId);
@@ -117,10 +117,10 @@ export class ChatService {
   chatMessagesByGroupQuery = (chatGroupId: string) =>
     this.afs.collection<ChatMessageI>('chatMessages', ref =>
       ref.where('chatGroupId', '==', chatGroupId).orderBy('createdAt', 'asc'),
-    );
+    )
 
   chatMessagesBySenderQuery = (senderId: string) =>
     this.afs.collection<ChatMessageI>('chatMessages', ref =>
       ref.where('senderId', '==', senderId),
-    );
+    )
 }

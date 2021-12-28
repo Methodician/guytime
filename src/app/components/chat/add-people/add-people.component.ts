@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router }       from '@angular/router';
 import { ChatGroupI } from '@app/models/chat-group';
 import { UserI } from '@app/models/user';
 import { ChatService } from '@app/services/chat.service';
@@ -15,7 +15,7 @@ import { takeUntil } from 'rxjs/operators';
   templateUrl: './add-people.component.html',
   styleUrls: ['./add-people.component.scss'],
 })
-export class AddPeopleComponent implements OnInit {
+export class AddPeopleComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<void> = new Subject();
 
   chatGroup$: BehaviorSubject<ChatGroupI> = new BehaviorSubject(null);
@@ -33,7 +33,9 @@ export class AddPeopleComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      if (!params['id']) return;
+      if (!params['id']) {
+        return;
+      }
       const { id } = params;
       this.chatSvc
         .chatGroupDoc(id)
@@ -54,15 +56,16 @@ export class AddPeopleComponent implements OnInit {
 
   watchChatGroup = () => {
     this.chatGroup$.subscribe(group => {
-      console.log(group);
-      if (!group) return;
+      if (!group) {
+        return;
+      }
       const { participantsMap } = group;
       const participantIds = Object.keys(participantsMap);
-      for (let uid of participantIds) {
+      for (const uid of participantIds) {
         this.selectedUsers[uid] = true;
       }
     });
-  };
+  }
 
   onCreateGroupClicked = () => {
     const uids = Object.entries(this.selectedUsers)

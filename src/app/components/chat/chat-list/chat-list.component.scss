@@ -7,10 +7,9 @@
     height: $body_height;
     overflow: scroll;
     .mat-list-item {
-      margin-bottom: 6px;
-      height: 100px;
+      margin-bottom: 8px;
+      height: 96px;
       width: 100vw;
-      border-bottom: 1px map-get($fellas-gray, 100) solid;
     }
   }
 

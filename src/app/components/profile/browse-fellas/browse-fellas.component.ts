@@ -125,11 +125,9 @@ export class BrowseFellasComponent implements OnInit {
       .select(selectIcebreakers)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(( icebreakers ) => {
-        console.log(icebreakers);
         this.icebreakers = icebreakers;
         if ( this.icebreakerAnswer && !this.icebreaker ) {
           const foundIcebreaker = this.icebreakers.find(( ib ) => ib.id === this.icebreakerAnswer.icebreakerId);
-          console.log(foundIcebreaker);
           this.icebreaker = foundIcebreaker;
         }
       });
@@ -140,11 +138,8 @@ export class BrowseFellasComponent implements OnInit {
       .select(icebreakerAnswerForUser)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(icebreakerAnswer => {
-        console.log(icebreakerAnswer);
         if ( this.icebreakers.length > 0 ) {
-          const foundIcebreaker = this.icebreakers.find(( ib ) => ib.id === icebreakerAnswer.icebreakerId);
-          console.log(foundIcebreaker);
-          this.icebreaker = foundIcebreaker;
+          this.icebreaker = this.icebreakers.find(( ib ) => ib.id === icebreakerAnswer.icebreakerId);
         }
         this.icebreakerAnswer = icebreakerAnswer;
       });

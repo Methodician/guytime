@@ -17,7 +17,7 @@ export const onChatMessageCreated = fsFunc
   .onCreate(async (snap, context) => {
     const { messageId } = <{ messageId: string }>context.params;
     const message = snap.data();
-    const { chatGroupId, senderId, content } = message;
+    const { chatGroupId, senderId, content, createdAt, } = message;
     const chatGroupRef = adminFs.collection('chatGroups').doc(chatGroupId);
 
     const addUnreadMessageToGroupAndUsersPromises = async () => {
@@ -59,6 +59,8 @@ export const onChatMessageCreated = fsFunc
         fName,
         lName,
         content,
+        messageId,
+        createdAt,
       };
 
       return chatGroupRef.update({ latestMessage });

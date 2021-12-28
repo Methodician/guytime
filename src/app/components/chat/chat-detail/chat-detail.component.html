@@ -1,3 +1,22 @@
+<mat-toolbar id='chat-detail-toolbar'>
+  <button
+    (click)='onBackClicked()'
+    class='back_button'
+    mat-icon-button
+    aria-label='Back Button'
+  >
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <div class='avatar-container' *ngFor='let user of users$ | async; let indexOfelement=index;'>
+    <gtm-avatar *ngIf='indexOfelement === 0'
+                [fileName]='avatarFileName$(user.uid) | async'
+                imageSize='45x45'
+    ></gtm-avatar>
+
+  </div>
+  <span class='page_title'>{{ this.firstNames }}</span>
+
+</mat-toolbar>
 <section class="chat_list" #chatList>
   <gtm-chat-message
     *ngFor="let message of messages$ | async; trackBy: trackMessageBy"

@@ -1,4 +1,4 @@
-<mat-toolbar id='toolbar' color='primary' *ngIf="(options$ | async) && (headerText$ | async)">
+<mat-toolbar id='toolbar' color='primary' *ngIf="(options$ | async) && (headerText$ | async) && !(shouldHide$ | async)">
   <div class='topnav-brand-container'>
     <div *ngIf="!(shouldShowBack$ | async)" id="btn-placeholder"></div>
     <button

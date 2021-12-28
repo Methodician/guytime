@@ -5,7 +5,7 @@ export const watchNavigation = createAction('[Header] Watch Navigation');
 
 export const watchNavigationSuccess = createAction(
   '[Header] Watch Navigation Success',
-  props<{ shouldShowBack: boolean }>(),
+  props<{ shouldShowBack: boolean, shouldHide: boolean }>(),
 );
 
 export const watchNavigationFailure = createAction(
