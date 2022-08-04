@@ -61,5 +61,38 @@ body {
         }
       }
     }
+
+    .button-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+
+      button:first-child {
+        margin-right: 8px;
+      }
+    }
+
+    &.not_connected {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      span {
+        margin-bottom: 8px;
+      }
+    }
+  }
+}
+
+.not-connected-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  span {
+    margin-bottom: 8px;
   }
 }

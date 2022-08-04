@@ -23,15 +23,15 @@ export class ChatService {
     return id;
   }
 
-  createPairChat = async (uid1: string, uid2: string) => {
-    const existingChats = await this.getPairChat(uid1, uid2);
+  createPairChat = async (initiatedByUid: string, uid2: string) => {
+    const existingChats = await this.getPairChat(initiatedByUid, uid2);
     if (existingChats.length > 0) {
       const existingChat = existingChats[0];
       const { id } = existingChat;
       return id;
     }
     const participantsMap = {
-      [uid1]: true,
+      [initiatedByUid]: true,
       [uid2]: true,
     };
     const chatGroup: ChatGroupI = {
@@ -39,6 +39,7 @@ export class ChatService {
       unreadMessagesByUser: {},
       createdAt: this.fbSvc.fsTimestamp(),
       isPairChat: true,
+      initiatedBy: initiatedByUid,
     };
     const { id } = await this.chatGroupsCol().add(chatGroup);
     return id;
@@ -54,6 +55,26 @@ export class ChatService {
       return chatGroup;
     });
     return chatGroups;
+  }
+
+  hidePairChatFromUser = async ( uid: string, chatGroupId: string ): Promise<void> => {
+    const chatGroupDoc = this.chatGroupDoc(chatGroupId)
+    const chatGroupSnapshot = await chatGroupDoc.ref.get()
+    const chatGroup = chatGroupSnapshot.data()
+
+    let hiddenForUsers = []
+
+    if (chatGroup.hiddenForUsers) {
+      hiddenForUsers = [
+        ...chatGroup.hiddenForUsers
+      ]
+    }
+
+    hiddenForUsers.push(uid)
+
+    await chatGroupDoc.update({
+      hiddenForUsers,
+    })
   }
 
   createGroupChat = async (uids: string[]) => {
@@ -80,6 +101,12 @@ export class ChatService {
     const chatsCol = this.chatGroupsByUserQuery(uid);
     return chatsCol.snapshotChanges().pipe(
       map(changeActions => {
+        changeActions = changeActions.filter(
+          (action) => {
+            const chatGroup = action.payload.doc.data()
+            return !chatGroup.hiddenForUsers || !chatGroup.hiddenForUsers.includes(uid)
+          }
+        )
         return changeActions.map(action => {
           const { doc } = action.payload;
           const { id } = doc;
@@ -95,20 +122,19 @@ export class ChatService {
     this.chatGroupsCol().doc<ChatGroupI>(chatGroupId);
 
   pairChatColQuery = (uid1: string, uid2: string) => {
-    const chatsCol = this.afs.collection<ChatGroupI>('chatGroups', ref =>
+    return this.afs.collection<ChatGroupI>('chatGroups', ref =>
       ref
         .where(`participantsMap.${uid1}`, '==', true)
         .where(`participantsMap.${uid2}`, '==', true)
         .where('isPairChat', '==', true),
     );
-    return chatsCol;
   }
 
   chatGroupsByUserQuery = (uid: string) => {
-    const chatsCol = this.afs.collection<ChatGroupI>('chatGroups', ref =>
-      ref.where(`participantsMap.${uid}`, '==', true),
+    return this.afs.collection<ChatGroupI>('chatGroups', ref =>
+      ref
+        .where(`participantsMap.${uid}`, '==', true),
     );
-    return chatsCol;
   }
 
   chatMessagesCol = () => this.afs.collection<ChatMessageI>('chatMessages');
@@ -123,4 +149,36 @@ export class ChatService {
     this.afs.collection<ChatMessageI>('chatMessages', ref =>
       ref.where('senderId', '==', senderId),
     )
+
+  removeUserFromChats = async ( uid: string, chatGroupIds: string[] ): Promise<void> => {
+
+    const chatGroups = this.afs.collection<ChatGroupI>('chatGroups', ref =>
+      ref
+        .where(`id`, 'in', chatGroupIds)
+        .where(`participantsMap.${uid}`, '==', true),
+    );
+
+    await Promise.all(chatGroupIds.map(async (chatGroupId) => {
+      const chatGroupDoc = chatGroups.doc(chatGroupId)
+      const chatGroupSnapshot = await chatGroupDoc.ref.get()
+      const chatGroup         = chatGroupSnapshot.data()
+
+      let hiddenForUsers = []
+
+      if ( chatGroup.hiddenForUsers ) {
+        hiddenForUsers = [
+          ...chatGroup.hiddenForUsers
+        ]
+      }
+
+      if (!hiddenForUsers.includes(uid)) {
+        hiddenForUsers.push(uid)
+
+        await chatGroupDoc.update({
+          hiddenForUsers,
+        })
+      }
+
+    }))
+  }
 }

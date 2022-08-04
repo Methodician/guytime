@@ -12,6 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 // ANGULAR FIRE
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule, SETTINGS } from '@angular/fire/compat/firestore';
+import { MessagingModule } from '@angular/fire/messaging';
 // import { AngularFireAnalyticsModule } from '@angular/fire/compat/analytics';
 
 // ANGULAR MATERIAL
@@ -53,20 +54,23 @@ import { ChatMessageComponent } from '@components/chat/chat-message/chat-message
 import { ChatGroupComponent } from '@components/chat/chat-group/chat-group.component';
 import { ChatPeopleComponent } from './components/chat/chat-people/chat-people.component';
 import { BottomGhostBannerComponent } from './components/ui/bottom-ghost-banner/bottom-ghost-banner.component';
-import { AddPeopleComponent } from './components/chat/add-people/add-people.component';
-import { AvatarComponent } from './components/shared/avatar/avatar.component';
+import { AddPeopleComponent }        from './components/chat/add-people/add-people.component';
+import { AvatarComponent }           from '@components/shared/avatar/avatar.component';
+import { MainNotificationComponent } from '@components/fcm/main-notification/main-notification.component';
+import { BottomSheetComponent }      from '@components/shell/bottom-sheet/bottom-sheet.component';
+import { OpacityOverlayComponent }  from '@components/shell/opacity-overlay/opacity-overlay.component';
+import { ChatGroupAvatarComponent } from '@components/chat/chat-group-avatar/chat-group-avatar.component';
 
 // pipes
-import { TimeElapsedPipe }                  from './pipes/time-elapsed.pipe';
-import { BrowseFellasComponent }            from './components/profile/browse-fellas/browse-fellas.component';
-import { StoreModule }                      from '@ngrx/store';
+import { TimeElapsedPipe }       from './pipes/time-elapsed.pipe';
+import { BrowseFellasComponent } from '@components/profile/browse-fellas/browse-fellas.component';
+import { StoreModule }           from '@ngrx/store';
 import { StoreDevtoolsModule }              from '@ngrx/store-devtools';
 import { EffectsModule }                    from '@ngrx/effects';
 import { reducers, metaReducers }           from './store';
 import { allEffects }                       from './app.effects';
 import { MAT_BOTTOM_SHEET_DEFAULT_OPTIONS } from '@angular/material/bottom-sheet';
-import { BottomSheetComponent }             from '@components/shell/bottom-sheet/bottom-sheet.component';
-import { OpacityOverlayComponent }          from '@components/shell/opacity-overlay/opacity-overlay.component';
+
 
 @NgModule({
   declarations: [
@@ -91,12 +95,14 @@ import { OpacityOverlayComponent }          from '@components/shell/opacity-over
     ChatMessageComponent,
     TimeElapsedPipe,
     ChatGroupComponent,
+    ChatGroupAvatarComponent,
     ChatPeopleComponent,
     AddPeopleComponent,
     BottomGhostBannerComponent,
     AvatarComponent,
     LandingComponent,
     BrowseFellasComponent,
+    MainNotificationComponent,
   ],
   imports: [
     BrowserModule,
@@ -107,6 +113,7 @@ import { OpacityOverlayComponent }          from '@components/shell/opacity-over
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
+    MessagingModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,

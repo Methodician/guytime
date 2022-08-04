@@ -21,8 +21,17 @@
         </mat-chip>
       </mat-chip-list>
       <mat-card *ngIf='icebreaker && icebreakerAnswer'>
-        <span class='mat-h3 icebreaker-question'>{{icebreaker.text}}</span>
-        <p>{{ icebreakerAnswer.text }}</p>
+        <span
+          class='mat-h3 icebreaker-question'
+          *ngIf='icebreaker'
+        >
+          {{icebreaker.text}}
+        </span>
+        <p
+          *ngIf='icebreakerAnswer'
+        >
+          {{ icebreakerAnswer.text }}
+        </p>
       </mat-card>
     </section>
   </article>

@@ -1,7 +1,7 @@
-import { AfterViewChecked, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router }                                                       from '@angular/router';
-import { Observable, Subject } from 'rxjs';
-import { ChatService } from '@services/chat.service';
+import { AfterViewChecked, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router }             from '@angular/router';
+import { combineLatest, Observable, Subject } from 'rxjs';
+import { ChatService }                        from '@services/chat.service';
 import { ChatMessageI } from '@models/message';
 import { FirebaseService }                     from '@app/services/firebase.service';
 import { Store }                               from '@ngrx/store';
@@ -9,14 +9,15 @@ import { authUid }                             from '@app/store/auth/auth.select
 import { map, take, takeUntil }                                from 'rxjs/operators';
 import { clearChatMessages, loadChatGroups, loadChatMessages } from '@app/store/chat/chat.actions';
 import { chatGroupById, chatMessages }                         from '@app/store/chat/chat.selectors';
+import { loggedInUser}                                         from '@app/store/user/user.selectors';
 import {
-  addHeaderOptions, backButtonClicked,
+   backButtonClicked,
   resetHeader,
-  setHeaderText,
-} from '@app/store/header/header.actions';
-import { UserI }                           from '@models/user';
-import { avatarFileName, userListByIdMap } from '@app/store/user/user.selectors';
-import { ChatGroupI }                      from '@models/chat-group';
+}                                                              from '@app/store/header/header.actions';
+import { UserI }                                               from '@models/user';
+import { avatarFileName, userListByIdMap }                     from '@app/store/user/user.selectors';
+import { ChatGroupI }                                          from '@models/chat-group';
+import { UserService }                                         from '@services/user.service'
 
 @Component({
   selector: 'gtm-chat-detail',
@@ -33,6 +34,10 @@ export class ChatDetailComponent implements OnInit, OnDestroy, AfterViewChecked 
   users$: Observable<UserI[]>;
   group$: Observable<ChatGroupI>;
   group: ChatGroupI | undefined | null;
+  messages: ReadonlyArray<ChatMessageI> | undefined | null;
+
+  loggedInUser: UserI | null = null;
+  users: UserI[] = [];
 
   firstNames: string;
 
@@ -40,6 +45,7 @@ export class ChatDetailComponent implements OnInit, OnDestroy, AfterViewChecked 
     private route: ActivatedRoute,
     private router: Router,
     private chatSvc: ChatService,
+    private userSvc: UserService,
     private fbSvc: FirebaseService,
     private store: Store,
   ) {}
@@ -52,6 +58,7 @@ export class ChatDetailComponent implements OnInit, OnDestroy, AfterViewChecked 
   }
 
   ngOnInit(): void {
+    this.watchLoggedInUser();
     this.route.params.subscribe(params => {
       if (params['id']) {
         const { id } = params;
@@ -65,12 +72,33 @@ export class ChatDetailComponent implements OnInit, OnDestroy, AfterViewChecked 
       }
     });
     this.messages$ = this.store.select(chatMessages);
+    this.watchMessages();
     // this.watchChatUsers();
     this.store.dispatch(loadChatGroups());
   }
 
   ngAfterViewChecked() {
     this.scrollToBottom();
+  }
+
+  watchMessages = () => {
+    this.messages$.subscribe(( messages ) => {
+      this.messages = messages;
+    });
+  }
+
+  watchLoggedInUser = () => {
+    this.store
+      .select(loggedInUser)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(user => {
+        if ( !user?.uid ) {
+          return;
+        }
+
+        this.loggedInUser = user
+
+      });
   }
 
   watchChatGroup = () => {
@@ -89,10 +117,20 @@ export class ChatDetailComponent implements OnInit, OnDestroy, AfterViewChecked 
       this.users$
         .pipe(
           takeUntil(this.unsubscribe$),
-          map(users => users.map(user => user.fName)),
+          map(users => users.map(user => user)),
         )
-        .subscribe(names => {
-          this.firstNames = names.join(', ');
+        .subscribe(users => {
+          let firstNamesArray = users.map((user) => user.fName)
+          if (users.length > 2) {
+            firstNamesArray = [
+              firstNamesArray[0],
+              firstNamesArray[1],
+              '...'
+            ]
+
+          }
+          this.firstNames = firstNamesArray.join(', ');
+          this.users = users
         });
     }
   }
@@ -124,7 +162,7 @@ export class ChatDetailComponent implements OnInit, OnDestroy, AfterViewChecked 
       seenBy: {},
       createdAt: this.fbSvc.fsTimestamp(),
     };
-    this.chatSvc.createChatMessage(messageData);
+    await this.chatSvc.createChatMessage(messageData);
     this.msgInput = '';
     this.chatInputEl.nativeElement.setAttribute('style', 'height:44px;');
   }
@@ -156,4 +194,44 @@ export class ChatDetailComponent implements OnInit, OnDestroy, AfterViewChecked 
   // Helpers
   avatarFileName$ = ( uid: string ) =>
     this.store.select(avatarFileName(uid, '45x45'))
+
+  isIncomingChatRequest = (): boolean => {
+    if (
+      this.loggedInUser &&
+      this.users &&
+      this.users.length === 1 &&
+      this.group &&
+      this.group.isPairChat
+    ) {
+      const user = this.users[0]
+      const connections = Object.keys(this.loggedInUser.contacts)
+      return !connections.includes(user.uid)
+    }
+    return true
+  }
+
+  isInitiatedByLoggedInUser = (): boolean => {
+    if (this.loggedInUser && this.group && this.group.initiatedBy) {
+      return this.group.initiatedBy === this.loggedInUser.uid
+    }
+
+    if (this.loggedInUser && this.messages && this.messages.length > 0) {
+      return this.messages[0].senderId === this.loggedInUser.uid
+    }
+
+    return false
+  }
+
+  onAddConnection = () => combineLatest([ this.store.select(loggedInUser), this.users$ ])
+    .pipe(take(1))
+    .subscribe(( [ loggedInUser, users ] ) =>
+      this.userSvc.addUserContact(loggedInUser.uid, users[0].uid),
+    );
+
+  onIgnoreUser = async (): Promise<void> => {
+    // Hide ChatGroup from loggedInUser
+    await this.chatSvc.hidePairChatFromUser(this.loggedInUser.uid, this.chatGroupId)
+    this.store.dispatch(backButtonClicked());
+  }
+
 }

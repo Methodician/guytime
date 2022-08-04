@@ -35,10 +35,15 @@ export class ChatEffects {
       exhaustMap(() =>
         this.store.select(authUid).pipe(
           take(1),
-          switchMap(loggedInUid => this.chatSvc.watchChatsByUser$(loggedInUid)),
-          map(chatGroups => loadChatGroupsSuccess({ chatGroups })),
-        ),
+          switchMap(loggedInUid => {
+            return this.chatSvc.watchChatsByUser$(loggedInUid)
+          }),
+
+        )
       ),
+      map(chatGroups => {
+        return loadChatGroupsSuccess({chatGroups})
+      }),
       catchError(error => of(loadChatGroupsFailure({ error }))),
     ),
   );

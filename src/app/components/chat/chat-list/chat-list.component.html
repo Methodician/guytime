@@ -1,13 +1,40 @@
 <div class='chat-list-container'>
   <mat-list>
-    <mat-list-item *ngFor="let chat of chatGroupList$ | async">
+    <mat-list-item *ngFor="let chat of chatGroupList">
+      <div
+        *ngIf="deleteMode"
+        class="delete-select-checkbox"
+        (click)='toggleSelectedChatGroup(chat.id)'
+      >
+        <mat-icon *ngIf='!selectedChatGroups[chat.id]'>radio_button_unchecked</mat-icon>
+        <mat-icon *ngIf='selectedChatGroups[chat.id]' class='radio-button-icon-checked'>radio_button_checked</mat-icon>
+      </div>
       <gtm-chat-group
         [group]='chat'
         [routerLink]="['/chat', chat.id]"
       ></gtm-chat-group>
     </mat-list-item>
   </mat-list>
+  <div
+    *ngIf="deleteMode"
+    class="delete-mode-button-container"
+  >
+    <button
+      mat-stroked-button
+      (click)='onCancelDelete()'
+    >
+      Cancel
+    </button>
+    <button
+      mat-stroked-button
+      color="warn"
+      (click)='onDeleteSelected()'
+    >
+      Delete
+    </button>
+  </div>
   <button
+    *ngIf="!deleteMode"
     class='new-chat-message'
     color='primary'
     (click)='onNewChatClicked()'

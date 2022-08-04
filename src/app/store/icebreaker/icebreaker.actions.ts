@@ -20,7 +20,7 @@ export const loadIcebreakerAnswerForUserId = createAction(
 
 export const loadIcebreakerAnswerForUserIdSuccess = createAction(
   '[Icebreaker] Load IcebreakerAnswer for User Success',
-  props<{ icebreakerAnswer: IcebreakerAnswerI }>(),
+  props<{ icebreakerAnswer: IcebreakerAnswerI | null }>(),
 );
 
 export const loadIcebreakerAnswerForUserIdFailure = createAction(

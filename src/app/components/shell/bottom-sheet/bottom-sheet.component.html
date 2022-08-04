@@ -53,10 +53,10 @@
           <div
             class='friends-list-item'
           >
-            <gtm-avatar
-              imageSize='45x45'
-              [fileName]='user.uploadedProfileImageMap["45x45"].fileName'
-            ></gtm-avatar>
+<!--            <gtm-avatar-->
+<!--              imageSize='45x45'-->
+<!--              [fileName]='user?.uploadedProfileImageMap["45x45"]?.fileName'-->
+<!--            ></gtm-avatar>-->
             <span class='friends-list-item-name'>{{user.fName}} {{user.lName}}</span>
 
             <mat-icon *ngIf='!selectedUsers[user.uid]'>radio_button_unchecked</mat-icon>

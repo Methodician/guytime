@@ -3,6 +3,9 @@
 # package manager
 .yarn
 
+# angular
+.angular
+
 # logs
 **/*.log
 

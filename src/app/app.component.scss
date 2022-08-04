@@ -3,4 +3,6 @@
 main {
   background-color: $background-color;
   height: 100%;
+  overflow: scroll;
+  padding-bottom: 150px;
 }

@@ -28,9 +28,13 @@ export class TagEffects {
     this.actions$.pipe(
       ofType(loadTagsForUserId),
       switchMap(async (action) => {
+        console.log(`loadTagsForUserId: ${action.userId}`);
         return await this.tagSvc.tagsForUserIdDocs(action.userId);
       }),
-      map(tagsForUser => loadTagsForUserSuccess({ tagsForUser })),
+      map(tagsForUser => {
+        console.log(`[35] tagsForUser: ${JSON.stringify(tagsForUser)}`);
+        return loadTagsForUserSuccess({ tagsForUser })
+      }),
       catchError(error => of(loadTagsForUserFailure({ error }))),
     ),
   );

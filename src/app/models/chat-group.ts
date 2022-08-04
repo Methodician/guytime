@@ -8,6 +8,8 @@ export interface ChatGroupI {
   unreadMessagesByUser: KeyMapI<KeyMapI<boolean>>;
   isPairChat: boolean;
   createdAt: any;
+  hiddenForUsers?: string[];
+  initiatedBy?: string;
 }
 
 export interface LatestGroupMessageI {

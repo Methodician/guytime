@@ -7,12 +7,11 @@
   >
     <mat-icon>arrow_back</mat-icon>
   </button>
-  <div class='avatar-container' *ngFor='let user of users$ | async; let indexOfelement=index;'>
-    <gtm-avatar *ngIf='indexOfelement === 0'
-                [fileName]='avatarFileName$(user.uid) | async'
-                imageSize='45x45'
+  <div class='avatar-container'>
+    <gtm-avatar
+      [fileName]='avatarFileName$(users[0].uid) | async'
+      imageSize='45x45'
     ></gtm-avatar>
-
   </div>
   <span class='page_title'>{{ this.firstNames }}</span>
 
@@ -23,8 +22,43 @@
     [chatMessage]="message"
   >
   </gtm-chat-message>
+  <div
+    class="not-connected-message"
+    *ngIf="group.isPairChat && isIncomingChatRequest() && isInitiatedByLoggedInUser()"
+  >
+    <span>You and {{this.firstNames}} are not connected</span>
+    <span>Waiting for {{this.firstNames}} to respond ...</span>
+  </div>
 </section>
-<section class="chat_input_wrapper">
+
+<section
+  class="chat_input_wrapper not_connected"
+  *ngIf="group.isPairChat && isIncomingChatRequest() && !isInitiatedByLoggedInUser()"
+>
+  <span>You and {{this.firstNames}} are not connected</span>
+  <div class="button-container">
+    <button
+      mat-stroked-button
+      aria-label="Ignore"
+      (click)="onIgnoreUser()"
+    >
+      Ignore
+    </button>
+    <button
+      mat-stroked-button
+      color='primary'
+      aria-label="Add connection"
+      (click)="onAddConnection()"
+    >
+      Add Connection
+    </button>
+  </div>
+</section>
+
+<section
+  class="chat_input_wrapper"
+  *ngIf="!group.isPairChat || isInitiatedByLoggedInUser() || !isIncomingChatRequest()"
+>
   <form action="submit">
     <textarea
       #chatInput

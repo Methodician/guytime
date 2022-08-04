@@ -9,7 +9,7 @@ import { Store }              from '@ngrx/store';
 import { authUid }            from '@app/store/auth/auth.selectors';
 import { take }               from 'rxjs/operators';
 import { KeyMapI }            from '../../../functions/src';
-import { TagI, UserTagI }     from '@models/tag';
+import { UserTagI }     from '@models/tag';
 import { IcebreakerService }  from '@services/icebreaker.service';
 
 @Injectable({
@@ -54,8 +54,6 @@ export class UserService {
         }
 
         if (user.tags.length > 0 && existingUserTags.length > 0) {
-          console.log('existingUserTags:');
-          console.log(existingUserTags);
           await Promise.all(existingUserTags.map(async ( userTag ) => {
             const matchingSubmittedTag = user.tags.find((t) => t.name.toLowerCase() === userTag.tag.name && t.type === userTag.tag.type);
             if (!matchingSubmittedTag) {
@@ -75,11 +73,7 @@ export class UserService {
       }
 
       if (user.icebreakerId && user.icebreakerAnswerText) {
-        console.log(user.icebreakerId);
-        console.log(user.icebreakerAnswerText);
         const existingAnswer = await this.icebreakerSvc.icebreakerAnswerForUserId(uid);
-        console.log('existingAnswer:');
-        console.log(existingAnswer);
         if (existingAnswer) {
           existingAnswer.text = user.icebreakerAnswerText;
           existingAnswer.icebreakerId = user.icebreakerId;

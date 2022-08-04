@@ -1,7 +1,7 @@
 import { Component, OnInit }                      from '@angular/core';
 import { Router }                                                    from '@angular/router';
 import { authUid }                                                   from '@app/store/auth/auth.selectors';
-import { ProfileImageSizeT, }                    from '@app/models/user';
+import { ProfileImageSizeT, UserI, }                    from '@app/models/user';
 import { ChatService }                                               from '@app/services/chat.service';
 import { Store }                                                     from '@ngrx/store';
 import { map, take, takeUntil }                                      from 'rxjs/operators';
@@ -15,7 +15,8 @@ import { TagI }                                                      from '@mode
 import { IcebreakerAnswerI, IcebreakerI }                            from '@models/icebreaker';
 import { loadTagsForUserId }                                         from '@app/store/tag/tag.actions';
 import { loadIcebreakerAnswerForUserId, loadIcebreakers }            from '@app/store/icebreaker/icebreaker.actions';
-import { avatarFileName, loggedInUser }                              from '@app/store/user/user.selectors';
+import { TagService }                                                from '@services/tag.service';
+import { loggedInUser }                                              from '@app/store/user/user.selectors'
 
 @Component({
   selector: 'gtm-browse-fellas',
@@ -31,11 +32,14 @@ export class BrowseFellasComponent implements OnInit {
   icebreakers: IcebreakerI[]                 = [];
   icebreakerAnswer: IcebreakerAnswerI | null = null;
   icebreaker: IcebreakerI | null             = null;
+  loggedInUser: UserI | null = null;
+  selectedFella: UserI | null = null;
 
 
   constructor(
     private router: Router,
     private chatSvc: ChatService,
+    private tagSvc: TagService,
     private store: Store,
   ) {}
 
@@ -45,6 +49,7 @@ export class BrowseFellasComponent implements OnInit {
       this.watchUserTags();
       this.watchIcebreakerAnswer();
       this.watchSelectedFella();
+      this.watchLoggedInUser();
       this.store.dispatch(loadIcebreakers());
     }
   }
@@ -106,8 +111,24 @@ export class BrowseFellasComponent implements OnInit {
           return;
         }
 
+        this.selectedFella = user
+
         this.store.dispatch(loadTagsForUserId({ userId: user.uid }));
         this.store.dispatch(loadIcebreakerAnswerForUserId({ userId: user.uid }));
+      });
+  }
+
+  watchLoggedInUser = () => {
+    this.store
+      .select(loggedInUser)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(user => {
+        if ( !user?.uid ) {
+          return;
+        }
+
+        this.loggedInUser = user
+
       });
   }
 
@@ -138,10 +159,18 @@ export class BrowseFellasComponent implements OnInit {
       .select(icebreakerAnswerForUser)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(icebreakerAnswer => {
-        if ( this.icebreakers.length > 0 ) {
+        if ( icebreakerAnswer && this.icebreakers.length > 0 ) {
           this.icebreaker = this.icebreakers.find(( ib ) => ib.id === icebreakerAnswer.icebreakerId);
         }
         this.icebreakerAnswer = icebreakerAnswer;
       });
+  }
+
+  isConnection = () => {
+    if (this.selectedFella && this.loggedInUser && this.loggedInUser.contacts && this.loggedInUser.contacts) {
+      const contactIds = Object.keys(this.loggedInUser.contacts)
+      return contactIds.includes(this.selectedFella.uid)
+    }
+    return false
   }
 }

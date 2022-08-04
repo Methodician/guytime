@@ -31,5 +31,16 @@ export const userListByIdMap = (idMap: KeyMapI<boolean>) =>
 export const avatarFileName = (uid: string, size: ThumbnailOptionsT) =>
   createSelector(
     specificUser(uid),
-    user => user?.uploadedProfileImageMap?.[size]?.fileName,
+    user => {
+      if (
+        user &&
+        user.uploadedProfileImageMap &&
+        user.uploadedProfileImageMap[size] &&
+        user.uploadedProfileImageMap[size].fileName
+      ) {
+        return user.uploadedProfileImageMap[size].fileName
+      }
+
+      return ''
+    },
   );

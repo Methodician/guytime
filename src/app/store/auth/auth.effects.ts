@@ -19,7 +19,8 @@ import {
   register,
   registerSuccess,
   registerFailure,
-} from './auth.actions';
+}                            from './auth.actions';
+import { authInfo, authUid } from '@app/store/auth/auth.selectors'
 
 
 @Injectable()
@@ -56,7 +57,11 @@ export class AuthEffects {
       ofType(logout),
       exhaustMap(_ =>
         this.authSvc.logout$().pipe(
-          tap(_ => this.router.navigateByUrl('/landing')),
+          tap(_ => {
+            authInfo.release()
+            authUid.release()
+            this.router.navigateByUrl('/landing')
+          }),
           map(_ => logoutSuccess()),
         ),
       ),

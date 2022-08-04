@@ -86,8 +86,9 @@ export class ProfileDetailComponent {
       .select(icebreakerAnswerForUser)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(icebreakerAnswer => {
-        if (this.icebreakers.length > 0) {
-          this.icebreaker = this.icebreakers.find(( ib ) => ib.id === icebreakerAnswer.icebreakerId);
+        if (icebreakerAnswer && this.icebreakers && this.icebreakers.length > 0) {
+          const foundIcebreaker = this.icebreakers.find(( ib ) => ib.id === icebreakerAnswer.icebreakerId);
+          this.icebreaker = foundIcebreaker;
         }
         this.icebreakerAnswer = icebreakerAnswer;
       });

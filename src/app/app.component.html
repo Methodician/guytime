@@ -1,4 +1,5 @@
 <main [ngClass]="{ 'logged-in': loggedIn }">
+  <gtm-main-notification></gtm-main-notification>
   <gtm-header *ngIf="loggedIn"></gtm-header>
   <!-- <div *ngIf="!(isLoggedIn$ | async)"></div> -->
   <router-outlet></router-outlet>

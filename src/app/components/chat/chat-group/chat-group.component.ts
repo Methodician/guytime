@@ -24,6 +24,7 @@ export class ChatGroupComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<void> = new Subject();
 
   users$: Observable<UserI[]>;
+  users: UserI[] = [];
   firstNames: string;
   latestMessageCreatedAtString = '';
 
@@ -41,7 +42,7 @@ export class ChatGroupComponent implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
-  watchChatUsers = async () => {
+  watchChatUsers = () => {
     const users$ = this.store.select(
       userListByIdMap(this.group.participantsMap),
     );
@@ -50,9 +51,21 @@ export class ChatGroupComponent implements OnInit, OnDestroy {
     users$
       .pipe(
         takeUntil(this.unsubscribe$),
-        map(users => users.map(user => user.fName)),
+        map(users => {
+          this.users = users
+          return users.map(user => user.fName)
+        }),
       )
-      .subscribe(names => (this.firstNames = names.join(', ')));
+      .subscribe(names => {
+        if (names.length > 2) {
+          names = [
+            names[0],
+            names[1],
+            '...'
+          ]
+        }
+        return names.join(', ')
+      });
   }
 
   // Helpers

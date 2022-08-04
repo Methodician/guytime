@@ -1,6 +1,7 @@
-import { IcebreakerAnswerI, IcebreakerI } from '@app/models/icebreaker';
-import { createReducer, on }                                                                from '@ngrx/store';
+import { IcebreakerAnswerI, IcebreakerI }                                from '@app/models/icebreaker';
+import { createReducer, on }                                             from '@ngrx/store';
 import { loadIcebreakersSuccess, loadIcebreakerAnswerForUserIdSuccess, } from './icebreaker.actions';
+import { logoutSuccess }                                                 from '@app/store/auth/auth.actions'
 
 export const icebreakerFeatureKey = 'icebreakers';
 
@@ -23,5 +24,9 @@ export const icebreakerReducer = createReducer(
   on(loadIcebreakerAnswerForUserIdSuccess, ( state, { icebreakerAnswer } ) => ({
     ...state,
     icebreakerAnswerForUser: icebreakerAnswer,
+  })),
+  on(logoutSuccess, ( state, {} ) => ({
+    ...state,
+    icebreakerAnswerForUser: null,
   })),
 );

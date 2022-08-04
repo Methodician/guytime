@@ -18,6 +18,7 @@ export class TagService {
   ) {}
 
   getOrCreateTag = async ( tag: TagI) => {
+    console.log(`[getOrCreate] tag: ${tag}`);
     tag.name = tag.name.toLowerCase();
     const existingTag = await this.getTagByName(tag.name, tag.type);
     if (existingTag) {
@@ -99,8 +100,6 @@ export class TagService {
     }
     const { docs: existingTags } = await query.get();
 
-    console.log(`name: ${name} existingTags.length: ${existingTags.length}`);
-
     if ( existingTags.length > 1 ) {
       const [, ...duplicates] = existingTags;
       await Promise.all(duplicates.map(async (duplicateTag) => {
@@ -109,11 +108,9 @@ export class TagService {
           .get();
         if (existingUserTags.length > 0) {
           await Promise.all(existingUserTags.map(async (userTag) => {
-            console.log(`Would delete userTag with id: ${userTag.ref.id}`);
             await userTag.ref.delete();
           }));
         }
-        console.log(`Would delete tag with id: ${duplicateTag.ref.id}`);
         await duplicateTag.ref.delete();
       }));
     }
