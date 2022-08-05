@@ -1,5 +1,7 @@
 import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
+import * as admin     from 'firebase-admin';
+import { firestore }  from 'firebase-admin'
+import WriteResult = firestore.WriteResult
 
 admin.initializeApp();
 
@@ -66,8 +68,24 @@ export const onChatMessageCreated = fsFunc
       return chatGroupRef.update({ latestMessage });
     };
 
+    // const removeHiddenStatus = async (): Promise<WriteResult> => {
+    //   const existingGroupSnap = await chatGroupRef.get();
+    //   const existingGroup     = existingGroupSnap.data()!;
+    //   let {hiddenForUsers} = existingGroup;
+    //
+    //   if (hiddenForUsers.includes(senderId)) {
+    //     hiddenForUsers = hiddenForUsers.filter((uid: string) => uid !== senderId)
+    //   }
+    //
+    //
+    //   return chatGroupRef.update({
+    //     hiddenForUsers,
+    //   })
+    // }
+
     const writePromises = await addUnreadMessageToGroupAndUsersPromises();
     writePromises.push(addLatestMessageToGroup());
+    // writePromises.push(removeHiddenStatus());
 
     return Promise.all(writePromises);
   });

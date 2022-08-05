@@ -111,10 +111,12 @@ export class BrowseFellasComponent implements OnInit {
           return;
         }
 
-        this.selectedFella = user
+        if (this.loggedInUser) {
+          this.selectedFella = user
 
-        this.store.dispatch(loadTagsForUserId({ userId: user.uid }));
-        this.store.dispatch(loadIcebreakerAnswerForUserId({ userId: user.uid }));
+          this.store.dispatch(loadTagsForUserId({ userId: user.uid }));
+          this.store.dispatch(loadIcebreakerAnswerForUserId({ userId: user.uid }));
+        }
       });
   }
 
@@ -167,8 +169,9 @@ export class BrowseFellasComponent implements OnInit {
   }
 
   isConnection = () => {
-    if (this.selectedFella && this.loggedInUser && this.loggedInUser.contacts && this.loggedInUser.contacts) {
-      const contactIds = Object.keys(this.loggedInUser.contacts)
+    if (this.selectedFella && this.loggedInUser && this.loggedInUser.contacts) {
+      const contactIdsRaw = Object.keys(this.loggedInUser.contacts)
+      const contactIds = contactIdsRaw.map((id) => id.trim())
       return contactIds.includes(this.selectedFella.uid)
     }
     return false

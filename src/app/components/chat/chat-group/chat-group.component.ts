@@ -64,7 +64,7 @@ export class ChatGroupComponent implements OnInit, OnDestroy {
             '...'
           ]
         }
-        return names.join(', ')
+        this.firstNames = names.join(', ')
       });
   }
 

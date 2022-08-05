@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable }       from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { FirebaseService } from './firebase.service';
-import { ChatGroupI } from '../models/chat-group';
-import { ChatMessageI } from '../models/message';
-import { map } from 'rxjs/operators';
+import { FirebaseService }  from './firebase.service';
+import { ChatGroupI }       from '../models/chat-group';
+import { ChatMessageI }     from '../models/message';
+import { map }              from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +19,7 @@ export class ChatService {
 
   createChatMessage = async (message: ChatMessageI) => {
     const messageDocRef = await this.chatMessagesCol().add(message);
+
     const { id } = messageDocRef;
     return id;
   }
@@ -77,6 +78,23 @@ export class ChatService {
     })
   }
 
+  showPairChatToUser = async ( uid: string, chatGroupId: string ): Promise<void> => {
+    const chatGroupDoc      = this.chatGroupDoc(chatGroupId)
+    const chatGroupSnapshot = await chatGroupDoc.ref.get()
+    const chatGroup         = chatGroupSnapshot.data()
+
+    let hiddenForUsers = []
+
+    if ( chatGroup.hiddenForUsers && chatGroup.hiddenForUsers.includes(uid) ) {
+      hiddenForUsers = chatGroup.hiddenForUsers.filter(( hiddenUid ) => hiddenUid !== uid)
+
+      await chatGroupDoc.update({
+        hiddenForUsers,
+      })
+    }
+
+  }
+
   createGroupChat = async (uids: string[]) => {
     if (!uids || uids.length < 3) {
       throw new Error(
@@ -97,23 +115,20 @@ export class ChatService {
     return id;
   }
 
+  getChatGroup = async (chatGroupId) => {
+    const chatGroupDoc = this.chatGroupDoc(chatGroupId)
+  }
+
   watchChatsByUser$ = (uid: string) => {
     const chatsCol = this.chatGroupsByUserQuery(uid);
     return chatsCol.snapshotChanges().pipe(
-      map(changeActions => {
-        changeActions = changeActions.filter(
-          (action) => {
-            const chatGroup = action.payload.doc.data()
-            return !chatGroup.hiddenForUsers || !chatGroup.hiddenForUsers.includes(uid)
-          }
-        )
-        return changeActions.map(action => {
+      map(changeActions => changeActions.map(action => {
           const { doc } = action.payload;
           const { id } = doc;
           const data = doc.data();
           return { id, ...data };
-        });
-      }),
+        })
+      )
     );
   }
 

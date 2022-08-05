@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { ChatService } from '@app/services/chat.service';
 import { UserService } from '@app/services/user.service';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Store } from '@ngrx/store';
-import { catchError, exhaustMap, map, switchMap, take } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { Store }                                                   from '@ngrx/store';
+import { catchError, exhaustMap, map, switchMap, take, takeUntil } from 'rxjs/operators';
+import { of }                                                      from 'rxjs';
 import { KeyMapI } from '../../../../functions/src';
 import { authUid } from '../auth/auth.selectors';
 import {
@@ -18,7 +18,8 @@ import {
   loadUserUnreadMessages,
   loadUserUnreadMessagesFailure,
   loadUserUnreadMessagesSuccess,
-} from './chat.actions';
+}                        from './chat.actions';
+import { logoutSuccess } from '@app/store/auth/auth.actions'
 
 @Injectable()
 export class ChatEffects {
@@ -34,7 +35,7 @@ export class ChatEffects {
       ofType(loadChatGroups),
       exhaustMap(() =>
         this.store.select(authUid).pipe(
-          take(1),
+          // take(1),
           switchMap(loggedInUid => {
             return this.chatSvc.watchChatsByUser$(loggedInUid)
           }),

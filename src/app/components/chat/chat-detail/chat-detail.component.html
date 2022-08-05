@@ -7,13 +7,13 @@
   >
     <mat-icon>arrow_back</mat-icon>
   </button>
-  <div class='avatar-container'>
+  <div class='avatar-container' *ngIf="users && users.length > 0">
     <gtm-avatar
       [fileName]='avatarFileName$(users[0].uid) | async'
       imageSize='45x45'
     ></gtm-avatar>
   </div>
-  <span class='page_title'>{{ this.firstNames }}</span>
+  <span class='page_title'>{{ firstNames }}</span>
 
 </mat-toolbar>
 <section class="chat_list" #chatList>
@@ -24,18 +24,18 @@
   </gtm-chat-message>
   <div
     class="not-connected-message"
-    *ngIf="group.isPairChat && isIncomingChatRequest() && isInitiatedByLoggedInUser()"
+    *ngIf="group && group.isPairChat && isIncomingChatRequest() && isInitiatedByLoggedInUser()"
   >
-    <span>You and {{this.firstNames}} are not connected</span>
-    <span>Waiting for {{this.firstNames}} to respond ...</span>
+    <span>You and {{firstNames}} are not connected</span>
+    <span>Waiting for {{firstNames}} to respond ...</span>
   </div>
 </section>
 
 <section
   class="chat_input_wrapper not_connected"
-  *ngIf="group.isPairChat && isIncomingChatRequest() && !isInitiatedByLoggedInUser()"
+  *ngIf="group && group.isPairChat && isIncomingChatRequest() && !isInitiatedByLoggedInUser()"
 >
-  <span>You and {{this.firstNames}} are not connected</span>
+  <span>You and {{firstNames}} are not connected</span>
   <div class="button-container">
     <button
       mat-stroked-button
@@ -57,7 +57,7 @@
 
 <section
   class="chat_input_wrapper"
-  *ngIf="!group.isPairChat || isInitiatedByLoggedInUser() || !isIncomingChatRequest()"
+  *ngIf="!group || !group.isPairChat || isInitiatedByLoggedInUser() || !isIncomingChatRequest()"
 >
   <form action="submit">
     <textarea

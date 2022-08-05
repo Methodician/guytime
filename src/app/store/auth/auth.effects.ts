@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
-import { AuthInfoI } from '@app/models/auth-info';
 import { AuthService } from '@app/services/auth.service';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { from, of } from 'rxjs';
@@ -20,7 +19,12 @@ import {
   registerSuccess,
   registerFailure,
 }                            from './auth.actions';
-import { authInfo, authUid } from '@app/store/auth/auth.selectors'
+import { authInfo, authUid }                                        from '@app/store/auth/auth.selectors'
+import {
+  chatMessages,
+  openChatGroups,
+  unreadMessagesCountForUser
+} from '@app/store/chat/chat.selectors'
 
 
 @Injectable()
@@ -60,6 +64,9 @@ export class AuthEffects {
           tap(_ => {
             authInfo.release()
             authUid.release()
+            openChatGroups.release()
+            chatMessages.release()
+            unreadMessagesCountForUser.release()
             this.router.navigateByUrl('/landing')
           }),
           map(_ => logoutSuccess()),
@@ -97,8 +104,8 @@ export class AuthEffects {
       ofType(loadAuth),
       exhaustMap(_ => this.afAuth.user),
       map(user => {
-          console.log('user:');
-          console.log(user);
+          // console.log('user:');
+          // console.log(user);
           return user && user.uid && user.email
             ? loadAuthSuccess({
               authInfo: { uid: user.uid, email: user.email },

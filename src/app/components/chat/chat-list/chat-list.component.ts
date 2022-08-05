@@ -52,9 +52,8 @@ export class ChatListComponent implements OnInit, OnDestroy {
 
   watchChatGroups = () => {
     this.chatGroupList$.subscribe((groups) => {
-      const sortedGroups = [
-        ...groups
-      ]
+      const newGroups = Array.from(groups)
+      const sortedGroups = newGroups.filter((group) => !group.hiddenForUsers || !group.hiddenForUsers.includes(this.loggedInUser.uid))
       sortedGroups.sort((a, b) => {
         if (a.latestMessage && b.latestMessage && a.latestMessage.createdAt && b.latestMessage.createdAt) {
           return b.latestMessage.createdAt.seconds - a.latestMessage.createdAt.seconds

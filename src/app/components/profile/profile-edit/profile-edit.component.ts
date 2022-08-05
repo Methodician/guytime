@@ -96,7 +96,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
       .select(loggedInUser)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(user => {
-        if (!user?.uid) return;
+        if (!user || !user.uid) return;
 
         this.avatarFileName$ = this.store.select(
           avatarFileName(user.uid, '90x90'),

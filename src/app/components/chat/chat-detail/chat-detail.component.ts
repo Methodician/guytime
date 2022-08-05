@@ -58,23 +58,26 @@ export class ChatDetailComponent implements OnInit, OnDestroy, AfterViewChecked 
   }
 
   ngOnInit(): void {
+    this.watchParams();
+
+    this.group$ = this.store.select(chatGroupById(this.chatGroupId));
+    this.messages$ = this.store.select(chatMessages);
+
     this.watchLoggedInUser();
+    this.watchChatGroup();
+    this.watchMessages();
+    this.watchChatUsers();
+    this.store.dispatch(loadChatGroups());
+  }
+
+  watchParams = () => {
     this.route.params.subscribe(params => {
-      if (params['id']) {
-        const { id } = params;
+      if ( params['id']) {
+        const {id}       = params;
         this.chatGroupId = id;
-        this.store.dispatch(loadChatMessages({ chatGroupId: id }));
-        // this.updateHeader();
-        if (!this.group$) {
-          this.group$ = this.store.select(chatGroupById(id));
-          this.watchChatGroup();
-        }
+        this.store.dispatch(loadChatMessages({chatGroupId: id}));
       }
     });
-    this.messages$ = this.store.select(chatMessages);
-    this.watchMessages();
-    // this.watchChatUsers();
-    this.store.dispatch(loadChatGroups());
   }
 
   ngAfterViewChecked() {
@@ -102,9 +105,12 @@ export class ChatDetailComponent implements OnInit, OnDestroy, AfterViewChecked 
   }
 
   watchChatGroup = () => {
+
     this.group$.subscribe((group) => {
-      this.group = group;
-      this.watchChatUsers();
+      if (group) {
+        this.group = group;
+        this.watchChatUsers();
+      }
     });
   }
 
@@ -163,6 +169,9 @@ export class ChatDetailComponent implements OnInit, OnDestroy, AfterViewChecked 
       createdAt: this.fbSvc.fsTimestamp(),
     };
     await this.chatSvc.createChatMessage(messageData);
+    if (this.group && this.group.hiddenForUsers && this.group.hiddenForUsers.includes(uid)) {
+      await this.chatSvc.showPairChatToUser(uid, chatGroupId)
+    }
     this.msgInput = '';
     this.chatInputEl.nativeElement.setAttribute('style', 'height:44px;');
   }
@@ -204,8 +213,9 @@ export class ChatDetailComponent implements OnInit, OnDestroy, AfterViewChecked 
       this.group.isPairChat
     ) {
       const user = this.users[0]
-      const connections = Object.keys(this.loggedInUser.contacts)
-      return !connections.includes(user.uid)
+      const connectionIdsRaw = Object.keys(this.loggedInUser.contacts)
+      const connectionIds = connectionIdsRaw.map((id) => id.trim())
+      return !connectionIds.includes(user.uid)
     }
     return true
   }
